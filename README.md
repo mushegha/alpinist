@@ -1,0 +1,3 @@
+# Alpinist
+
+Automated trading platform.
