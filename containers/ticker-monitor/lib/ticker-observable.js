@@ -1,3 +1,5 @@
+const debug = require('debug')('monitor:cursor')
+
 const rt = require('rethinkdb')
 const { Observable } = require('rxjs')
 const { curryN } = require('ramda')
@@ -29,17 +31,22 @@ const getCursor = (pred, conn) =>
  */
 
 function observe (pred, conn) {
-  async function fromCursor (observer) {
-    const cursor = await getCursor(pred, conn)
 
+  function fromCursor (observer) {
     const emit = (err, row) =>
       err
         ? observer.error(err)
         : observer.next(row)
 
-    cursor.each(emit)
+    getCursor(pred, conn)
+      .then(cursor => {
+        cursor.each(emit)
+      })
 
-    return () => cursor.close()
+    return () => {
+      debug('closing connection')
+      conn.close()
+    }
   }
 
   return Observable.create(fromCursor)
