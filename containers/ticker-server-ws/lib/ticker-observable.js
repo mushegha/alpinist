@@ -13,21 +13,7 @@ const descTimestamp = {
 }
 
 /**
- * Helpers
- */
-
-const getCursor = (pred, conn) =>
-  rt.db('alpinist')
-    .table('ticker')
-    .orderBy(descTimestamp)
-    .filter(pred)
-    .limit(1)
-    .changes()
-    .run(conn)
-
-/**
  * Ticker stream
- *
  */
 
 function observe (pred, conn) {
@@ -36,12 +22,16 @@ function observe (pred, conn) {
     const emit = (err, row) =>
       err
         ? observer.error(err)
-        : observer.next(row)
+        : observer.next(row.new_val)
 
-    getCursor(pred, conn)
-      .then(cursor => {
-        cursor.each(emit)
-      })
+    rt.db('alpinist')
+      .table('ticker')
+      .orderBy(descTimestamp)
+      .filter(pred)
+      .limit(1)
+      .changes()
+      .run(conn)
+      .then(cursor => cursor.each(emit))
 
     return () => {
       debug('closing connection')

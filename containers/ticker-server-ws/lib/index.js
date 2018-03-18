@@ -1,36 +1,32 @@
-const { prop } = require('ramda')
-
-const { Server } = require('ws')
-
 const { connect } = require('./rethinkdb-connection')
 
 const observe = require('./ticker-observable')
 
 const { parse, stringify } = JSON
 
-const wss = new Server({ port: 3030 })
+module.exports = ws => {
+  const emit = (event, data) =>
+    ws.emit(event, data)
 
-wss.on('connection', ws => {
+  const send = data =>
+    ws.send(data)
+
   ws.on('message', msg => {
     try {
       const { type, payload } = parse(msg)
-      ws.emit(type, payload)
+      emit(type, payload)
     } catch (err) {
       console.error(err)
+      emit('error', err)
     }
   })
 
-  ws.on('close', () => {
-    ws.emit('unsubscribe')
-  })
+  ws.on('close', () => emit('unsubscribe'))
 
   ws.on('subscribe', pred => {
-    const send = data =>
-      ws.send(stringify(data))
-
     const subscribe = observable => {
       const source = observable
-        .map(prop('new_val'))
+        .map(stringify)
         .subscribe(send)
 
       const teardown = () =>
@@ -43,6 +39,8 @@ wss.on('connection', ws => {
       .then(observe(pred))
       .then(subscribe)
   })
-})
+
+  return ws
+}
 
 
