@@ -8,7 +8,7 @@ const observe = require('./ticker-observable')
 
 const { parse, stringify } = JSON
 
-const wss = new Server({ port: 8080 })
+const wss = new Server({ port: 3030 })
 
 wss.on('connection', ws => {
   ws.on('message', msg => {
