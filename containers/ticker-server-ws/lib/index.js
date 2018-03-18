@@ -12,6 +12,8 @@ const connectionOptions = {
 
 module.exports = async ws => {
 
+  const conn = await rt.connect(connectionOptions)
+
   /**
    * Delegate
    */
@@ -26,16 +28,23 @@ module.exports = async ws => {
     }
   })
 
-  ws.on('close', () => ws.emit('unsubscribe'))
+  ws.on('close', () => {
+    ws.emit('unsubscribe')
+    conn.close()
+  })
+
+  ws.on('publish', async data => {
+    data.timestamp = rt.now()
+
+    rt.db('alpinist')
+      .table('ticker')
+      .insert(data)
+      .run(conn)
+  })
 
   ws.on('subscribe', async pred => {
-
-    /**
-     * Connect
-     */
-
-    const conn = await rt
-      .connect(connectionOptions)
+    // drop previous subscription
+    // ws.emit('unsubscribe')
 
     const cursor = await rt
       .db('alpinist')
@@ -53,9 +62,9 @@ module.exports = async ws => {
       ws.send(val)
     })
 
-    ws.on('unsubscribe', () => {
-      console.log('closing connection')
-      conn.close()
+    ws.once('unsubscribe', () => {
+      console.log('closing cursor')
+      cursor.close()
     })
   })
 
