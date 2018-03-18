@@ -1,46 +1,63 @@
-const { connect } = require('./rethinkdb-connection')
+const rt = require('rethinkdb')
 
-const observe = require('./ticker-observable')
 
 const { parse, stringify } = JSON
 
-module.exports = ws => {
-  const emit = (event, data) =>
-    ws.emit(event, data)
 
-  const send = data =>
-    ws.send(data)
+const connectionOptions = {
+  host: 'localhost',
+  port: 28015
+}
+
+
+module.exports = async ws => {
+
+  /**
+   * Delegate
+   */
 
   ws.on('message', msg => {
     try {
       const { type, payload } = parse(msg)
-      emit(type, payload)
+      ws.emit(type, payload)
     } catch (err) {
       console.error(err)
-      emit('error', err)
+      ws.emit('error', err)
     }
   })
 
-  ws.on('close', () => emit('unsubscribe'))
+  ws.on('close', () => ws.emit('unsubscribe'))
 
-  ws.on('subscribe', pred => {
-    const subscribe = observable => {
-      const source = observable
-        .map(stringify)
-        .subscribe(send)
+  ws.on('subscribe', async pred => {
 
-      const teardown = () =>
-        source.unsubscribe()
+    /**
+     * Connect
+     */
 
-      ws.on('unsubscribe', teardown)
-    }
+    const conn = await rt
+      .connect(connectionOptions)
 
-    connect()
-      .then(observe(pred))
-      .then(subscribe)
+    const cursor = await rt
+      .db('alpinist')
+      .table('ticker')
+      .orderBy({ index: rt.desc('timestamp') })
+      .filter(pred)
+      .limit(1)
+      .changes()
+      .run(conn)
+
+    cursor.each((err, row) => {
+      if (err) return void 0
+
+      const val = stringify(row.new_val)
+      ws.send(val)
+    })
+
+    ws.on('unsubscribe', () => {
+      console.log('closing connection')
+      conn.close()
+    })
   })
 
   return ws
 }
-
-
