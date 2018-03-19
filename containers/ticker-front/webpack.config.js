@@ -52,8 +52,8 @@ module.exports = {
     noInfo: true,
     disableHostCheck: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost',
+      '/api/v1': {
+        target: 'http://localhost:8080',
       }
     }
   },

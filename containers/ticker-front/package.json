@@ -20,6 +20,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bulma": "^0.6.1",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.1.0",
