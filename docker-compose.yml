@@ -13,10 +13,10 @@ services:
       - '28015:28015'
       - '28080:8080'
 
-  ticker-server-ws:
-    build: ./containers/ticker-server-ws
+  ticker-server:
+    build: ./containers/ticker-server
     volumes:
-      - ./containers/ticker-server-ws/lib:/usr/src/app/lib
+      - ./containers/ticker-server/lib:/usr/src/app/lib
     links:
       - rethinkdb
     environment:
@@ -26,14 +26,14 @@ services:
     ports:
       - '8081:80'
     command: npm run dev
-
-  nginx:
-    restart: always
-    build: ./containers/nginx
-    volumes:
-      - ./containers/nginx/conf.d:/etc/nginx/conf.d
-      - ./containers/nginx/www:/var/www
-    ports:
-      - '8080:80'
-    links:
-      - ticker-server-ws
+  #
+  # # nginx:
+  #   restart: always
+  #   build: ./containers/nginx
+  #   volumes:
+  #     - ./containers/nginx/conf.d:/etc/nginx/conf.d
+  #     - ./containers/nginx/www:/var/www
+  #   ports:
+  #     - '8080:80'
+  #   links:
+  #     - ticker-server-ws
