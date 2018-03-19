@@ -27,6 +27,17 @@ services:
       - '8081:80'
     command: npm run dev
 
+  ticker-sync:
+    build: ./containers/ticker-sync
+    volumes:
+      - ./containers/ticker-sync/lib:/usr/src/app/lib
+    links:
+      - ticker-server
+    environment:
+      TICKER_HOST: ticker-server
+      TICKER_PORT: 80
+    command: npm run dev
+
   nginx:
     restart: always
     build: ./containers/nginx
