@@ -1,9 +1,12 @@
 import Vue from 'vue'
 
+import Rx from 'rxjs/Rx'
+import VueRx from 'vue-rx'
+
 import App from './app'
 
-const render = h => h(App)
+Vue.use(VueRx, Rx)
 
 new Vue({
-  render
+  render: h => h(App)
 }).$mount('#body')

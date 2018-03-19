@@ -1,24 +1,20 @@
+import { Observable } from 'rxjs/Observable'
+
 import * as computed from './computed'
 
 const props = []
 
 const data = () => {
-  return {
-    bid: null,
-    ask: null
-  }
+  return {}
 }
 
 function mounted () {
-  const ws = new WebSocket('ws://localhost:8081')
 
-  ws.onopen = () => {
-    ws.onmessage = console.log
+}
 
-    ws.send(JSON.stringify({
-      pair: 'btcusd',
-      provider: 'bitfinex'
-    }))
+function subscriptions () {
+  return {
+    status: Observable.from([{ bid: 999, ask: 1001 }])
   }
 }
 
@@ -26,5 +22,6 @@ export default {
   props,
   data,
   computed,
-  mounted
+  mounted,
+  subscriptions
 }
