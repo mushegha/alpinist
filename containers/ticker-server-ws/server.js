@@ -7,3 +7,5 @@ const port = process.env.NODE_PORT || 8080
 const wss = new Server({ port })
 
 wss.on('connection', handleConnection)
+
+console.log('listening to', port)

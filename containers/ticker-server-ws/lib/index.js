@@ -5,8 +5,8 @@ const { parse, stringify } = JSON
 
 
 const connectionOptions = {
-  host: 'localhost',
-  port: 28015
+  host: process.env.RETHINKDB_HOST || 'localhost',
+  port: process.env.RETHINKDB_PORT || 28015
 }
 
 
