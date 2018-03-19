@@ -3,10 +3,10 @@
     div.card-content
       p.field
         span.tag.is-medium
-          | {{ status.bid }}
+          | {{ status$.bid }}
       p.field
         span.tag.is-medium
-          | {{ status.ask }}
+          | {{ status$.ask }}
 </template>
 
 <script src="./script.js"></script>

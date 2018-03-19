@@ -12,18 +12,22 @@ const data = () => {
 
 
 function mounted () {
+
+}
+
+
+function subscriptions () {
   const params = {
     pair: 'btcusd',
     provider: 'bitfinex'
   }
 
-  get(params).then(console.log)
-}
+  const status$ = Observable
+    .interval(400)
+    .flatMap(_ => get(params))
 
-
-function subscriptions () {
   return {
-    status: Observable.from([{ bid: 999, ask: 1001 }])
+    status$
   }
 }
 

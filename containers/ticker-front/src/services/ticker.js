@@ -1,19 +1,16 @@
 import Axios from 'axios'
 
-import { Observable } from 'rxjs/Observable'
+
+const baseURL = '/api/v1/ticker/'
 
 
-const api = Axios.create({
-  baseURL: '/api/v1/ticker/'
-})
+const API = Axios.create({ baseURL })
 
 
-function get ({ pair, provider }) {
+export function get ({ pair, provider }) {
   const uri = `${pair}/${provider}`
 
-  return api
+  return API
     .get(uri)
     .then(res => res.data)
 }
-
-export { get }
