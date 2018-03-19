@@ -2,13 +2,13 @@ const debug = require('debug')('queue')
 
 const Bull = require('bull')
 
-const DIR = __dirname + '/lib/'
+const WORKER_DIR = __dirname + '/lib'
 
-const feeder = new Bull('feeder')
+const ticker = new Bull('ticker')
 
-feeder.process(DIR + 'btcusd-bitfinex.js')
+ticker.process(WORKER_DIR + '/worker.js')
 
-feeder
+ticker
   .on('error', function(error) {
     debug('error: %O', error)
   })
@@ -46,4 +46,4 @@ feeder
     // jobs, and `type` is the type of jobs cleaned.
   })
 
-feeder.add({ pair: 'btcusd', provider: 'bitfinex' })
+ticker.add({})
