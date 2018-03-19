@@ -12,6 +12,8 @@ const connectionOptions = {
 
 module.exports = async ws => {
 
+  console.log('exo')
+
   const conn = await rt.connect(connectionOptions)
 
   /**

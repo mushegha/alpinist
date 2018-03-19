@@ -1,5 +1,3 @@
-import WebSocket from 'ws'
-
 import * as computed from './computed'
 
 const props = []
@@ -12,9 +10,16 @@ const data = () => {
 }
 
 function mounted () {
-  const ws = new WebSocket('ws://localhost:3030')
+  const ws = new WebSocket('ws://localhost:8081')
 
-  ws.on('message', console.log)
+  ws.onopen = () => {
+    ws.onmessage = console.log
+
+    ws.send(JSON.stringify({
+      pair: 'btcusd',
+      provider: 'bitfinex'
+    }))
+  }
 }
 
 export default {
