@@ -26,14 +26,13 @@ services:
     ports:
       - '8081:80'
     command: npm run dev
-  #
-  # # nginx:
-  #   restart: always
-  #   build: ./containers/nginx
-  #   volumes:
-  #     - ./containers/nginx/conf.d:/etc/nginx/conf.d
-  #     - ./containers/nginx/www:/var/www
-  #   ports:
-  #     - '8080:80'
-  #   links:
-  #     - ticker-server-ws
+
+  nginx:
+    restart: always
+    build: ./containers/nginx
+    volumes:
+      - ./containers/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - '8080:80'
+    links:
+      - ticker-server
