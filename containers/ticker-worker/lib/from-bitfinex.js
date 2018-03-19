@@ -2,33 +2,65 @@ const { Observable } = require('rxjs')
 
 const Axios = require('axios')
 
-const { prop } = require('ramda')
+const { map, prop, flip, compose, join } = require('ramda')
 
+/**
+ * Constants
+ */
 
-const baseURL = 'https://api.bitfinex.com/v2/ticker/'
+const baseURL = 'https://api.bitfinex.com/v2/'
 
-
-const API = Axios.create({ baseURL })
-
-
-const get = pair => {
-  const symbol = 't' + pair.toUpperCase()
-
-  const format = args => {
-    const bid = args[0]
-    const ask = args[2]
-
-    return { bid, ask, pair }
-  }
-
-  return API
-    .get(symbol)
-    .then(prop('data'))
-    .then(format)
+const symbolsDict = {
+  'btcusd': 'tBTCUSD',
+  'neousd': 'tNEOUSD'
 }
 
+const pairsDict = {
+  'tBTCUSD': 'btcusd',
+  'tNEOUSD': 'neousd'
+}
 
-module.exports = pair =>
+/**
+ * Helpers
+ */
+
+const lookup = flip(prop)
+
+const toSymbol = lookup(symbolsDict)
+
+const toSymbols = compose(join(','), map(toSymbol))
+
+const toPair = lookup(pairsDict)
+
+const toTicker = args => {
+  const bid = args[1]
+  const ask = args[3]
+
+  const pair = toPair(args[0])
+  const provider = 'bitfinex'
+
+  return { bid, ask, pair, provider }
+}
+
+/**
+ * Remote API
+ */
+
+const { get } = Axios.create({ baseURL })
+
+const fetch = pairs => {
+  const params = { symbols: toSymbols(pairs) }
+
+  return get('/tickers', { params })
+    .then(prop('data'))
+    .then(map(toTicker))
+}
+
+/**
+ * Expose
+ */
+
+module.exports = pairs =>
   Observable
-    .interval(60000 / 10)
-    .flatMap(_ => get(pair))
+    .interval(60000 / 10) // Bitfinex limit
+    .flatMap(_ => fetch(pairs))
