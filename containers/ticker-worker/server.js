@@ -46,4 +46,7 @@ ticker
     // jobs, and `type` is the type of jobs cleaned.
   })
 
-ticker.add({})
+ticker.add({
+  pair: 'btcusd',
+  provider: 'bitfinex'
+})
