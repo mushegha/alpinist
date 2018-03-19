@@ -8,7 +8,7 @@ const API = Axios.create({ baseURL })
 
 
 export function get ({ pair, provider }) {
-  const uri = `${pair}/${provider}`
+  const uri = `${provider}/${pair}`
 
   return API
     .get(uri)

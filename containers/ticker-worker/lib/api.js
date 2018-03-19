@@ -9,7 +9,7 @@ const { put } = Axios.create({ baseURL })
 const update = body => {
   const { provider, pair } = body
 
-  const uri = `${pair}/${provider}`
+  const uri = `${provider}/${pair}`
 
   return put(uri, body)
     .catch(console.log)

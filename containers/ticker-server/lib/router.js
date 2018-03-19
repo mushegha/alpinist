@@ -51,8 +51,8 @@ async function get (ctx) {
 module.exports = () => {
   const router = new Router()
 
-  router.put('/:pair/:provider', put)
-  router.get('/:pair/:provider', get)
+  router.put('/:provider/:pair', put)
+  router.get('/:provider/:pair', get)
 
   return router.routes()
 }
