@@ -3,9 +3,21 @@
     .panel-heading
       | Lots
     .panel-block
-      ul(v-if="slots$")
-        li(v-for="slot in slots$")
-          | {{ slot.openPrice }}
+      table.table.is-bordered.is-narrow.is-fullwidth(v-if="slots$")
+        thead
+          tr
+            th #
+            th Price
+            th Worth
+        tbody
+          tr(v-for="(slot, index) in slots$")
+            th {{ index }}
+            td {{ slot.openPrice }}
+            td {{ slot.investment }}
+    .panel-block
+      button.button.is-link.is-outlined.is-fullwidth(disabled)
+        | Liquidate all assets
+
 </template>
 
 <script src="./script.js"></script>
