@@ -14,12 +14,6 @@ const {
 } = require('ramda')
 
 /**
- * Helpers
- */
-
-const sortByPrice = sortBy(prop('openPrice'))
-
-/**
  * Mocks
  */
 
@@ -60,11 +54,10 @@ async function run () {
     const cursor = await Ladder
       .filter(focusArea)
       .filter(rt.row.hasFields('closePrice').not())
+      .orderBy('openPrice')
       .run(conn)
 
-    const slots = await cursor
-      .toArray()
-      .then(sortByPrice)
+    const slots = await cursor.toArray()
 
     /**
      * Should buy
