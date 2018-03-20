@@ -6,8 +6,13 @@ const components = {
   LadderStatus
 }
 
+const props = [
+  'provider',
+  'pair'
+]
 
 export default {
   name: 'symbol-scope-view',
-  components
+  components,
+  props
 }

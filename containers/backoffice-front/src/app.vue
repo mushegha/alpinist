@@ -40,16 +40,6 @@ div
 </nav>
 <script>
 
-import TickerStatus from '@/ticker-status'
-import LadderStatus from '@/ladder-status'
-
-const components = {
-  TickerStatus,
-  LadderStatus
-}
-
-export default {
-  components
-}
+export default { }
 
 </script>

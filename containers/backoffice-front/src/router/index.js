@@ -3,11 +3,16 @@ import Router from 'vue-router'
 import SymbolScope from '~/views/symbol-scope'
 
 const routes = [
-  { path: '', component: SymbolScope }
+  {
+    path: '/:provider/:pair',
+    component: SymbolScope,
+    props: true
+  }
 ]
 
-const router = new Router({
-  routes
-})
+const options = {
+  routes,
+  mode: 'history'
+}
 
-export default router
+export default new Router(options)
