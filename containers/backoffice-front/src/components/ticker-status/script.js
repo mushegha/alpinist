@@ -1,40 +1,27 @@
 import { Observable } from 'rxjs/Observable'
 
-import { get } from '~/services/ticker'
+import { mapActions, mapGetters } from 'vuex'
 
-import * as computed from './computed'
+import { pick } from 'ramda'
 
-const props = []
-
-const data = () => {
-  return {}
-}
-
+const props = ['provider', 'pair']
 
 function mounted () {
+  const params = pick(props, this)
 
-}
-
-
-function subscriptions () {
-  const params = {
-    pair: 'btcusd',
-    provider: 'bitfinex'
-  }
-
-  const status$ = Observable
+  const stream = Observable
     .interval(400)
-    .flatMap(_ => get(params))
+    .flatMap(_ => this.fetch(params))
 
-  return {
-    status$
-  }
+  this.$subscribeTo(stream, _ => _)
 }
+
+const methods = mapActions('ticker', ['fetch'])
+const computed = mapGetters('ticker', ['status'])
 
 export default {
   props,
-  data,
   computed,
-  mounted,
-  subscriptions
+  methods,
+  mounted
 }

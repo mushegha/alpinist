@@ -1,16 +1,22 @@
 import * as R from 'ramda'
 
-const bid = R.compose(
-  R.prop('bid'),
+const status = R.compose(
+  R.defaultTo({}),
   R.last
 )
 
-const ask = R.compose(
-  R.prop('ask'),
-  R.last
-)
+// const bid = R.compose(
+//   R.prop('bid'),
+//   R.last
+// )
+//
+// const ask = R.compose(
+//   R.prop('ask'),
+//   R.last
+// )
 
 export {
-  bid,
-  ask
+  status
+  // bid,
+  // ask
 }
