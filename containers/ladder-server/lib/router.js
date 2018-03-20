@@ -10,12 +10,11 @@ const Ladder = rt
   .db('alpinist')
   .table('ladder')
 
-
 async function get (ctx) {
   const { conn, params } = ctx
 
   const data = await Ladder
-    .filter(rt.row.hasFields('priceClose').not())
+    .filter(rt.row.hasFields('closePrice').not())
     .filter(params)
     .orderBy('openPrice')
     .run(conn)
