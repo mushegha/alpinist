@@ -10,14 +10,14 @@ function mounted () {
   const params = pick(props, this)
 
   const stream = Observable
-    .interval(400)
+    .interval(500)
     .flatMap(_ => this.fetch(params))
 
   this.$subscribeTo(stream, _ => _)
 }
 
 const methods = mapActions('ticker', ['fetch'])
-const computed = mapGetters('ticker', ['status'])
+const computed = mapGetters('ticker', ['last'])
 
 export default {
   props,

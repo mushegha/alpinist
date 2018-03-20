@@ -3,13 +3,13 @@
     .panel-heading
       | Ticker
     .panel-block
-      div(v-if="status")
+      div(v-if="last")
         p.field
           span.tag.is-medium
-            | {{ status.bid }}
+            | {{ last.bid }}
         p.field
           span.tag.is-medium
-            | {{ status.ask }}
+            | {{ last.ask }}
 </template>
 
 <script src="./script.js"></script>

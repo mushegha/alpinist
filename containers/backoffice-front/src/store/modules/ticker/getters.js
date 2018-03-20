@@ -1,22 +1,26 @@
 import * as R from 'ramda'
 
-const status = R.compose(
-  R.defaultTo({}),
-  R.last
-)
+const scope = (state, getters, rootState) => {
+  const { provider, pair } = rootState.route.params
 
-// const bid = R.compose(
-//   R.prop('bid'),
-//   R.last
-// )
-//
-// const ask = R.compose(
-//   R.prop('ask'),
-//   R.last
-// )
+  const key = `${provider}/${pair}`
+  const val = state[key]
+
+  return val || []
+}
+
+const last = (state, getters) =>
+  R.last(getters.scope)
+
+const prev = (state, getters) =>
+  R.nth(-2, getters.scope)
+
+/**
+ * Expose
+ */
 
 export {
-  status
-  // bid,
-  // ask
+  scope,
+  last,
+  prev
 }
