@@ -17,13 +17,7 @@ const {
  * Helpers
  */
 
-const isRelevant = assoc('closeAt', null)
-
-const sortByPrice = sortBy(path(['openAt', 'ask']))
-
-const formatUnion = ({ right, left }) =>
-  assoc('openAt', right, left)
-
+const sortByPrice = sortBy(prop('openPrice'))
 
 /**
  * Mocks
@@ -61,17 +55,15 @@ async function run () {
   cursor.each(async (_, ch) => {
     const t = Date.now()
 
-    const newTick = ch.new_val
-    const oldTick = ch.old_val
+    const { bid, ask } = ch.new_val
 
     const cursor = await Ladder
-      .filter(isRelevant(focusArea))
-      .eqJoin('openAt', Ticker)
+      .filter(focusArea)
+      .filter(rt.row.hasFields('closePrice').not())
       .run(conn)
 
     const slots = await cursor
       .toArray()
-      .then(map(formatUnion))
       .then(sortByPrice)
 
     /**
@@ -81,33 +73,30 @@ async function run () {
     if (slots.length === 0) {
       const newSlot = merge({
         investment : investment,
-        openAt     : newTick.id,
-        closeAt    : null,
-        timestamp  : rt.now()
+        openTime   : rt.now(),
+        openPrice  : ask,
       }, focusArea)
 
       await Ladder
         .insert(newSlot)
         .run(conn)
     }
-    else if (head(slots).openAt.ask - treshold >= newTick.ask) {
+    else if (head(slots).openPrice - treshold >= ask) {
       const newSlot = merge({
         investment : investment,
-        openAt     : newTick.id,
-        closeAt    : null,
-        timestamp  : rt.now()
+        openTime   : rt.now(),
+        openPrice  : ask,
       }, focusArea)
 
       await Ladder
         .insert(newSlot)
         .run(conn)
     }
-    else if (last(slots).openAt.ask + treshold <= newTick.ask) {
+    else if (last(slots).openPrice + treshold <= ask) {
       const newSlot = merge({
         investment : investment,
-        openAt     : newTick.id,
-        closeAt    : null,
-        timestamp  : rt.now()
+        openTime   : rt.now(),
+        openPrice  : ask,
       }, focusArea)
 
       await Ladder
@@ -116,7 +105,7 @@ async function run () {
     }
 
     const group = groupBy(slot => {
-      return slot.openAt.ask < newTick.bid
+      return slot.openPrice < bid
         ? 'profit'
         : 'loss'
     }, slots)
@@ -127,15 +116,20 @@ async function run () {
       const selling = take(minSellCount, group.profit)
       const ids = map(prop('id'), selling)
 
+      const patch = {
+        closeTime  : rt.now(),
+        closePrice : bid
+      }
+
       ids.forEach(id => {
         Ladder
           .get(id)
-          .update({ closeAt: newTick.id })
+          .update(patch)
           .run(conn)
       })
     }
 
-    console.log(slots.map(path(['openAt', 'ask'])))
+    console.log(slots.map(prop('openPrice')))
   })
 
 }
