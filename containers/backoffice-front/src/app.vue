@@ -22,13 +22,7 @@ div
               a.navbar-item(href="/mock/btcusd")
                 | Mock / BTCUSD
 
-  section.section
-    .container
-      .columns
-        .column.is-3
-          ladder-status
-        .column.is-9
-          ticker-status
+  router-view
 
 </template>
 <nav class="navbar" role="navigation" aria-label="main navigation">

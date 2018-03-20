@@ -1,12 +1,18 @@
 import Vue from 'vue'
 
-import Rx from 'rxjs/Rx'
+import VueRouter from 'vue-router'
+
 import VueRx from 'vue-rx'
+import Rx from 'rxjs/Rx'
 
 import App from './app'
 
+import router from './router'
+
 Vue.use(VueRx, Rx)
+Vue.use(VueRouter)
 
 new Vue({
-  render: h => h(App)
+  router,
+  render: h => h(App),
 }).$mount('#body')
