@@ -2,8 +2,6 @@ import { Observable } from 'rxjs/Observable'
 
 import { get } from '~/services/ladder'
 
-import * as computed from './computed'
-
 const props = []
 
 const data = () => {
@@ -34,7 +32,6 @@ function subscriptions () {
 export default {
   props,
   data,
-  computed,
   mounted,
   subscriptions
 }

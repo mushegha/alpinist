@@ -2,11 +2,12 @@
 
 section#body.section
   header
-  main.container
-    div
-      ticker-status
-    div
-      ladder-status
+  .container
+    .columns
+      .column.is-3
+        ladder-status
+      .column.is-9
+        ticker-status
 
 </template>
 

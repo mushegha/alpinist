@@ -1,12 +1,15 @@
 <template lang="pug">
-  div.card
-    div.card-content
-      p.field
-        span.tag.is-medium
-          | {{ status$.bid }}
-      p.field
-        span.tag.is-medium
-          | {{ status$.ask }}
+  .panel
+    .panel-heading
+      | Ticker
+    .panel-block
+      div
+        p.field
+          span.tag.is-medium
+            | {{ status$.bid }}
+        p.field
+          span.tag.is-medium
+            | {{ status$.ask }}
 </template>
 
 <script src="./script.js"></script>
