@@ -4,8 +4,13 @@ const {
   map,
   sortBy,
   path,
+  prop,
   assoc,
-  merge
+  merge,
+  head,
+  last,
+  take,
+  groupBy
 } = require('ramda')
 
 /**
@@ -30,7 +35,10 @@ const focusArea = {
 }
 
 const investment = 100
-const treshold = 1
+const treshold = 5
+
+const minSellCount = 2
+const minKeepCount = 1
 
 async function run () {
   const conn = await rt.connect()
@@ -82,7 +90,7 @@ async function run () {
         .insert(newSlot)
         .run(conn)
     }
-    else if (slots[0].openAt.ask - treshold >= newTick.ask) {
+    else if (head(slots).openAt.ask - treshold >= newTick.ask) {
       const newSlot = merge({
         investment : investment,
         openAt     : newTick.id,
@@ -94,7 +102,7 @@ async function run () {
         .insert(newSlot)
         .run(conn)
     }
-    else if (slots[0].openAt.ask + treshold <= newTick.ask) {
+    else if (last(slots).openAt.ask + treshold <= newTick.ask) {
       const newSlot = merge({
         investment : investment,
         openAt     : newTick.id,
@@ -107,7 +115,27 @@ async function run () {
         .run(conn)
     }
 
-    console.log(Date.now() - t)
+    const group = groupBy(slot => {
+      return slot.openAt.ask < newTick.bid
+        ? 'profit'
+        : 'loss'
+    }, slots)
+
+    if (group.profit && group.profit.length >= minSellCount
+      && group.loss && group.loss.length >= minKeepCount) {
+
+      const selling = take(minSellCount, group.profit)
+      const ids = map(prop('id'), selling)
+
+      ids.forEach(id => {
+        Ladder
+          .get(id)
+          .update({ closeAt: newTick.id })
+          .run(conn)
+      })
+    }
+
+    console.log(slots.map(path(['openAt', 'ask'])))
   })
 
 }
