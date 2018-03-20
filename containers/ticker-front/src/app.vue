@@ -3,16 +3,21 @@
 section#body.section
   header
   main.container
-    ticker-status
+    div
+      ticker-status
+    div
+      ladder-status
 
 </template>
 
 <script>
 
 import TickerStatus from '@/ticker-status'
+import LadderStatus from '@/ladder-status'
 
 const components = {
-  TickerStatus
+  TickerStatus,
+  LadderStatus
 }
 
 export default {
