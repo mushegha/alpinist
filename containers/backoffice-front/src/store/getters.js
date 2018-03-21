@@ -1,35 +1,12 @@
-import * as R from 'ramda'
+import {
+  propEq,
+  find,
+  head
+} from 'ramda'
 
-export function shouldBuyFor (state, getters) {
-  const { init, step } = state
+export function activeScope (state) {
+  const { scopes, route } = state
+  const pred = propEq('query', route.query)
 
-  const isFirst = price => {
-    const card = getters['lots/card']
-    return card === 0
-  }
-
-  const isNextHead = price => {
-    const head = getters['lots/head']
-    return head && head.price + step <= price
-  }
-
-  const isNextFoot = price => {
-    const foot = getters['lots/foot']
-    return foot && foot.price - step >= price
-  }
-
-  const exo = R.anyPass([
-    isFirst,
-    isNextHead,
-    isNextFoot
-  ])
-
-  return exo
-}
-
-export function shouldSellFor (state, getters) {
-
-  return price => {
-
-  }
+  return find(pred, scopes) || head(scopes)
 }
