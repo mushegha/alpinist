@@ -99,25 +99,25 @@ test('renderSlotsToBuy', t => {
   t.deepEqual($(100), [])
   t.deepEqual(
     $(100, []),
-    {
+    [{
       investment: 50,
       openPrice: 100
-    }
+    }]
   )
 
   t.deepEqual(
     $(123),
-    {
+    [{
       investment: 75,
       openPrice: 123
-    }
+    }]
   )
 
   t.deepEqual(
     $(87),
-    {
+    [{
       investment: 100,
       openPrice: 87
-    }
+    }]
   )
 })

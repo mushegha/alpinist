@@ -93,12 +93,14 @@ function getInvestment (opts, mark, slots) {
 function renderSlotsToBuy (opts, openPrice, slots) {
   const investment = getInvestment(opts, openPrice, slots)
 
-  if (!investment) return []
-
-  return {
+  const slot = {
     investment,
     openPrice
   }
+
+  return investment
+    ? [slot]
+    : []
 }
 
 module.exports = {
