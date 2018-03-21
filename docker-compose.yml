@@ -24,7 +24,7 @@ services:
       RETHINKDB_PORT: 28015
       NODE_PORT: 80
       DEBUG: 'ticker:*'
-    command: node server.js
+    command: npm run dev
 
   ladder-server:
     build: ./containers/ladder-server
