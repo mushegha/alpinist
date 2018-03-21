@@ -1,15 +1,15 @@
 <template lang="pug">
   .panel
     .panel-heading
-      | Ticker
-    .panel-block
-      div(v-if="last")
-        p.field
-          span.tag.is-medium
-            | {{ last.bid }}
-        p.field
-          span.tag.is-medium
-            | {{ last.ask }}
+      .level
+        .level-right
+          .level-item
+            | Ticker
+        .level-left(v-if="last")
+          .level-item
+            .tag.is-medium.is-info {{ last.bid }}
+          .level-item
+            .tag.is-medium.is-warning {{ last.ask }}
     .panel-block
       ticker-chart.chart
 </template>
