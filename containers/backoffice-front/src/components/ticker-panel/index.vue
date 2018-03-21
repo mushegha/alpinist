@@ -11,7 +11,14 @@
           span.tag.is-medium
             | {{ last.ask }}
     .panel-block
-      ticker-chart
+      ticker-chart.chart
 </template>
 
 <script src="./script.js"></script>
+
+<style scoped>
+.chart {
+  width: 100%;
+  height: 420px;
+}
+</style>

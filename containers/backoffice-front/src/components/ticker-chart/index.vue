@@ -1,5 +1,5 @@
 <template lang="pug">
-div.canvas Exo
+div.canvas
 </template>
 
 <script src="./script.js"></script>
