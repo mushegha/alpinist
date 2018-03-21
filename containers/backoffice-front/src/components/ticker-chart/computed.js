@@ -3,35 +3,19 @@ import { mapGetters } from 'vuex'
 import {
   map,
   props,
-  evolve,
   compose,
-  uniqBy,
-  prop,
   prepend
 } from 'ramda'
 
 const HEADER = [ 'time', 'bid', 'ask' ]
 
-const toRow = compose(
-  props(HEADER),
-  evolve({
-    time: t => new Date(t)
-  })
-)
-
 const toRows = compose(
   prepend(HEADER),
-  map(toRow),
-  uniqBy(prop('time'))
+  map(props(HEADER))
 )
 
-function rows () {
-  return toRows(this.scope)
+export function rows () {
+  return toRows(this.history)
 }
 
-const { scope } = mapGetters('ticker', ['scope'])
-
-export {
-  rows,
-  scope
-}
+export const { history } = mapGetters('ticker', ['history'])
