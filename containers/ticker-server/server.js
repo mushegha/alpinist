@@ -1,7 +1,13 @@
+const debug = require('debug')('ticker:server')
+
+const getenv = require('getenv')
+
 const createApp = require('./lib')
 
 const app = createApp()
 
-const port = process.env.NODE_PORT || 8080
+const port = getenv.int('NODE_PORT', 8080)
 
-app.listen(port)
+app.listen(port, () => {
+  debug('Listening to %d', port)
+})

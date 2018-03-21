@@ -1,17 +1,10 @@
-const rt = require('rethinkdb')
-
-
-const options = {
-  host: process.env.RETHINKDB_HOST || 'localhost',
-  port: process.env.RETHINKDB_PORT || 28015
-}
-
+const { connect } = require('./clients/rethinkdb')
 
 module.exports = function () {
-  const connect = rt.connect(options)
+  const connection = connect()
 
   return async (ctx, next) => {
-    ctx.conn = await connect
+    ctx.conn = await connection
     return next()
   }
 }
