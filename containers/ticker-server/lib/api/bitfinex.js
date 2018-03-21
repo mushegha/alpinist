@@ -1,4 +1,4 @@
-const BFX = require('bitfinex-api-node')
+const { rest } = require('../clients/bitfinex')
 
 const {
   merge,
@@ -38,15 +38,7 @@ const SYMBOLS = {
 }
 
 /**
- * Client
- */
-
-const bfx = new BFX()
-
-const rest = bfx.rest(2, { transform: true })
-
-/**
- * Callback for each call
+ * Callback for each request
  */
 
 function callback (err, ticks) {
@@ -67,6 +59,7 @@ function callback (err, ticks) {
 
   return map(translate, ticks)
 }
+
 
 const fetchAll = symbols =>
   rest.tickers(symbols, callback)

@@ -43,5 +43,3 @@ Observable
   .timer(0, DELAY)
   .flatMap(fromRemote)
   .subscribe(intoDatabase)
-
-
