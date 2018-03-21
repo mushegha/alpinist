@@ -1,58 +1,47 @@
 const Router = require('koa-router')
 
-const rt = require('rethinkdb')
+const {
+  head,
+  assoc
+} = require('ramda')
 
-const { head } = require('ramda')
+const {
+  insert,
+  select
+} = require('./api/rethinkdb')
 
 async function put (ctx) {
   const { conn, params, request } = ctx
 
-  const { pair, provider } = params
-  const { bid, ask } = request.body
+  const data = request.body
 
-  const data = {
-    pair,
-    provider,
-    bid,
-    ask,
-    timestamp: rt.now()
-  }
+  data.moment = new Date()
 
-  await rt
-    .db('alpinist')
-    .table('ticker')
-    .insert(data)
-    .run(conn)
+  await insert(data, conn)
 
   ctx.status = 200
 }
 
 async function get (ctx) {
-  const { conn, params } = ctx
+  const { conn, query } = ctx
+  ctx.body = await select(query, conn)
+}
 
-  const data = await rt
-    .db('alpinist')
-    .table('ticker')
-    .orderBy({ index: rt.desc('timestamp') })
-    .filter(params)
-    .limit(1)
-    .run(conn)
-    .then(cursor => cursor.toArray())
+async function getOne (ctx) {
+  const { conn, query } = ctx
+
+  const lastOf = assoc('limit', 1)
+
+  ctx.body = await select(lastOf(query), conn)
     .then(head)
-
-  if (data) {
-    ctx.status = 200
-    ctx.body = data
-  } else {
-    ctx.status = 404
-  }
 }
 
 module.exports = () => {
   const router = new Router()
 
-  router.put('/:provider/:pair', put)
-  router.get('/:provider/:pair', get)
+  router.put('/', put)
+  router.get('/', get)
+  router.get('/_', getOne)
 
   return router.routes()
 }
