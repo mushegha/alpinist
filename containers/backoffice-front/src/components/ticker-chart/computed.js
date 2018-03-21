@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 import {
   map,
@@ -18,4 +18,4 @@ export function rows () {
   return toRows(this.history)
 }
 
-export const { history } = mapGetters('ticker', ['history'])
+export const { history } = mapState({ history: 'ticker' })

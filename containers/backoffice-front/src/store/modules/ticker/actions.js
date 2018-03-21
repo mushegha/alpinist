@@ -32,9 +32,6 @@ const { get } = Axios.create({ baseURL })
  */
 
 export async function fetch ({ commit }, params) {
-  const { origin, symbol } = params
-  const namespace = `${origin}/${symbol}`
-
   const update = data =>
     commit('PUT', data)
 

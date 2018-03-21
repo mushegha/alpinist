@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
 import {
+  filter,
+  whereEq,
+  pick,
   append,
   compose,
   equals,
@@ -33,20 +36,24 @@ const isStale = ({ time }) =>
  */
 
 export function PUT (state, payload) {
-  const { origin, symbol } = payload
-
-  const key = `${origin}/${symbol}`
+  const spec = pick(['origin', 'symbol'], payload)
 
   const push = compose(
-    takeLastWhile(isStale),
+    // TODO: remove
+    // takeLastWhile(isStale),
+    filter(whereEq(spec)),
     uniqBy(prop('id')),
-    appendTo(state[key] || []),
+    appendTo(state),
     evolve({ time })
   )
 
   const data = push(payload)
 
   // update only if updated
-  if (!equals(state[key], data))
-    Vue.set(state, key, data)
+  if (!equals(state, data))
+    state.splice(0, state.length, ...data)
+}
+
+export function ERASE (state) {
+  state.splice(0, state.length)
 }

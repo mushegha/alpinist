@@ -1,6 +1,10 @@
 import { Observable } from 'rxjs/Observable'
 
-import { mapActions, mapGetters } from 'vuex'
+import {
+  mapActions,
+  mapGetters,
+  mapMutations
+} from 'vuex'
 
 import { pick } from 'ramda'
 
@@ -24,12 +28,16 @@ function mounted () {
 }
 
 const watch = {
-  target ({ id }) {
-    console.log('navigation detected')
+  target () {
+    this.erase()
   }
 }
 
-const methods = mapActions('ticker', ['fetch'])
+const methods = {
+  ...mapActions('ticker', ['fetch']),
+  ...mapMutations('ticker', { erase: 'ERASE' })
+}
+
 const computed = mapGetters('ticker', ['last'])
 
 export default {
