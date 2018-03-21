@@ -5,7 +5,7 @@
         .column.is-3
 
         .column.is-9
-          ticker-panel(:target="target")
+          ticker-panel(:target="activeScope")
 
 </template>
 

@@ -13,11 +13,20 @@ const components = {
 const props = ['target']
 
 function mounted () {
+  const fromRemote = () =>
+    this.fetch(this.target.query)
+
   const stream = Observable
-    .interval(500)
-    .flatMap(_ => this.fetch(this.target))
+    .timer(0, 800)
+    .flatMap(fromRemote)
 
   this.$subscribeTo(stream, _ => _)
+}
+
+const watch = {
+  target ({ id }) {
+    console.log('navigation detected')
+  }
 }
 
 const methods = mapActions('ticker', ['fetch'])
@@ -28,5 +37,6 @@ export default {
   props,
   computed,
   methods,
-  mounted
+  mounted,
+  watch
 }

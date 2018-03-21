@@ -1,3 +1,5 @@
+import { mapGetters } from 'vuex'
+
 import TickerPanel from '@/ticker-panel'
 // import LadderStatus from '@/ladder-status'
 
@@ -6,11 +8,7 @@ const components = {
   // LadderStatus
 }
 
-const computed = {
-  target () {
-    return this.$route.query
-  }
-}
+const computed = mapGetters(['activeScope'])
 
 export default {
   name: 'the-dashboard-view',
