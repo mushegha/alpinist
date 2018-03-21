@@ -1,11 +1,24 @@
 import Vue from 'vue'
 
 import {
-  takeLast,
+  filter,
+  whereEq,
+  pick,
   append,
   compose,
-  flip
+  equals,
+  evolve,
+  flip,
+  prop,
+  takeLastWhile,
+  uniqBy
 } from 'ramda'
+
+/**
+ * Settings
+ */
+
+const MAX_TIME = 3 * 60 * 1e3 // 3 minutes
 
 /**
  * Helpers
@@ -13,19 +26,34 @@ import {
 
 const appendTo = flip(append)
 
+const time = t => new Date(t)
+
+const isStale = ({ time }) =>
+  Date.now() - time < MAX_TIME
+
 /**
  * Mutations
  */
 
 export function PUT (state, payload) {
-  const { provider, pair } = payload
-
-  const key = `${provider}/${pair}`
+  const spec = pick(['origin', 'symbol'], payload)
 
   const push = compose(
-    takeLast(100),
-    appendTo(state[key] || [])
+    // TODO: remove
+    // takeLastWhile(isStale),
+    filter(whereEq(spec)),
+    uniqBy(prop('id')),
+    appendTo(state),
+    evolve({ time })
   )
 
-  Vue.set(state, key, push(payload))
+  const data = push(payload)
+
+  // update only if updated
+  if (!equals(state, data))
+    state.splice(0, state.length, ...data)
+}
+
+export function ERASE (state) {
+  state.splice(0, state.length)
 }

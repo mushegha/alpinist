@@ -1,18 +1,11 @@
 import Router from 'vue-router'
 
-import SymbolScope from '~/views/symbol-scope'
-
-const routes = [
-  {
-    path: '/:provider/:pair',
-    component: SymbolScope,
-    props: true
-  }
-]
+import routes from './routes'
 
 const options = {
   routes,
-  mode: 'history'
+  mode: 'history',
+  linkExactActiveClass: 'is-active'
 }
 
 export default new Router(options)
