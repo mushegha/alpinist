@@ -12,7 +12,7 @@ const props = [
 ]
 
 export default {
-  name: 'symbol-scope-view',
+  name: 'the-dashboard-view',
   components,
   props
 }

@@ -1,11 +1,11 @@
 import Router from 'vue-router'
 
-import SymbolScope from '~/views/symbol-scope'
+import TheDashboard from '~/views/the-dashboard'
 
 const routes = [
   {
-    path: '/:provider/:pair',
-    component: SymbolScope,
+    path: '/dashboard',
+    component: TheDashboard,
     props: true
   }
 ]
