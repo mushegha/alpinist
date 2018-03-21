@@ -10,6 +10,8 @@
         p.field
           span.tag.is-medium
             | {{ last.ask }}
+    .panel-block
+      ticker-chart
 </template>
 
 <script src="./script.js"></script>
