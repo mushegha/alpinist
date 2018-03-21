@@ -1,4 +1,4 @@
-const debug = require('debug')('server')
+const debug = require('debug')('ticker:server')
 
 const getenv = require('getenv')
 

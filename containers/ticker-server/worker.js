@@ -1,4 +1,4 @@
-const debug = require('debug')('worker')
+const debug = require('debug')('ticker:worker')
 
 const { Observable } = require('rxjs')
 
@@ -34,7 +34,9 @@ const fromRemote = () =>
   fetchAll(SYMBOLS)
 
 const intoDatabase = data =>
-  awaitConnection.then(insert(data))
+  awaitConnection
+    .then(insert(data))
+    .catch(err => debug('Write failed with error: %O', err))
 
 /**
  *

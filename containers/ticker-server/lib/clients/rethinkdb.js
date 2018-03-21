@@ -1,4 +1,4 @@
-const debug = require('debug')('rethinkdb')
+const debug = require('debug')('ticker:rethinkdb')
 
 const rt = require('rethinkdb')
 
