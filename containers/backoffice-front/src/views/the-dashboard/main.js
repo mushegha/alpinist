@@ -1,8 +1,8 @@
-import TickerStatus from '@/ticker-status'
+import TickerPanel from '@/ticker-panel'
 // import LadderStatus from '@/ladder-status'
 
 const components = {
-  TickerStatus,
+  TickerPanel,
   // LadderStatus
 }
 

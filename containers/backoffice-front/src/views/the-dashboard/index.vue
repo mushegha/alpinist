@@ -5,7 +5,7 @@
         .column.is-3
 
         .column.is-9
-          ticker-status(:target="target")
+          ticker-panel(:target="target")
 
 </template>
 

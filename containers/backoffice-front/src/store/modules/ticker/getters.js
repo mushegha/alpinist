@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-const scope = (state, getters, rootState) => {
+const history = (state, getters, rootState) => {
   const { origin, symbol } = rootState.route.query
 
   const key = `${origin}/${symbol}`
@@ -9,17 +9,17 @@ const scope = (state, getters, rootState) => {
 }
 
 const last = (state, getters) =>
-  R.last(getters.scope)
+  R.last(getters.history)
 
 const prev = (state, getters) =>
-  R.nth(-2, getters.scope)
+  R.nth(-2, getters.history)
 
 /**
  * Expose
  */
 
 export {
-  scope,
+  history,
   last,
   prev
 }
