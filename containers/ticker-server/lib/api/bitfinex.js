@@ -1,7 +1,7 @@
 const { rest } = require('../clients/bitfinex')
 
 const {
-  merge,
+  assoc,
   compose,
   evolve,
   flip,
@@ -43,10 +43,7 @@ const SYMBOLS = {
 
 function callback (err, ticks) {
   const translate = compose(
-    merge({
-      origin: ORIGIN,
-      moment: new Date()
-    }),
+    assoc('origin', ORIGIN),
     pick([
       'bid',
       'ask',

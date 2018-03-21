@@ -1,9 +1,24 @@
 const rt = require('rethinkdb')
 
 const {
+  assoc,
   curryN,
+  is,
+  map,
   pick
 } = require('ramda')
+
+/**
+ * Helpers
+ */
+
+const withTime = data => {
+  const setTime = assoc('time', new Date())
+
+  return is(Array, data)
+    ? map(setTime, data)
+    : setTime(data)
+}
 
 
 const Table = rt
@@ -13,7 +28,7 @@ const Table = rt
 
 async function insert (data, conn) {
   return Table
-    .insert(data)
+    .insert(withTime(data))
     .run(conn)
 }
 
@@ -22,8 +37,10 @@ async function select (pred, conn) {
 
   const filter = pick(['origin', 'symbol'], pred)
 
+  const descTime = { index: rt.desc('time') }
+
   const query = Table
-    .orderBy({ index: rt.desc('moment') })
+    .orderBy(descTime)
     .filter(filter)
     .limit(limit)
 

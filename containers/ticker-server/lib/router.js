@@ -13,11 +13,7 @@ const {
 async function put (ctx) {
   const { conn, params, request } = ctx
 
-  const data = request.body
-
-  data.moment = new Date()
-
-  await insert(data, conn)
+  await insert(request.body, conn)
 
   ctx.status = 200
 }
