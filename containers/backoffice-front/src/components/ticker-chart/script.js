@@ -1,3 +1,5 @@
+import c3 from 'c3'
+
 import { Observable } from 'rxjs/Observable'
 
 import { mapActions, mapGetters } from 'vuex'
@@ -7,32 +9,53 @@ import { pick, map } from 'ramda'
 const props = ['target']
 
 function mounted () {
-  this.chart = ''
+  const chart = c3.generate({
+    bindto: this.$el,
+    transition: {
+      duration: 200
+    },
+    data: {
+      x: 'time',
+      rows: [
+        ['time', 'bid', 'ask']
+      ],
+    },
+    point: { show: false },
+    axis: {
+      x: {
+        type: 'timeseries',
+        tick: {
+          format: '%H:%M:%S',
+        }
+      }
+    }
+  })
+
+  this.chart = chart
 }
 
 const methods = {}
 
 const watch = {
-  source (data) {
-
+  rows (data) {
+    this.chart.load({
+      rows: [
+        ['time', 'bid', 'ask'],
+        ...data
+      ]
+    })
   }
 }
 
 const computed = {
-  source () {
-    const toPair = ({ bid, ask, time }) => {
-      time = new Date(time).getTime()
-
-      return {
-        time,
-        price: bid,
-        type: 'bid'
-      }
-    }
-
-    return map(toPair, this.scope)
+  rows () {
+    const header = ['time', 'bid', 'ask']
+    const data = map(({time, bid, ask}) => {
+      return [ new Date(time), bid, ask ]
+    }, this.scope)
+    return data
   },
-  ...mapGetters('ticker', ['scope'])
+  ...mapGetters('ticker', ['scope', 'last'])
 }
 
 export default {
