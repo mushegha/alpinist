@@ -11,15 +11,27 @@ const state = {
   scopes: [
     {
       id: 'bitfinex/btcusd',
-      data: {
+      query: {
         origin: 'bitfinex',
         symbol: 'btcusd'
       }
     }, {
+      id: 'bitfinex/ethusd',
+      query: {
+        origin: 'bitfinex',
+        symbol: 'ethusd'
+      }
+    }, {
       id: 'bitfinex/neousd',
-      data: {
+      query: {
         origin: 'bitfinex',
         symbol: 'neousd'
+      }
+    }, {
+      id: 'mock/exousd',
+      query: {
+        origin: 'mock',
+        symbol: 'exousd'
       }
     }
   ]

@@ -7,7 +7,7 @@
       v-for="scope in scopes"
       :key="scope.id"
     )
-      router-link(:to="{ path: 'dashboard', query: scope.data }")
+      router-link(:to="{ path: 'dashboard', query: scope.query }")
         | {{ scope.id }}
 </template>
 
