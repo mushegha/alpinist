@@ -1,66 +1,75 @@
 import Taucharts from 'taucharts'
+import Trendline from 'taucharts/dist/plugins/trendline'
 
 import { Observable } from 'rxjs/Observable'
 
 import { mapActions, mapGetters } from 'vuex'
 
-import { pick, range } from 'ramda'
+import { pick, map } from 'ramda'
 
 const props = ['target']
 
 function mounted () {
-  const stream = Observable
-    .interval(500)
-
-  this.$subscribeTo(stream, _ => _)
-
   const chart = new Taucharts.Chart({
     type: 'line',
-    x: ['x'],
-    y: ['y'],
+    y: 'price',
+    x: 'time',
     color: 'type',
-    guide: [
-      {
-        x: { autoScale: false },
-        y: { autoScale: false, min: -1.5, max: 1.5 },
-        interpolate: 'basis'
-      }
+    guide: {
+      y: { nice: false, min: 9080, max: 9120 }
+    },
+    data: [
+      { time: new Date(), price: 9000, type: 'bid' },
     ],
-
     settings: {
       animationSpeed: 0
     },
+    dimensions: {
+      price: {
+        type: 'measure',
+      },
+      time: {
+        type: 'measure',
+        scale: 'time'
+      }
+    },
+    plugins: []
+  })
 
-    data: range(1, 100).reduce(function (memo, i) {
-        var x = i * (Math.PI / 100);
-        return memo.concat([
-            {
-                x: x,
-                y: Math.sin(x),
-                type: 'sin'
-            },
-            {
-                x: x,
-                y: Math.cos(x),
-                type: 'cos'
-            }
-        ]);
-    }, []),
+  chart.renderTo(this.$el);
 
-      // plugins: [
-      //     Taucharts.api.plugins.get('trendline')({showPanel:false})
-      // ]
-      });
-
-    chart.renderTo(this.$el);
+  this.chart = chart
 }
 
 const methods = {}
-const computed = mapGetters('ticker', ['scope'])
+
+const watch = {
+  source (data) {
+    this.chart.setData(data)
+  }
+}
+
+const computed = {
+  source () {
+    const toPair = ({ bid, ask, time }) => {
+      time = new Date(time).getTime()
+
+      return {
+        time,
+        price: bid,
+        type: 'bid'
+      }
+    }
+
+    return map(toPair, this.scope)
+  },
+  ...mapGetters('ticker', ['scope'])
+}
 
 export default {
   props,
   computed,
+  watch,
   methods,
   mounted
 }
