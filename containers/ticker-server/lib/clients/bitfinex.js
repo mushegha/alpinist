@@ -1,9 +1,11 @@
 const BFX = require('bitfinex-api-node')
 
-const options = {
-  apiKey: process.env.BITFINEX_KEY || void 0,
-  apiSecret: process.env.BITFINEX_SECRET || void 0
-}
+const getenv = require('getenv')
+
+const options = getenv.multi({
+  apiKey    : ['BITFINEX_KEY', ''],
+  apiSecret : ['BITFINEX_SECRET', '']
+})
 
 const bfx = new BFX(options)
 
