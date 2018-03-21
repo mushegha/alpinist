@@ -1,18 +1,19 @@
 import TickerStatus from '@/ticker-status'
-import LadderStatus from '@/ladder-status'
+// import LadderStatus from '@/ladder-status'
 
 const components = {
   TickerStatus,
-  LadderStatus
+  // LadderStatus
 }
 
-const props = [
-  'provider',
-  'pair'
-]
+const computed = {
+  target () {
+    return this.$route.query
+  }
+}
 
 export default {
   name: 'the-dashboard-view',
   components,
-  props
+  computed
 }

@@ -18,9 +18,9 @@ const appendTo = flip(append)
  */
 
 export function PUT (state, payload) {
-  const { provider, pair } = payload
+  const { origin, symbol } = payload
 
-  const key = `${provider}/${pair}`
+  const key = `${origin}/${symbol}`
 
   const push = compose(
     takeLast(100),

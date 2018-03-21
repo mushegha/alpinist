@@ -1,12 +1,11 @@
 import * as R from 'ramda'
 
 const scope = (state, getters, rootState) => {
-  const { provider, pair } = rootState.route.params
+  const { origin, symbol } = rootState.route.query
 
-  const key = `${provider}/${pair}`
-  const val = state[key]
+  const key = `${origin}/${symbol}`
 
-  return val || []
+  return state[key] || []
 }
 
 const last = (state, getters) =>

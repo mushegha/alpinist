@@ -4,14 +4,12 @@ import { mapActions, mapGetters } from 'vuex'
 
 import { pick } from 'ramda'
 
-const props = ['provider', 'pair']
+const props = ['target']
 
 function mounted () {
-  const params = pick(props, this)
-
   const stream = Observable
     .interval(500)
-    .flatMap(_ => this.fetch(params))
+    .flatMap(_ => this.fetch(this.target))
 
   this.$subscribeTo(stream, _ => _)
 }
