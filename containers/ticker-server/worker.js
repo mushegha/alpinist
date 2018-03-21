@@ -1,3 +1,5 @@
+const debug = require('debug')('worker')
+
 const { Observable } = require('rxjs')
 
 const { connect } = require('./lib/clients/rethinkdb')
@@ -34,7 +36,6 @@ const fromRemote = () =>
 const intoDatabase = data =>
   awaitConnection.then(insert(data))
 
-
 /**
  *
  */
@@ -42,4 +43,5 @@ const intoDatabase = data =>
 Observable
   .timer(0, DELAY)
   .flatMap(fromRemote)
+  .do(_ => debug('Data received from remote'))
   .subscribe(intoDatabase)

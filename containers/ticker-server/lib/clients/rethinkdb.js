@@ -1,6 +1,10 @@
+const debug = require('debug')('rethinkdb')
+
 const rt = require('rethinkdb')
 
 const getenv = require('getenv')
+
+const { tap } = require('ramda')
 
 const options = getenv.multi({
   host: ['RETHINKDB_HOST', 'localhost'],
@@ -8,7 +12,11 @@ const options = getenv.multi({
 })
 
 async function connect () {
-  return rt.connect(options)
+  const logSuccess = _ => debug('Database connection estabilished')
+
+  return rt
+    .connect(options)
+    .then(tap(logSuccess))
 }
 
 module.exports = {
