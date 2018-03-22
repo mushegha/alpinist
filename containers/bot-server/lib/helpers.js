@@ -53,8 +53,8 @@ function renderSlotsToSell (opts, price, slots) {
 
   const render = compose(
     map(prop('id')),
-    sortedByPrice,
-    take(sellLimit)
+    take(sellLimit),
+    sortedByPrice
   )
 
   const [ right, left ] = splitByPL(price, slots)
@@ -68,13 +68,13 @@ function renderSlotsToSell (opts, price, slots) {
 
 function getInvestment (opts, price, slots) {
   const {
-    initialInvestment,
+    investment,
     treshold,
     upK, upB,
     downK, downB
   } = opts
 
-  if (isEmpty(slots)) return initialInvestment
+  if (isEmpty(slots)) return investment
 
   const [lowest, highest] = edges(slots)
 
