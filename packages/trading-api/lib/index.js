@@ -4,6 +4,40 @@ const BFX = require('bitfinex-api-node')
 
 const { Order } = require('bitfinex-api-node/lib/models')
 
+function getBalance (config) {
+  const client = new BFX(config)
+  const rest = client.rest(2)
+
+  rest
+    .wallets((err, list) => list)
+    .then(console.log)
+}
+
+
+function connect (config) {
+  const fx = new BFX(config)
+  const ws = fx.ws(2)
+
+  return new Promise(resolve => {
+    ws.on('error', (err) => {
+      console.log('>', err)
+    })
+
+    ws.on('open', () => {
+      debug('open')
+      ws.auth()
+    })
+
+    ws.once('auth', () => {
+      debug('authenticated')
+      resolve(ws)
+    })
+
+    ws.open()
+  })
+}
+
+
 /**
  * Buy
  *
@@ -21,71 +55,50 @@ const { Order } = require('bitfinex-api-node/lib/models')
  */
 
 function buy (config, params) {
-  const client = new BFX(config)
-  const ws = client.ws(2)
+  const data = {
+    cid: Date.now(),
+    symbol: params.symbol,
+    price: params.price,
+    amount: params.amount,
+    type: Order.type.MARKET
+  }
 
-  ws.on('error', (err) => {
-    console.log(err)
-  })
+  connect(config)
+    .then(ws => {
+      const o = new Order(data, ws)
 
-  ws.on('open', () => {
-    debug('open')
-    ws.auth()
-  })
+      // Build new order
 
-  ws.once('auth', () => {
-    debug('authenticated')
+      let closed = false
 
-    // Build new order
-    const o = new Order({
-      cid: Date.now(),
-      symbol: 'tXRPUSD',
-      price: 0.67723,
-      amount: 1,
-      type: Order.type.MARKET
-    }, ws)
+      // Enable automatic updates
+      o.registerListeners()
 
-    let closed = false
+      o.on('update', () => {
+        debug('order updated: %j', o.serialize())
+      })
 
-    // Enable automatic updates
-    o.registerListeners()
+      o.on('close', () => {
+        debug('order closed: %s', o.status)
+        closed = true
+      })
 
-    o.on('update', () => {
-      debug('order updated: %j', o.serialize())
-    })
+      debug('submitting order %d', o.cid)
 
-    o.on('close', () => {
-      debug('order closed: %s', o.status)
-      closed = true
-    })
-
-    debug('submitting order %d', o.cid)
-
-    o.submit().then(() => {
-      debug('got submit confirmation for order %d [%d]', o.cid, o.id)
-
-      // wait a bit...
-      setTimeout(() => {
-        if (closed) return
-
-        debug('canceling...')
-
-        o.cancel().then(() => {
-          debug('got cancel confirmation for order %d', o.cid)
-          ws.close()
-        }).catch((err) => {
-          debug('error cancelling order: %j', err)
-          ws.close()
+      o.submit()
+        .then(() => {
+          debug('got submit confirmation for order %d [%d]', o.cid, o.id)
         })
-      }, 2000)
-    }).catch((err) => {
-      console.log(err)
-      ws.close()
-    })
+        .catch(err => {
+          ws.close()
+          return Promise.reject(err)
+        })
+
   })
 
-  ws.open()
-  console.log(ws)
 }
 
-module.exports = { buy }
+module.exports = {
+  buy,
+  getBalance
+}
