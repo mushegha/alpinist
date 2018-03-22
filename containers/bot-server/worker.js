@@ -1,6 +1,7 @@
 const rt = require('rethinkdb')
 
 const {
+  curry,
   map,
   sortBy,
   path,
@@ -14,6 +15,8 @@ const {
 } = require('ramda')
 
 const H = require('./lib/helpers')
+
+const Slots = require('./lib/api/ladder')
 
 /**
  * Mocks
@@ -45,9 +48,11 @@ async function run () {
     .db('alpinist')
     .table('ticker')
 
-  const Ladder = rt
+  const LadderTable = rt
     .db('alpinist')
     .table('ladder')
+
+
 
   const cursor = await Ticker
     .orderBy({ index: rt.desc('time') })
@@ -57,6 +62,9 @@ async function run () {
     .run(conn)
 
   cursor.each(async (_, ch) => {
+
+
+
     const t = Date.now()
 
     const {
@@ -67,52 +75,28 @@ async function run () {
       time
     } = ch.new_val
 
-    const cursor = await Ladder
-      .filter(focusArea)
-      .filter(rt.row.hasFields('closePrice').not())
-      .orderBy('openPrice')
-      .run(conn)
-
-    const slots = await cursor.toArray()
-
+    const slots = await Slots.getAllOpen(focusArea)
 
     const buySlots = H.renderSlotsToBuy(opts, ask, slots)
 
     await Promise.all(
-      map(slot => {
-        slot.time = new Date()
-        slot.origin = origin
-        slot.symbol = symbol
-        return Ladder
-          .insert(slot)
-          .run(conn)
-      }, buySlots)
+      map(Slots.buy({ origin, symbol }), buySlots)
     )
 
     const sellSlots = H.renderSlotsToSell(opts, bid, slots)
-    console.log(sellSlots)
 
-    //
-    // if (group.profit && group.profit.length >= minSellCount
-    //   && group.loss && group.loss.length >= minKeepCount) {
-    //
-    //   const selling = take(minSellCount, group.profit)
-    //   const ids = map(prop('id'), selling)
-    //
-    //   const patch = {
-    //     closeTime  : rt.now(),
-    //     closePrice : bid
-    //   }
-    //
-    //   ids.forEach(id => {
-    //     Ladder
-    //       .get(id)
-    //       .update(patch)
-    //       .run(conn)
-    //   })
-    // }
+    await Promise.all(
+      map(slot => {
+        slot.closeTime = new Date()
+        slot.closePrice = bid
+        return LadderTable
+          .get(slot.id)
+          .update(slot)
+          .run(conn)
+      }, sellSlots)
+    )
 
-    console.log(slots.map(prop('openPrice')))
+    // console.log(slots.map(prop('openPrice')))
   })
 
 }

@@ -20,7 +20,7 @@ const {
  * Utils
  */
 
-const useOpenPrice = prop('openPrice')
+const useOpenPrice = prop('position')
 
 const sortedByPrice = sortBy(useOpenPrice)
 
@@ -81,21 +81,21 @@ function getInvestment (opts, mark, slots) {
 
   const [lowest, highest] = edges(slots)
 
-  if (mark + treshold <= lowest.openPrice) {
+  if (mark + treshold <= lowest.position) {
     return downK * initialInvestment + downB
   }
 
-  if (mark - treshold >= highest.openPrice) {
+  if (mark - treshold >= highest.position) {
     return upK * initialInvestment + upB
   }
 }
 
-function renderSlotsToBuy (opts, openPrice, slots) {
-  const investment = getInvestment(opts, openPrice, slots)
+function renderSlotsToBuy (opts, price, slots) {
+  const investment = getInvestment(opts, price, slots)
 
   const slot = {
-    investment,
-    openPrice
+    amount: investment / price,
+    price
   }
 
   return investment
