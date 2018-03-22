@@ -34,7 +34,6 @@ const edges = compose(
  */
 
 function splitByPL (price, slots) {
-
   const pred = compose(
     lte(price),
     usePrice
@@ -49,24 +48,22 @@ function splitByPL (price, slots) {
   return splitX(slots)
 }
 
-function isEligibleToSell (opts, price, slots) {
-  const { sellLimit, keepLimit } = opts
-
-  const [ right, left ] = splitByPL(price, slots)
-
-  return and(
-    right >= sellLimit,
-    left >= keepLimit
-  )
-}
-
 function renderSlotsToSell (opts, price, slots) {
   const { sellLimit, keepLimit } = opts
 
-  if (!isEligibleToSell(opts, price, slots)) return []
+  const render = compose(
+    map(prop('id')),
+    sortedByPrice,
+    take(sellLimit)
+  )
 
-  return take(sellLimit, slots)
-    .map(slot => slot.id)
+  const [ right, left ] = splitByPL(price, slots)
+
+  if (right >= sellLimit && left >= keepLimit) {
+    return render(slots)
+  } else {
+    return []
+  }
 }
 
 function getInvestment (opts, price, slots) {
@@ -92,7 +89,6 @@ function getInvestment (opts, price, slots) {
 
 module.exports = {
   splitByPL,
-  isEligibleToSell,
   renderSlotsToSell,
   getInvestment
 }
