@@ -22,7 +22,7 @@ const Slots = require('./lib/api/ladder')
  * Mocks
  */
 
-const focusArea = {
+const target = {
   origin: 'bitfinex',
   symbol: 'btcusd'
 }
@@ -56,16 +56,12 @@ async function run () {
 
   const cursor = await Ticker
     .orderBy({ index: rt.desc('time') })
-    .filter(focusArea)
+    .filter(target)
     .limit(1)
     .changes()
     .run(conn)
 
   cursor.each(async (_, ch) => {
-
-
-
-    const t = Date.now()
 
     const {
       bid,
@@ -75,28 +71,23 @@ async function run () {
       time
     } = ch.new_val
 
-    const slots = await Slots.getAllOpen(focusArea)
+    const slots = await Slots.getAllOpen(conn, target)
 
-    const buySlots = H.renderSlotsToBuy(opts, ask, slots)
+    const investment = H.getInvestment(opts, ask, slots)
 
-    await Promise.all(
-      map(Slots.buy({ origin, symbol }), buySlots)
-    )
+    console.log('~', bid, ask)
+
+    await Slots.buy(conn, ch.new_val, investment)
+      .then(console.log)
 
     const sellSlots = H.renderSlotsToSell(opts, bid, slots)
 
-    await Promise.all(
-      map(slot => {
-        slot.closeTime = new Date()
-        slot.closePrice = bid
-        return LadderTable
-          .get(slot.id)
-          .update(slot)
-          .run(conn)
-      }, sellSlots)
-    )
+    console.log('>', sellSlots)
 
-    // console.log(slots.map(prop('openPrice')))
+    const sell = Slots.sellSlot(conn, ch.new_val)
+
+    await Promise.all(map(sell, sellSlots))
+      .then(console.log)
   })
 
 }

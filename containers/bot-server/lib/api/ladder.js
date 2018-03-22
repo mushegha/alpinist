@@ -1,7 +1,5 @@
 const rt = require('rethinkdb')
 
-const { connect } = require('../clients/rethinkdb')
-
 const { curryN } = require('ramda')
 
 /**
@@ -25,13 +23,11 @@ const hasNotField = name =>
  * Actions
  */
 
-async function getAllOpen (target) {
-  const conn = await connect()
-
+async function getAllOpen (conn, target) {
   const cursor = await Table
     .filter(target)
     .filter(hasNotField('dateClose'))
-    .orderBy('position')
+    .orderBy('price')
     .run(conn)
 
   return cursor.toArray()
@@ -40,31 +36,32 @@ async function getAllOpen (target) {
 /**
  * Buy
  *
- * @param {Object} target
- * @param {string} target.origin
- * @param {string} target.symbol
- * @param {Object} params
- * @param {number} params.amount
- * @param {number} params.price
+ * @param {Object} ticker
+ * @param {string} ticker.origin
+ * @param {string} ticker.symbol
+ * @param {number} ticker.ask
+ * @param {number} investment
  */
 
-async function buy (target, params) {
-  const { origin, symbol } = target
-  const { amount, price } = params
+async function buy (conn, ticker, investment) {
+  if (!investment) return Promise.resolve()
 
-  const investment = price * amount
+  const origin    = ticker.origin
+  const symbol    = ticker.symbol
+  const priceOpen = ticker.ask
+
+  const amount    = investment / priceOpen
 
   const slot = {
     origin,
     symbol,
-    amount,
+    //
     investment,
+    amount,
     // meta
-    position: price,
+    priceOpen,
     dateOpen: new Date()
   }
-
-  const conn = await connect()
 
   return Table
     .insert(slot)
@@ -74,39 +71,26 @@ async function buy (target, params) {
 /**
  * Sell
  *
- * @param {Object} target
- * @param {string} target.origin
- * @param {string} target.symbol
- * @param {Object} params
- * @param {number} params.amount
- * @param {number} params.price
+ * @param {Object} ticker
+ * @param {number} ticker.bid
+ * @param {string} id
  */
 
-async function sell (target, params) {
-  const { origin, symbol } = target
-  const { amount, price } = params
+async function sellSlot (conn, ticker, id) {
+  const priceClose = ticker.bid
 
-  const investment = price * amount
-
-  const slot = {
-    origin,
-    symbol,
-    amount,
-    investment,
-    // meta
-    position: price,
-    dateOpen: new Date()
+  const data = {
+    priceClose,
+    dateClose: new Date()
   }
 
-  const conn = await connect()
-
   return Table
-    .get(slot)
+    .get(id)
+    .update(data)
     .run(conn)
 }
 
-module.exports = {
-  getAllOpen
-}
+module.exports.getAllOpen = curryN(2, getAllOpen)
 
-module.exports.buy = curryN(2, buy)
+module.exports.buy = curryN(3, buy)
+module.exports.sellSlot = curryN(3, sellSlot)
