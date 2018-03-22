@@ -20,9 +20,9 @@ const {
  * Utils
  */
 
-const useOpenPrice = prop('openPrice')
+const usePrice = prop('priceOpen')
 
-const sortedByPrice = sortBy(useOpenPrice)
+const sortedByPrice = sortBy(usePrice)
 
 const edges = compose(
   juxt([head, last]),
@@ -33,14 +33,14 @@ const edges = compose(
  *
  */
 
-function splitByPL (mark, slots) {
-
+function splitByPL (price, slots) {
   const pred = compose(
-    lte(mark),
-    useOpenPrice
+    lte(price),
+    usePrice
   )
 
   const splitX = compose(
+    map(x => x.length),
     splitWhen(pred),
     sortedByPrice
   )
@@ -48,65 +48,47 @@ function splitByPL (mark, slots) {
   return splitX(slots)
 }
 
-function isEligibleToSell (opts, mark, slots) {
+function renderSlotsToSell (opts, price, slots) {
   const { sellLimit, keepLimit } = opts
 
-  const measure = map(x => x.length)
-
-  const [ right, left ] = measure(splitByPL(mark, slots))
-
-  return and(
-    right >= sellLimit,
-    left >= keepLimit
+  const render = compose(
+    map(prop('id')),
+    take(sellLimit),
+    sortedByPrice
   )
+
+  const [ right, left ] = splitByPL(price, slots)
+
+  if (right >= sellLimit && left >= keepLimit) {
+    return render(slots)
+  } else {
+    return []
+  }
 }
 
-function renderSlotsToSell (opts, mark, slots) {
-  const { sellLimit, keepLimit } = opts
-
-  if (!isEligibleToSell(opts, mark, slots)) return []
-
-  return take(sellLimit, slots)
-}
-
-function getInvestment (opts, mark, slots) {
+function getInvestment (opts, price, slots) {
   const {
-    initialInvestment,
+    investment,
     treshold,
     upK, upB,
     downK, downB
   } = opts
 
-  if (isEmpty(slots)) return initialInvestment
+  if (isEmpty(slots)) return investment
 
   const [lowest, highest] = edges(slots)
 
-  if (mark + treshold <= lowest.openPrice) {
-    return downK * initialInvestment + downB
+  if (price + treshold <= lowest.priceOpen) {
+    return downK * lowest.investment + downB
   }
 
-  if (mark - treshold >= highest.openPrice) {
-    return upK * initialInvestment + upB
+  if (price - treshold >= highest.priceOpen) {
+    return upK * highest.investment + upB
   }
-}
-
-function renderSlotsToBuy (opts, openPrice, slots) {
-  const investment = getInvestment(opts, openPrice, slots)
-
-  const slot = {
-    investment,
-    openPrice
-  }
-
-  return investment
-    ? [slot]
-    : []
 }
 
 module.exports = {
   splitByPL,
-  isEligibleToSell,
   renderSlotsToSell,
-  getInvestment,
-  renderSlotsToBuy
+  getInvestment
 }

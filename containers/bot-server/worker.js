@@ -1,33 +1,24 @@
 const rt = require('rethinkdb')
 
-const {
-  map,
-  sortBy,
-  path,
-  prop,
-  assoc,
-  merge,
-  head,
-  last,
-  take,
-  groupBy
-} = require('ramda')
+const { map } = require('ramda')
 
 const H = require('./lib/helpers')
+
+const Slots = require('./lib/api/ladder')
 
 /**
  * Mocks
  */
 
-const focusArea = {
+const target = {
   origin: 'bitfinex',
   symbol: 'btcusd'
 }
 
-const opts = {
-  // buy config
-  initialInvestment: 50,
+const params = {
   treshold: 5,
+  // buy config
+  investment: 50,
   upK: 1,
   upB: 25,
   downK: 2,
@@ -37,6 +28,24 @@ const opts = {
   keepLimit: 1
 }
 
+async function perform (conn, tick) {
+  const performBuy = Slots.buy(conn, tick)
+  const performSell = Slots.sellSlot(conn, tick)
+
+  await Slots
+    .getAllOpen(conn, target)
+    .then(slots => {
+      const investment = H.getInvestment(params, tick.ask, slots)
+      return performBuy(investment)
+    })
+
+  await Slots
+    .getAllOpen(conn, target)
+    .then(slots => {
+      const ids = H.renderSlotsToSell(params, tick.bid, slots)
+      return Promise.all(map(performSell, ids))
+    })
+}
 
 async function run () {
   const conn = await rt.connect()
@@ -45,76 +54,15 @@ async function run () {
     .db('alpinist')
     .table('ticker')
 
-  const Ladder = rt
-    .db('alpinist')
-    .table('ladder')
-
   const cursor = await Ticker
     .orderBy({ index: rt.desc('time') })
-    .filter(focusArea)
+    .filter(target)
     .limit(1)
     .changes()
     .run(conn)
 
-  cursor.each(async (_, ch) => {
-    const t = Date.now()
-
-    const {
-      bid,
-      ask,
-      origin,
-      symbol,
-      time
-    } = ch.new_val
-
-    const cursor = await Ladder
-      .filter(focusArea)
-      .filter(rt.row.hasFields('closePrice').not())
-      .orderBy('openPrice')
-      .run(conn)
-
-    const slots = await cursor.toArray()
-
-
-    const buySlots = H.renderSlotsToBuy(opts, ask, slots)
-
-    await Promise.all(
-      map(slot => {
-        slot.time = new Date()
-        slot.origin = origin
-        slot.symbol = symbol
-        return Ladder
-          .insert(slot)
-          .run(conn)
-      }, buySlots)
-    )
-
-    const sellSlots = H.renderSlotsToSell(opts, bid, slots)
-    console.log(sellSlots)
-
-    //
-    // if (group.profit && group.profit.length >= minSellCount
-    //   && group.loss && group.loss.length >= minKeepCount) {
-    //
-    //   const selling = take(minSellCount, group.profit)
-    //   const ids = map(prop('id'), selling)
-    //
-    //   const patch = {
-    //     closeTime  : rt.now(),
-    //     closePrice : bid
-    //   }
-    //
-    //   ids.forEach(id => {
-    //     Ladder
-    //       .get(id)
-    //       .update(patch)
-    //       .run(conn)
-    //   })
-    // }
-
-    console.log(slots.map(prop('openPrice')))
-  })
-
+  cursor
+    .each((_, ch) => perform(conn, ch.new_val))
 }
 
 run()
