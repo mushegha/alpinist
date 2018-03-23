@@ -2,10 +2,13 @@ import test from 'ava'
 
 import {
   getAll,
-  getBalanceOf
-} from '../../lib/models/wallet'
+  aggregate
+} from '../../lib/models/bitfinex-wallet'
 
 test.serial('getAll', async t => {
+  const each = fn => arr =>
+    arr.forEach(fn)
+
   const assertSerialized = wallet => {
     t.not(wallet.type, undefined)
     t.not(wallet.currency, undefined)
@@ -14,17 +17,14 @@ test.serial('getAll', async t => {
   }
 
   await getAll()
-    .then(wallets => wallets.forEach(assertSerialized))
-
-  t.pass()
+    .then(each(assertSerialized))
 })
 
-test.serial('getBalanceOf', async t => {
-  const target = {
-    type: 'exchange',
-    currency: 'USD'
+test.serial('aggregate', async t => {
+  const assertSerialized = wallet => {
+    t.is(typeof wallet.usd, 'number')
   }
 
-  await getBalanceOf(target)
-    .then(x => t.is(typeof x, 'number'))
+  await aggregate()
+    .then(assertSerialized)
 })
