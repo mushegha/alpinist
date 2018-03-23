@@ -1,14 +1,20 @@
 {
   "apps" : [
     {
-      "name"       : "server",
-      "script"     : "./server.js",
-      "watch"       : true
+      "name"   : "server",
+      "script" : "./server.js",
+      "watch"  : true,
+      "env"    : {
+        "DEBUG_HIDE_DATE" : "true"
+      }
     },
     {
-      "name"        : "worker",
-      "script"      : "./worker.js",
-      "watch"       : true
+      "name"   : "worker",
+      "script" : "./worker.js",
+      "watch"  : true,
+      "env"    : {
+        "DEBUG_HIDE_DATE" : "true"
+      }
     }
   ]
 }
