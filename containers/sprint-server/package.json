@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "test": "ava",
+    "start": "pm2 start ecosystem.json",
+    "dev": "pm2-dev ecosystem.json"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
+  },
+  "dependencies": {
+    "getenv": "^0.7.0",
+    "ioredis": "^3.2.2",
+    "koa": "^2.5.0",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "mont": "^0.1.7",
+    "pm2": "^2.10.1",
+    "rxjs": "^5.5.7"
+  }
+}
