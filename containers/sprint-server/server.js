@@ -6,7 +6,7 @@ const Koa = require('koa')
 
 const logger = require('koa-logger')
 
-const router = require('./lib/router')
+const routes = require('./lib/routes')
 
 const clients = require('./lib/clients')
 
@@ -20,7 +20,7 @@ app.context.clients = clients
 
 app.use(logger())
 
-app.use(router())
+app.use(routes())
 
 
 /**
