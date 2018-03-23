@@ -9,9 +9,21 @@ const config = {
 }
 
 const params = {
-  price: 8746.3,
-  amount: 0.0001,
-  symbol: 'tBTCUSD'
+  price: 545.10,
+  amount: -0.02,
+  symbol: 'tETHUSD'
 }
 
+getBalance(config)
+
 buy(config, params)
+  .then(
+    (x) => {
+      console.log(x.price)
+      console.log(x.status)
+      // console.log(x.serialize())
+    }
+  )
+  .catch(err => {
+    console.log(err)
+  })

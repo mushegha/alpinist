@@ -21,6 +21,7 @@ function connect (config) {
   return new Promise(resolve => {
     ws.on('error', (err) => {
       console.log('>', err)
+      ws.close()
     })
 
     ws.on('open', () => {
@@ -60,42 +61,46 @@ function buy (config, params) {
     symbol: params.symbol,
     price: params.price,
     amount: params.amount,
-    type: Order.type.MARKET
+    type: 'EXCHANGE MARKET'
   }
 
-  connect(config)
+  return connect(config)
     .then(ws => {
-      const o = new Order(data, ws)
-
-      // Build new order
-
-      let closed = false
+      const order = new Order(data, ws)
 
       // Enable automatic updates
-      o.registerListeners()
+      order.registerListeners()
 
-      o.on('update', () => {
-        debug('order updated: %j', o.serialize())
+      order.on('error', err => {
+        debug('error: %o', err)
       })
 
-      o.on('close', () => {
-        debug('order closed: %s', o.status)
-        closed = true
+      order.on('update', () => {
+        debug('order updated: %j', order.serialize())
       })
 
-      debug('submitting order %d', o.cid)
+      order.on('close', (x) => {
+        debug('%O', order)
+        debug('order closed: %s', order.status)
+        debug('order closed: %s', order.price)
+        debug('closing websocket connection')
+        ws.close()
+      })
 
-      o.submit()
-        .then(() => {
-          debug('got submit confirmation for order %d [%d]', o.cid, o.id)
-        })
-        .catch(err => {
-          ws.close()
-          return Promise.reject(err)
-        })
+      debug('submitting order %d', order.cid)
 
-  })
-
+      return order
+        .submit()
+    })
+    .then(order => {
+      debug('got submit confirmation for order %d [%d]', order.cid, order.id)
+    //
+      return order
+    })
+    .catch(err => {
+      // ws.close()
+      return Promise.reject(err)
+    })
 }
 
 module.exports = {
