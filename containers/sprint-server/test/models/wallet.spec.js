@@ -5,7 +5,7 @@ import {
   getBalanceOf
 } from '../../lib/models/wallet'
 
-test('getAll', async t => {
+test.serial('getAll', async t => {
   const assertSerialized = wallet => {
     t.not(wallet.type, undefined)
     t.not(wallet.currency, undefined)
@@ -19,7 +19,7 @@ test('getAll', async t => {
   t.pass()
 })
 
-test('getBalanceOf', async t => {
+test.serial('getBalanceOf', async t => {
   const target = {
     type: 'exchange',
     currency: 'USD'
