@@ -44,7 +44,10 @@ const assignDateCreated = () =>  {
 }
 
 const persistOnMongo = () => {
-  const { insert } = mongo.get('ticker')
+  const insert = x =>
+    mongo
+      .get('ticker')
+      .insert(x)
 
   return flatMap(insert)
 }
