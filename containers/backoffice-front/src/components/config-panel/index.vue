@@ -1,6 +1,6 @@
 <template lang="pug">
-  .panel
-    .panel-heading
+  b-collapse.panel
+    .panel-heading(slot="trigger")
       .level
         .level-left
           .level-item

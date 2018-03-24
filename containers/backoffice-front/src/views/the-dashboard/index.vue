@@ -5,10 +5,8 @@
         .column.is-3
           ladder-panel
 
-        .column.is-4
+        .column.is-9
           config-panel
-
-        .column.is-5
           ticker-panel
 
 </template>
