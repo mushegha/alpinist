@@ -17,6 +17,8 @@ const { getOpenSlots } = require('../getters/mongodb-ladder')
 
 const { openPosition } = require('../actions/mongodb-ladder')
 
+const { submitOrder }  = require('../actions/bitfinex-order')
+
 
 async function director (opts, price) {
   const isInitial = isEmpty
