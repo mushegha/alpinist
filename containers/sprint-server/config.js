@@ -1,4 +1,4 @@
-module.exports.treshold   = 3
+module.exports.treshold   = 5
 module.exports.investment = 12
 module.exports.upK        = 1
 module.exports.upB        = 3

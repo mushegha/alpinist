@@ -5,14 +5,14 @@ const Ticker = require('./lib/observables/ticker')
 const performBuy = require('./lib/strategies/buy')
 const performSell = require('./lib/strategies/sell')
 
-const options = require('./options')
+const config = require('./config')
 
 async function next (ticker) {
   debug('Evaluating buy strategy')
-  await performBuy(options, ticker.ask)
+  await performBuy(config, ticker.ask)
 
   debug('Evaluating sell strategy')
-  await performSell(options, ticker.bid)
+  await performSell(config, ticker.bid)
 }
 
 const source$ = Ticker('tBTCUSD')
