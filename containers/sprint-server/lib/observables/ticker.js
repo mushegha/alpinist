@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:ticker')
+
 const { Observable } = require('rxjs')
 
 const {
@@ -20,11 +22,16 @@ const {
   mongo
 } = require('../clients')
 
+/**
+ * Debug
+ */
+
+const tapLog = ({ bid, ask }) =>
+  debug('Ticker data received: bid=%d ask=%d', bid, ask)
 
 /**
  * Helper operators
  */
-
 
 const assignId = () => {
   const ulid = monotonicFactory()
@@ -77,8 +84,6 @@ function fromTicker (symbol) {
   }
 }
 
-
-
 /**
  * Expose observable factory
  */
@@ -86,6 +91,7 @@ function fromTicker (symbol) {
 module.exports = symbol =>
   Observable
     .create(fromTicker(symbol))
+    .do(tapLog)
     .pipe(
       assignId(),
       assignDateCreated(),

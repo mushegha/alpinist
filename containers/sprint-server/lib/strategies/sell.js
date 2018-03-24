@@ -1,5 +1,3 @@
-const mongo = require('../clients/mongo')
-
 const {
   take,
   map,
@@ -14,55 +12,25 @@ const {
   dropWhile
 } = require('ramda')
 
-const options = {
-  limitSell: 3,
-  limitKeep: 1
-}
+const mongo = require('../clients/mongo')
 
-const symbol = 'tETHUSD'
+const { getOpenSlots } = require('../getters/mongodb-ladder')
+const { markClose } = require('../actions/mongodb-ladder')
 
-const getOpenSlots = () => {
-  const query = {
-    dateClose: { $exists: false }
-  }
-
-  const options = {
-    sort: { priceOpen: 1 }
-  }
-
-  return mongo
-    .get('ladder')
-    .find(query, options)
-}
-
-async function perform (params) {
-  const { amount, symbol, price } = params
-
-  return mongo
-    .get('ladder')
-    .insert({
-      amount,
-      symbol,
-      priceOpen: price,
-      dateOpen: new Date()
-    })
-}
-
-
-async function director (price) {
+async function director (opts, price) {
   const isProfitable = compose(
     gte(price),
     prop('priceOpen')
   )
 
   const hasEnoughToSell = compose(
-    lte(options.limitSell),
+    lte(opts.limitSell),
     length,
     takeWhile(isProfitable)
   )
 
   const hasEnoughToKeep = compose(
-    lte(options.limitKeep),
+    lte(opts.limitKeep),
     length,
     dropWhile(isProfitable)
   )
@@ -75,20 +43,9 @@ async function director (price) {
   const slots = await getOpenSlots()
 
   if (shouldSell(slots)) {
-    const selling = take(options.limitSell, slots)
+    const selling = take(opts.limitSell, slots)
 
-    const ids = map(prop('_id'), selling)
-
-    console.log(ids)
-
-    return mongo
-      .get('ladder')
-      .update(
-        { _id: { $in: ids } },
-        { priceClose: price, dateClose: new Date() },
-        { multi: true }
-      )
-      .then(console.log)
+    return markClose(price, selling)
   }
 
   return Promise.resolve()

@@ -1,5 +1,3 @@
-const mongo = require('../clients/mongo')
-
 const {
   unless,
   isNil,
@@ -13,53 +11,25 @@ const {
   cond
 } = require('ramda')
 
-const options = {
-  treshold: 1,
-  investment: 100
-}
+const mongo = require('../clients/mongo')
 
-const symbol = 'tETHUSD'
+const { getOpenSlots } = require('../getters/mongodb-ladder')
 
-const getOpenSlots = () => {
-  const query = {
-    dateClose: { $exists: false }
-  }
-
-  const options = {
-    sort: { priceOpen: 1 }
-  }
-
-  return mongo
-    .get('ladder')
-    .find(query, options)
-}
-
-async function perform (params) {
-  const { amount, symbol, price } = params
-
-  return mongo
-    .get('ladder')
-    .insert({
-      amount,
-      symbol,
-      priceOpen: price,
-      dateOpen: new Date()
-    })
-}
+const { openPosition } = require('../actions/mongodb-ladder')
 
 
-async function director (price) {
+async function director (opts, price) {
   const isInitial = isEmpty
 
   const renderInitial = () => {
-    const investment = options.investment
+    const investment = opts.investment
     const amount = investment / price
 
-    return { amount, symbol, price }
+    return { amount, price }
   }
 
   const isNextFoot = compose(
-    lte(price + options.treshold),
+    lte(price + opts.treshold),
     prop('priceOpen'),
     head
   )
@@ -71,11 +41,11 @@ async function director (price) {
     const investment = prevInvestment
     const amount = investment / price
 
-    return { amount, symbol, price }
+    return { amount, price }
   }
 
   const isNextHead = compose(
-    gte(price - options.treshold),
+    gte(price - opts.treshold),
     prop('priceOpen'),
     last
   )
@@ -87,7 +57,7 @@ async function director (price) {
     const investment = prevInvestment
     const amount = investment / price
 
-    return { amount, symbol, price }
+    return { amount, price }
   }
 
   const renderNext = cond([
@@ -98,7 +68,7 @@ async function director (price) {
 
   return getOpenSlots()
     .then(renderNext)
-    .then(unless(isNil, perform))
+    .then(unless(isNil, openPosition))
 }
 
 module.exports = director
