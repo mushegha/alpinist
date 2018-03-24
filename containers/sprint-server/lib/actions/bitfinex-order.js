@@ -2,6 +2,7 @@ const debug = require('debug')('alpinist:order')
 
 const bitfinex = require('../clients/bitfinex')
 
+const { Order } = require('bitfinex-api-node/lib/models')
 
 const symbol = 'tETHUSD'
 
@@ -10,22 +11,12 @@ async function connect () {
   const ws = bitfinex.ws(2)
 
   return new Promise(resolve => {
-    ws.on('error', (err) => {
-      debug('Error %s', err.message)
-      ws.close()
-    })
-
-    ws.on('open', () => {
-      debug('Open ws')
-      ws.auth()
-    })
-
     ws.once('auth', () => {
       debug('Authenticated')
       resolve(ws)
     })
 
-    ws.open()
+    ws.auth()
   })
 }
 
@@ -46,6 +37,7 @@ async function connect () {
  */
 
 function submitOrder (params) {
+  const ws = bitfinex.ws(2)
 
   const data = {
     cid: Date.now(),
@@ -54,33 +46,26 @@ function submitOrder (params) {
     type: 'EXCHANGE MARKET'
   }
 
-  console.log(data)
-
   return connect()
     .then(ws => {
       const order = new Order(data, ws)
+
+      console.log(order)
 
       // Enable automatic updates
       order.registerListeners()
 
       order.on('error', err => {
-        debug('error: %o', err)
-      })
-
-      order.on('update', () => {
-        debug('order updated: %j', order.serialize())
+        debug('error: %s', err.message)
       })
 
       order.on('close', (x) => {
         debug('order closed: %s', order.status)
-        debug('closing websocket connection')
-        ws.close()
       })
 
       debug('submitting order %d', order.cid)
 
-      return order
-        .submit()
+      return order.submit()
     })
     .catch(err => {
       debug('Declined with error: %s', err.message)

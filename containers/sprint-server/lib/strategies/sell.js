@@ -1,4 +1,7 @@
+const debug = require('debug')('alpinist:selling-strategy')
+
 const {
+  reduce,
   take,
   map,
   both,
@@ -15,7 +18,18 @@ const {
 const mongo = require('../clients/mongo')
 
 const { getOpenSlots } = require('../getters/mongodb-ladder')
+
 const { markClose } = require('../actions/mongodb-ladder')
+
+const { submitOrder }  = require('../actions/bitfinex-order')
+
+const sellGiven = (slots) => {
+  const amount = reduce((sum, slot) => {
+    return sum - slot.amount
+  }, 0, slots)
+
+  return submitOrder({ amount })
+}
 
 async function director (opts, price) {
   const isProfitable = compose(
@@ -44,6 +58,14 @@ async function director (opts, price) {
 
   if (shouldSell(slots)) {
     const selling = take(opts.limitSell, slots)
+
+    try {
+      // TODO: exo
+      // await sellGiven(selling)
+      return markClose(price, selling)
+    } catch (err) {
+      debug('Selling not complete: %s', err.message)
+    }
 
     return markClose(price, selling)
   }
