@@ -8,6 +8,8 @@ div
           | Alpinist
       .navbar-menu
         .navbar-start
+          .navbar-item
+            vue-clock
 
         wallet-navbar.navbar-end
 
@@ -16,10 +18,14 @@ div
 </template>
 
 <script>
+
 import WalletNavbar from '@/wallet-navbar'
 
+import VueClock from 'vue-clock-simple'
+
 const components = {
-  WalletNavbar
+  WalletNavbar,
+  VueClock
 }
 
 export default {

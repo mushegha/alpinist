@@ -30,6 +30,7 @@
     "rxjs": "^5.5.7",
     "socket.io-client": "^2.0.4",
     "vue": "^2.4.2",
+    "vue-clock-simple": "^1.0.4",
     "vue-router": "^2.8.1",
     "vue-rx": "^5.0.0",
     "vuex": "^2.5.0",
