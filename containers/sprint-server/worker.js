@@ -1,8 +1,13 @@
 const debug = require('debug')('alpinist:worker')
 
+const Ticker = require('./lib/observables/ticker')
 
-const noop = () => {}
+const source$ = Ticker('tBTCUSD')
 
-debug('Started')
+function next (ticker) {
+  console.log(ticker)
+}
 
-setTimeout(noop, 5000)
+const sub = source$
+  .do(_ => debug('Got tick from remote'))
+  .subscribe({ next })

@@ -1,16 +1,68 @@
 const { Observable } = require('rxjs')
 
-const bfx = require('../clients/bitfinex')
+const {
+  flatMap,
+  map
+} = require('rxjs/operators')
+
+const {
+  assoc,
+  compose,
+  toLower
+} = require('ramda')
+
+const {
+  monotonicFactory
+} = require('ulid')
+
+const {
+  bitfinex,
+  mongo
+} = require('../clients')
 
 
-function Ticker (symbol) {
-  const ws = bfx.ws(2)
+/**
+ * Helper operators
+ */
 
-  function listener (observer) {
-    ws.on('open', () => {
-      ws.subscribeTicker(symbol)
-    })
 
+const assignId = () => {
+  const ulid = monotonicFactory()
+  const gen = compose(toLower, ulid)
+
+  const assign = x => assoc('id', gen(), x)
+
+  return map(assign)
+}
+
+const assignDateCreated = () =>  {
+  const gen = () => new Date()
+
+  const assign = x => assoc('dateCreated', gen(), x)
+
+  return map(assign)
+}
+
+const persistOnMongo = () => {
+  const { insert } = mongo.get('ticker')
+
+  return flatMap(insert)
+}
+
+/**
+ *
+ */
+
+function fromTicker (symbol) {
+  const ws = bitfinex.ws(2)
+
+  ws.on('open', () => {
+    ws.subscribeTicker(symbol)
+  })
+
+  ws.open()
+
+  return observer => {
     ws.onTicker({ symbol }, ticker => {
       const bid = ticker[0]
       const ask = ticker[2]
@@ -18,12 +70,21 @@ function Ticker (symbol) {
       observer.next({ bid, ask })
     })
 
-    ws.open()
-
     return () => ws.close()
   }
-
-  return Observable.create(listener)
 }
 
-module.exports = Ticker
+
+
+/**
+ * Expose observable factory
+ */
+
+module.exports = symbol =>
+  Observable
+    .create(fromTicker(symbol))
+    .pipe(
+      assignId(),
+      assignDateCreated(),
+      persistOnMongo()
+    )
