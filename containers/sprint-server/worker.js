@@ -15,6 +15,6 @@ async function next (ticker) {
   await performSell(config, ticker.bid)
 }
 
-const source$ = Ticker('tBTCUSD')
+const source$ = Ticker('tETHUSD')
 
 const sub = source$.subscribe({ next })
