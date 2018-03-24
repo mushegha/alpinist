@@ -55,12 +55,12 @@ function connect (config) {
  * @return {Promise}
  */
 
-function buy (config, params) {
+function buy (config, symbol, amount) {
   const data = {
     cid: Date.now(),
-    symbol: params.symbol,
-    price: params.price,
-    amount: params.amount,
+    symbol: symbol,
+    amount: amount,
+    price: 1000,
     type: 'EXCHANGE MARKET'
   }
 

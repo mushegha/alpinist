@@ -9,21 +9,41 @@ const config = {
 }
 
 const params = {
-  price: 545.10,
-  amount: -0.02,
+  // price: 545.10,
+  amount: 0.02,
   symbol: 'tETHUSD'
 }
 
-getBalance(config)
+async function perform () {
+  await getBalance(config)
 
-buy(config, params)
-  .then(
-    (x) => {
-      console.log(x.price)
-      console.log(x.status)
-      // console.log(x.serialize())
-    }
-  )
-  .catch(err => {
-    console.log(err)
-  })
+  await buy(config, 'tETHUSD', -0.02)
+    .then(
+      (x) => {
+        console.log(x.price)
+        console.log(x.amount)
+        // console.log(x.serialize())
+      }
+    )
+    .catch(err => {
+      console.log(err.message)
+    })
+
+  await getBalance(config)
+  //
+  // await buy(config, 'tETHUSD', -0.02)
+  //   .then(
+  //     (x) => {
+  //       console.log(x.price)
+  //       console.log(x.amount)
+  //       // console.log(x.serialize())
+  //     }
+  //   )
+  //   .catch(err => {
+  //     console.log(err)
+  //   })
+
+  await getBalance(config)
+}
+
+perform()
