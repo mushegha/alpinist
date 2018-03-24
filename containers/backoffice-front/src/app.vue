@@ -9,15 +9,18 @@ div
       .navbar-menu
         .navbar-start
 
-        .navbar-end
+        wallet-navbar.navbar-end
 
   router-view
 
 </template>
 
 <script>
+import WalletNavbar from '@/wallet-navbar'
 
-const components = { }
+const components = {
+  WalletNavbar
+}
 
 export default {
   components
