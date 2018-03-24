@@ -4,14 +4,16 @@ import {
   map,
   props,
   compose,
-  prepend
+  prepend,
+  evolve
 } from 'ramda'
 
-const HEADER = [ 'time', 'bid', 'ask' ]
+const HEADER = [ 'dateCreated', 'bid', 'ask' ]
 
 const toRows = compose(
   prepend(HEADER),
-  map(props(HEADER))
+  map(props(HEADER)),
+  map(evolve({ dateCreated: t => new Date(t) })),
 )
 
 export function rows () {

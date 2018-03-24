@@ -21,21 +21,14 @@ function mounted () {
     this.fetch(this.target.query)
 
   const stream = Observable
-    .timer(0, 800)
+    .timer(0, 2000)
     .flatMap(fromRemote)
 
   this.$subscribeTo(stream, _ => _)
 }
 
-const watch = {
-  target () {
-    this.erase()
-  }
-}
-
 const methods = {
-  ...mapActions('ticker', ['fetch']),
-  ...mapMutations('ticker', { erase: 'ERASE' })
+  ...mapActions('ticker', ['fetch'])
 }
 
 const computed = mapGetters('ticker', ['last'])
@@ -45,6 +38,5 @@ export default {
   props,
   computed,
   methods,
-  mounted,
-  watch
+  mounted
 }

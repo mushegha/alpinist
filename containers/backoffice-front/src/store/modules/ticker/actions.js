@@ -35,7 +35,7 @@ export async function fetch ({ commit }, params) {
   const update = data =>
     commit('PUT', data)
 
-  return get('/_', { params })
+  return get('/')
     .then(prop('data'))
     .then(tap(update))
 }
