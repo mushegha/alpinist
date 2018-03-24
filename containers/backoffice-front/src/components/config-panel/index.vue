@@ -8,7 +8,7 @@
         .level-right
           .level-item
             .field
-              b-switch(disabled) Running
+              b-switch(disabled :value="true") Running
     .panel-block
       b-field(label="Treshold")
         b-input(
