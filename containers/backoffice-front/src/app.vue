@@ -10,7 +10,6 @@ div
         .navbar-start
 
         .navbar-end
-          scope-dropdown
 
   router-view
 
@@ -18,11 +17,7 @@ div
 
 <script>
 
-import ScopeDropdown from '@/scope-dropdown'
-
-const components = {
-  ScopeDropdown
-}
+const components = { }
 
 export default {
   components
