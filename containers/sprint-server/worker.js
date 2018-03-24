@@ -5,15 +5,13 @@ const Ticker = require('./lib/observables/ticker')
 const performBuy = require('./lib/strategies/buy')
 const performSell = require('./lib/strategies/sell')
 
-async function next (ticker) {
-  const options = {
-    treshold: 1,
-    investment: 100,
-    limitSell: 3,
-    limitKeep: 1
-  }
+const options = require('./options')
 
+async function next (ticker) {
+  debug('Evaluating buy strategy')
   await performBuy(options, ticker.ask)
+
+  debug('Evaluating sell strategy')
   await performSell(options, ticker.bid)
 }
 
