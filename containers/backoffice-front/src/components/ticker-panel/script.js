@@ -18,7 +18,7 @@ const props = ['target']
 
 function mounted () {
   const fromRemote = () =>
-    this.fetch(this.target.query)
+    this.fetch()
 
   const stream = Observable
     .timer(0, 2000)
