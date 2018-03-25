@@ -42,7 +42,7 @@ async function director (opts, price) {
     const prev = head(slots)
     const prevInvestment = prev.priceOpen * prev.amount
 
-    const investment = prevInvestment * downK + downB
+    const investment = prevInvestment * opts.downK + opts.downB
     const amount = investment / price
 
     return { amount, price }
@@ -58,7 +58,7 @@ async function director (opts, price) {
     const prev = last(slots)
     const prevInvestment = prev.priceOpen * prev.amount
 
-    const investment = prevInvestment * upK + upB
+    const investment = prevInvestment * opts.upK + opts.upB
     const amount = investment / price
 
     return { amount, price }
