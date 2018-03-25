@@ -7,7 +7,7 @@ export function render (bindto) {
   }
 
   const data = {
-    x: 'time',
+    x: 'dateCreated',
     rows: []
   }
 

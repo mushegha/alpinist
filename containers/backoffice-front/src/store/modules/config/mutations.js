@@ -11,7 +11,8 @@ import {
   flip,
   prop,
   takeLastWhile,
-  uniqBy
+  uniqBy,
+  toPairs
 } from 'ramda'
 
 /**
@@ -31,5 +32,7 @@ const time = t => new Date(t)
  */
 
 export function PUT (state, data) {
-  state.splice(0, state.length, ...data)
+  toPairs(data).forEach(([key, value]) => {
+    Vue.set(state, key, value)
+  })
 }

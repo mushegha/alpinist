@@ -3,20 +3,16 @@ import { Observable } from 'rxjs/Observable'
 import {
   mapActions,
   mapGetters,
-  mapMutations
+  mapState
 } from 'vuex'
 
-import { pick } from 'ramda'
+import {
+  pick,
+  reverse
+} from 'ramda'
 
-import TickerChart from '@/ticker-chart'
 
-const components = {
-  TickerChart
-}
-
-const props = ['target']
-
-function mounted () {
+function subscriptions () {
   const fromRemote = () =>
     this.fetch()
 
@@ -28,15 +24,15 @@ function mounted () {
 }
 
 const methods = {
-  ...mapActions('ticker', ['fetch'])
+  ...mapActions('wallet', ['fetch'])
 }
 
-const computed = mapGetters('ticker', ['last'])
+const computed = {
+  ...mapState(['wallet'])
+}
 
 export default {
-  components,
-  props,
-  computed,
+  subscriptions,
   methods,
-  mounted
+  computed
 }

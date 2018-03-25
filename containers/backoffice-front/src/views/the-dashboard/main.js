@@ -1,11 +1,13 @@
 import { mapGetters } from 'vuex'
 
 import TickerPanel from '@/ticker-panel'
-// import LadderStatus from '@/ladder-status'
+import LadderPanel from '@/ladder-panel'
+import ConfigPanel from '@/config-panel'
 
 const components = {
   TickerPanel,
-  // LadderStatus
+  LadderPanel,
+  ConfigPanel
 }
 
 const computed = mapGetters(['activeScope'])

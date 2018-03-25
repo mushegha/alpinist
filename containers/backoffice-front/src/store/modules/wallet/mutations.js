@@ -31,5 +31,6 @@ const time = t => new Date(t)
  */
 
 export function PUT (state, data) {
-  state.splice(0, state.length, ...data)
+  Vue.set(state, 'usd', data.usd)
+  Vue.set(state, 'eth', data.eth)
 }

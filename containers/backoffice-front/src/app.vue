@@ -8,9 +8,10 @@ div
           | Alpinist
       .navbar-menu
         .navbar-start
+          .navbar-item
+            vue-clock
 
-        .navbar-end
-          scope-dropdown
+        wallet-navbar.navbar-end
 
   router-view
 
@@ -18,10 +19,13 @@ div
 
 <script>
 
-import ScopeDropdown from '@/scope-dropdown'
+import WalletNavbar from '@/wallet-navbar'
+
+import VueClock from 'vue-clock-simple'
 
 const components = {
-  ScopeDropdown
+  WalletNavbar,
+  VueClock
 }
 
 export default {
