@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:getters')
+const debug = require('debug')('alp:ticker:getters')
 
 const {
   curryN,
@@ -38,7 +38,7 @@ const callback = (err, res) => {
 function fetchMany (client, symbols) {
   const xSymbols = map(fromPlainSymbol, symbols)
 
-  debug('Fetching from remote: %O', symbols)
+  debug('Fetching from remote: %s', symbols.join(', '))
 
   return client
     .rest(2, { transform: true })

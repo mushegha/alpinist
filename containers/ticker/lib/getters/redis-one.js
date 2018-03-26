@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:getters')
+const debug = require('debug')('alp:ticker:getters')
 
 const {
   evolve,

@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:worker')
+const debug = require('debug')('alp:ticker:worker')
 
 const getenv = require('getenv')
 

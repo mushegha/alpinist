@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:setters')
+const debug = require('debug')('alp:ticker:setters')
 
 const { curryN } = require('ramda')
 

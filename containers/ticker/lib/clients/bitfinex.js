@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:bitfinex')
+const debug = require('debug')('alp:ticker:bitfinex')
 
 const BFX = require('bitfinex-api-node')
 

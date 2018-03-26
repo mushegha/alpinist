@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:redis')
+const debug = require('debug')('alp:ticker:redis')
 
 const Redis  = require('ioredis')
 

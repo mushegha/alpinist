@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:ticker:observable')
+const debug = require('debug')('alp:ticker:observable')
 
 const { Observable } = require('rxjs')
 
