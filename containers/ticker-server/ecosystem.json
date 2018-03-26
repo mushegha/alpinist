@@ -1,14 +1,14 @@
 {
   "apps" : [
     {
-      "name"       : "server",
-      "script"     : "./server.js",
-      "watch"       : true
+      "name"   : "server",
+      "script" : "./server.js",
+      "watch"  : true
     },
     {
-      "name"        : "worker",
-      "script"      : "./worker.js",
-      "watch"       : true
+      "name"   : "worker",
+      "script" : "./worker.js",
+      "watch"  : true
     }
   ]
 }
