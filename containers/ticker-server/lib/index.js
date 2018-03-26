@@ -2,7 +2,7 @@ const Koa = require('koa')
 
 const logger = require('koa-logger')
 
-const router = require('./router')
+const routes = require('./routes')
 
 const redis = require('./middlewares/redis')
 
@@ -13,7 +13,7 @@ module.exports = () => {
 
   app.use(redis())
 
-  app.use(router())
+  app.use(routes())
 
   return app
 }

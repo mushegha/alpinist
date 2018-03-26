@@ -1,6 +1,6 @@
 const Router = require('koa-router')
 
-const getOne = require('./getters/redis-one')
+const getOne = require('../getters/redis-one')
 
 async function get (ctx) {
   const { redis, params } = ctx
