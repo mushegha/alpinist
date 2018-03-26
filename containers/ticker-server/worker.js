@@ -1,26 +1,23 @@
 const debug = require('debug')('alpinist:ticker:worker')
 
-//
-// const { connect } = require('./lib/clients/rethinkdb')
-//
-// const { insert } = require('./lib/api/rethinkdb')
+const observe = require('./lib/observables/bitfinex-ticker')
 
-const createTicker = require('./lib/observables/bitfinex-ticker')
-
-createTicker()
-  .subscribe(console.log)
-
-//
-//
 /**
  * Constants
  */
+
+const SYMBOLS = [
+  'btcusd',
+  'ethusd',
+  'neousd'
+]
+
+const ticker$ = observe(SYMBOLS)
+
+ticker$.subscribe(console.log)
+
 //
-// const SYMBOLS = [
-//   'btcusd',
-//   'ethusd',
-//   'neousd'
-// ]
+//
 //
 // const DELAY = 60000 / 10 // limit of 10 per minute
 //
