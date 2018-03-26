@@ -2,6 +2,10 @@ const debug = require('debug')('alpinist:ticker:worker')
 
 const observe = require('./lib/observables/bitfinex-ticker')
 
+const update = require('./lib/setters/redis-one')
+
+const getRedis = require('./lib/clients/redis')
+
 /**
  * Constants
  */
@@ -14,7 +18,7 @@ const SYMBOLS = [
 
 const ticker$ = observe(SYMBOLS)
 
-ticker$.subscribe(console.log)
+ticker$.subscribe(update(getRedis()))
 
 //
 //
