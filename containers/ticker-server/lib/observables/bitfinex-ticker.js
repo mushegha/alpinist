@@ -6,12 +6,6 @@ const createClient = require('../clients/bitfinex')
 
 const manyFrom = require('../getters/bitfinex-many')
 
-/**
- * Settings
- */
-
-const SLEEP = 6e3
-
 
 const fetcherOf = symbols => {
   const client = createClient()
@@ -20,7 +14,7 @@ const fetcherOf = symbols => {
 }
 
 
-function create (symbols = []) {
+function create (opts, symbols = []) {
   const fetchAll = fetcherOf(symbols)
 
   const emitter = observer => {
@@ -35,7 +29,7 @@ function create (symbols = []) {
         .then(ts => ts.forEach(emit))
 
     // TODO: handle 'rate limit' errors
-    const interval = setInterval(perform, SLEEP)
+    const interval = setInterval(perform, opts.sleep || 1e3)
 
     // unsubscribe
     return () => clearInterval(interval)

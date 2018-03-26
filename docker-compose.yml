@@ -53,6 +53,8 @@ services:
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
       NODE_PORT: 80
+      TICKER_SYMBOLS: 'btcusd,ethusd,neousd'
+      TICKER_SLEEP: 6000
       DEBUG: 'alpinist:ticker:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'

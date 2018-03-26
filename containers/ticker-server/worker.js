@@ -1,5 +1,7 @@
 const debug = require('debug')('alpinist:ticker:worker')
 
+const getenv = require('getenv')
+
 const observe = require('./lib/observables/bitfinex-ticker')
 
 const update = require('./lib/setters/redis-one')
@@ -10,45 +12,9 @@ const getRedis = require('./lib/clients/redis')
  * Constants
  */
 
-const SYMBOLS = [
-  'btcusd',
-  'ethusd',
-  'neousd'
-]
+const symbols = getenv.array('TICKER_SYMBOLS', 'string', [])
+const sleep = getenv.int('TICKER_SLEEP', 5e3)
 
-const ticker$ = observe(SYMBOLS)
+const ticker$ = observe({ sleep }, symbols)
 
 ticker$.subscribe(update(getRedis()))
-
-//
-//
-//
-// const DELAY = 60000 / 10 // limit of 10 per minute
-//
-/**
- * DB connection Promise
- */
-//
-// const awaitConnection = connect()
-//
-/**
- * Actions
- */
-//
-// const fromRemote = () =>
-//   fetchAll(SYMBOLS)
-//
-// const intoDatabase = data =>
-//   awaitConnection
-//     .then(insert(data))
-//     .catch(err => debug('Write failed with error: %O', err))
-//
-/**
- *
- */
-//
-// Observable
-//   .timer(0, DELAY)
-//   .flatMap(fromRemote)
-//   .do(_ => debug('Data received from remote'))
-//   .subscribe(intoDatabase)
