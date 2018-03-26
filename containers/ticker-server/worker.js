@@ -1,49 +1,53 @@
-const debug = require('debug')('ticker:worker')
+const debug = require('debug')('alpinist:ticker:worker')
 
-const { Observable } = require('rxjs')
+//
+// const { connect } = require('./lib/clients/rethinkdb')
+//
+// const { insert } = require('./lib/api/rethinkdb')
 
-const { connect } = require('./lib/clients/rethinkdb')
+const createTicker = require('./lib/observables/bitfinex-ticker')
 
-const { insert } = require('./lib/api/rethinkdb')
+createTicker()
+  .subscribe(console.log)
 
-const { fetchAll } = require('./lib/api/bitfinex')
-
+//
+//
 /**
  * Constants
  */
-
-const SYMBOLS = [
-  'btcusd',
-  'ethusd',
-  'neousd'
-]
-
-const DELAY = 60000 / 10 // limit of 10 per minute
-
+//
+// const SYMBOLS = [
+//   'btcusd',
+//   'ethusd',
+//   'neousd'
+// ]
+//
+// const DELAY = 60000 / 10 // limit of 10 per minute
+//
 /**
  * DB connection Promise
  */
-
-const awaitConnection = connect()
-
+//
+// const awaitConnection = connect()
+//
 /**
  * Actions
  */
-
-const fromRemote = () =>
-  fetchAll(SYMBOLS)
-
-const intoDatabase = data =>
-  awaitConnection
-    .then(insert(data))
-    .catch(err => debug('Write failed with error: %O', err))
-
+//
+// const fromRemote = () =>
+//   fetchAll(SYMBOLS)
+//
+// const intoDatabase = data =>
+//   awaitConnection
+//     .then(insert(data))
+//     .catch(err => debug('Write failed with error: %O', err))
+//
 /**
  *
  */
-
-Observable
-  .timer(0, DELAY)
-  .flatMap(fromRemote)
-  .do(_ => debug('Data received from remote'))
-  .subscribe(intoDatabase)
+//
+// Observable
+//   .timer(0, DELAY)
+//   .flatMap(fromRemote)
+//   .do(_ => debug('Data received from remote'))
+//   .subscribe(intoDatabase)
