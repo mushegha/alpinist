@@ -2,58 +2,46 @@ const debug = require('debug')('alpinist:ticker:observable')
 
 const { Observable } = require('rxjs')
 
-const {
-  compose,
-  toLower,
-  toUpper,
-  tail,
-  concat,
-  pick,
-  evolve,
-  map
-} = require('ramda')
+const createClient = require('../clients/bitfinex')
 
-const Bitfinex = require('../clients/bitfinex')
+const manyFrom = require('../getters/bitfinex-many')
 
 /**
- * Helpers
+ * Settings
  */
 
-const toPlainSymbol = compose(toLower, tail)
+const SLEEP = 6e3
 
-const fromPlainSymbol = compose(concat('t'), toUpper)
 
-const parse = compose(
-  evolve({ symbol: toPlainSymbol }),
-  pick([ 'symbol', 'bid', 'ask' ])
-)
+const fetcherOf = symbols => {
+  const client = createClient()
 
-function fetchAll (client, symbols) {
-  const callback = (err, res) => {
-    return err
-      ? Promise.reject(err)
-      : Promise.resolve(res)
-  }
-
-  return client
-    .tickers(symbols, callback)
-    .then(map(parse))
+  return () => manyFrom(client, symbols)
 }
 
 
 function create (symbols = []) {
-  const bfx = Bitfinex()
+  const fetchAll = fetcherOf(symbols)
 
-  const rest = bfx.rest(2, { transform: true })
+  const emitter = observer => {
+    const emit = ticker =>
+      observer.next(ticker)
 
-  const fromRemote = () =>
-    fetchAll(rest, map(fromPlainSymbol, symbols))
+    const emitEach = tickers =>
+      tickers.forEach(emit)
 
-  // TODO: handle 'rate limit' errors
-  return Observable
-    .timer(0, 6000)
-    .flatMap(_ => fromRemote())
-    .flatMap(a => a)
+    const perform = () =>
+      fetchAll()
+        .then(ts => ts.forEach(emit))
+
+    // TODO: handle 'rate limit' errors
+    const interval = setInterval(perform, SLEEP)
+
+    // unsubscribe
+    return () => clearInterval(interval)
+  }
+
+  return Observable.create(emitter)
 }
 
 

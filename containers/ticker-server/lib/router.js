@@ -1,27 +1,13 @@
 const Router = require('koa-router')
 
-const {
-  evolve,
-  isEmpty
-} = require('ramda')
+const getOne = require('./getters/redis-one')
 
 async function get (ctx) {
   const { redis, params } = ctx
 
-  const format = evolve({
-    bid: Number,
-    ask: Number
-  })
+  const res = await getOne(redis, params.symbol)
 
-  const key = `ticker:${params.symbol}`
-
-  const res = await redis
-    .hgetall(key)
-    .then(format)
-
-  if (isEmpty(res)) {
-    return ctx.throw(404)
-  }
+  ctx.assert(res, 404)
 
   ctx.body = res
 }
