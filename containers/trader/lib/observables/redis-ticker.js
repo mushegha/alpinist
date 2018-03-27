@@ -4,7 +4,7 @@ const { Observable } = require('rxjs')
 
 const createClient = require('../clients/redis')
 
-const getOne = require('../getters/redis-one')
+const getTicker = require('../getters/redis-ticker')
 
 function create (symbol) {
   const client = createClient()
@@ -23,7 +23,7 @@ function create (symbol) {
     sub.on('message', () => {
       debug('Updated ticker for %s', symbol)
 
-      getOne(client, symbol)
+      getTicker(client, symbol)
         .then(emit)
     })
 
