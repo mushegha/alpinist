@@ -31,13 +31,34 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      REDIS_PREFIX: 'alp:'
+      REDIS_PREFIX: ''
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
       NODE_PORT: 80
       TICKER_SYMBOLS: 'btcusd,ethusd,neousd'
       TICKER_SLEEP: 6000
       DEBUG: 'alp:ticker:*'
+      DEBUG_COLORS: 'true'
+      DEBUG_HIDE_DATE: 'false'
+    command: npm run dev
+
+  trader:
+    build: ./containers/trader
+    volumes:
+      - ./containers/trader/lib:/usr/src/app/lib
+    links:
+      - redis
+      - mongodb
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PREFIX: ''
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
+      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
+      NODE_PORT: 80
+      DEBUG: 'alp:trader:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev

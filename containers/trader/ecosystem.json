@@ -6,9 +6,12 @@
       "watch"  : true
     },
     {
-      "name"   : "worker",
+      "name"   : "worker:btcusd",
       "script" : "./worker.js",
-      "watch"  : true
+      "watch"  : true,
+      "env"    : {
+        "TRADER_SYMBOL": "btcusd"
+      }
     }
   ]
 }
