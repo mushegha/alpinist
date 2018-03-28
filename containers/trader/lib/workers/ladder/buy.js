@@ -1,6 +1,7 @@
 const debug = require('debug')('alp:trader:strategies:buy')
 
 const {
+  curryN,
   unless,
   isNil,
   isEmpty,
@@ -19,18 +20,26 @@ const {
 //
 // const { submitOrder }  = require('../actions/bitfinex-order')
 
-async function director (opts, price) {
+
+async function director (clients, trader, price) {
+
+  const { monk } = clients
+
+  /**
+   * Helpers
+   */
+
   const isInitial = isEmpty
 
   const renderInitial = () => {
-    const investment = opts.investment
+    const investment = trader.investment
     const amount = investment / price
 
     return { amount, price }
   }
 
   const isNextFoot = compose(
-    lte(price + opts.treshold),
+    lte(price + trader.treshold),
     prop('priceOpen'),
     head
   )
@@ -39,14 +48,14 @@ async function director (opts, price) {
     const prev = head(slots)
     const prevInvestment = prev.priceOpen * prev.amount
 
-    const investment = prevInvestment * opts.downK + opts.downB
+    const investment = prevInvestment * trader.buyDownK + trader.buyDownB
     const amount = investment / price
 
     return { amount, price }
   }
 
   const isNextHead = compose(
-    gte(price - opts.treshold),
+    gte(price - trader.treshold),
     prop('priceOpen'),
     last
   )
@@ -55,7 +64,7 @@ async function director (opts, price) {
     const prev = last(slots)
     const prevInvestment = prev.priceOpen * prev.amount
 
-    const investment = prevInvestment * opts.upK + opts.upB
+    const investment = prevInvestment * trader.buyUpK + trader.buyUpB
     const amount = investment / price
 
     return { amount, price }
@@ -67,23 +76,33 @@ async function director (opts, price) {
     [ isNextHead, renderNextHead ]
   ])
 
-  // Mock
-  //
+  /**
+   * Actions
+   */
 
+  const slots = await monk
+    .get('orders')
+    .find(
+      { trader: trader._id,
+        dateClosed: { $exists: false } },
+      { sort: { priceOpen: 1 } }
+    )
 
+  const nextSlot = renderNext(slots)
 
-  return Promise
-    .resolve([])
-    .then(renderNext)
-    .then(({ amount, price }) => {
-      debug('Should buy %d for price %d', amount, price)
-    })
-    // TODO: exo
-    // .then(unless(isNil, submitOrder))
-    // .then(unless(isNil, openPosition))
-    .catch(err => {
-      debug('Order not completed for reason: %s', err.message)
-    })
+  console.log(nextSlot, price)
+
+  if (!nextSlot) return null
+
+  nextSlot.trader = trader._id
+  nextSlot.priceOpen = price
+  nextSlot.dateOpened = new Date()
+
+  debug('Open position %O', nextSlot)
+
+  await monk
+    .get('orders')
+    .insert(nextSlot)
 }
 
-module.exports = director
+module.exports = curryN(3, director)

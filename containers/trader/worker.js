@@ -30,10 +30,9 @@ bull.process(Ladder({ monk }))
 const targets$ = Targets({ redis, monk })
 
 async function next (target) {
-  console.log(target)
   bull.add(target)
 }
 
 const sub = targets$.subscribe({ next })
 
-setTimeout(() => sub.unsubscribe(), 10e3)
+// setTimeout(() => sub.unsubscribe(), 10e3)
