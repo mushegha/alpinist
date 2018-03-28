@@ -17,6 +17,7 @@ services:
     build: ./containers/nginx
     volumes:
       - ./containers/nginx/conf.d:/etc/nginx/conf.d
+      - ./containers/nginx/.htpasswd:/etc/nginx/.htpasswd
     ports:
       - '8080:80'
     links:
