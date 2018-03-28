@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:observable')
+const debug = require('debug')('alp:trader:observable:tickers')
 
 const { Observable } = require('rxjs')
 
@@ -21,7 +21,7 @@ function Tickers () {
     client.on('pmessage', (pattern, channel) => {
       const symbol = channel.replace(prefix, '')
 
-      debug('Updated ticker for %s', symbol)
+      debug('Updated for %s', symbol)
 
       observer.next(symbol)
     })
@@ -39,5 +39,5 @@ module.exports = () => {
 
   return Tickers()
     .flatMap(getTicker(client))
-    .do(data => debug('Ticker data received: %O', data))
+    .do(data => debug('Data received: %O', data))
 }

@@ -2,7 +2,8 @@ const debug = require('debug')('alp:trader:worker')
 
 const Bull = require('./lib/clients/bull')
 
-const observe = require('./lib/observables/redis-ticker')
+const Tickers = require('./lib/observables/redis-ticker')
+const WithTraders = require('./lib/observables/mongodb-traders')
 
 /**
  *
@@ -16,10 +17,12 @@ bull.process(__dirname + '/lib/workers/ladder/index.js')
  *
  */
 
-const tickers$ = observe()
+const tickers$ = Tickers()
 
 async function next (ticker) {
   bull.add(ticker)
 }
 
-tickers$.subscribe({ next })
+tickers$
+  .flatMap(WithTraders)
+  .subscribe({ next })
