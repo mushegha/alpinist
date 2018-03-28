@@ -1,1 +1,1 @@
-module.exports.ladder = require('./ladder')
+module.exports.Ladder = require('./ladder')

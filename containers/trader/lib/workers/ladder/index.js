@@ -1,7 +1,12 @@
-function evaluate (job) {
-  console.log(job.data)
+function Worker (clients) {
+  const { monk } = clients
 
-  return new Promise(res => setTimeout(res, 1000))
+  return function evaluate (job) {
+    console.log(job.data)
+
+    return new Promise(res => setTimeout(res, 1000))
+  }
 }
 
-module.exports = evaluate
+
+module.exports = Worker

@@ -1,28 +1,39 @@
 const debug = require('debug')('alp:trader:worker')
 
-const { Bull } = require('./lib/clients')
+const {
+  Bull,
+  Monk,
+  Redis
+} = require('./lib/clients')
 
-const Tickers = require('./lib/observables/redis-ticker')
-const WithTraders = require('./lib/observables/mongodb-traders')
+const { Ladder } = require('./lib/workers')
+
+const { Targets } = require('./lib/observables')
 
 /**
- *
+ * Initialize clients
  */
 
 const bull = new Bull('traders')
 
-bull.process(__dirname + '/lib/workers/ladder/index.js')
+const monk = new Monk()
+
+const redis = new Redis()
+
+
+bull.process(Ladder({ monk }))
 
 /**
  *
  */
 
-const tickers$ = Tickers()
+const targets$ = Targets({ redis, monk })
 
-async function next (ticker) {
-  bull.add(ticker)
+async function next (target) {
+  console.log(target)
+  bull.add(target)
 }
 
-tickers$
-  .flatMap(WithTraders)
-  .subscribe({ next })
+const sub = targets$.subscribe({ next })
+
+setTimeout(() => sub.unsubscribe(), 10e3)
