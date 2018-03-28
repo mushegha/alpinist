@@ -1,6 +1,6 @@
 const debug = require('debug')('alp:trader:worker')
 
-const Bull = require('./lib/clients/bull')
+const { Bull } = require('./lib/clients')
 
 const Tickers = require('./lib/observables/redis-ticker')
 const WithTraders = require('./lib/observables/mongodb-traders')
