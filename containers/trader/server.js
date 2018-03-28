@@ -1,13 +1,29 @@
 const debug = require('debug')('alp:trader:server')
 
+const Koa = require('koa')
+
 const getenv = require('getenv')
 
-const createApp = require('./lib')
+const routes = require('./lib/routes')
 
-const app = createApp()
+const middlewares = require('./lib/middlewares')
 
-const port = getenv.int('NODE_PORT', 8080)
+/**
+ * Settings
+ */
 
-app.listen(port, () => {
-  debug('Listening to %d', port)
+const PORT = getenv.int('NODE_PORT', 8080)
+
+/**
+ * App
+ */
+
+const app = new Koa()
+
+app.use(middlewares())
+
+app.use(routes())
+
+app.listen(PORT, () => {
+  debug('Listening to %d', PORT)
 })

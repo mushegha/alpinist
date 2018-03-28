@@ -14,10 +14,9 @@ const PATH = getenv('MONGODB_PATH', 'alpinist')
 
 const DEFAULT_URI = `mongodb://${HOST}:${PORT}/${PATH}`
 
-function create (uri = DEFAULT_URI) {
+function create (uri) {
   debug('Creating..')
-
-  return monk(uri)
+  return monk(uri || DEFAULT_URI)
 }
 
 module.exports = create
