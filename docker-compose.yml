@@ -20,9 +20,10 @@ services:
     ports:
       - '8080:80'
     links:
-      - ticker
+      - tickers
+      - traders
 
-  ticker:
+  tickers:
     build: ./containers/ticker
     volumes:
       - ./containers/ticker/lib:/usr/src/app/lib
@@ -41,7 +42,7 @@ services:
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
 
-  trader:
+  traders:
     build: ./containers/trader
     volumes:
       - ./containers/trader/lib:/usr/src/app/lib
