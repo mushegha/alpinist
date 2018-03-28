@@ -90,8 +90,6 @@ async function director (clients, trader, price) {
 
   const nextSlot = renderNext(slots)
 
-  console.log(nextSlot, price)
-
   if (!nextSlot) return null
 
   nextSlot.trader = trader._id

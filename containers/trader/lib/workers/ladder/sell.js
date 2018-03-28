@@ -1,6 +1,7 @@
 const debug = require('debug')('alp:trader:strategies:sell')
 
 const {
+  curryN,
   reduce,
   take,
   map,
@@ -23,28 +24,28 @@ const {
 //
 // const { submitOrder }  = require('../actions/bitfinex-order')
 
-const sellGiven = (slots) => {
-  const amount = reduce((sum, slot) => {
-    return sum - slot.amount
-  }, 0, slots)
+// const sellGiven = (slots) => {
+//   const amount = reduce((sum, slot) => {
+//     return sum - slot.amount
+//   }, 0, slots)
+//
+//   return submitOrder({ amount })
+// }
 
-  return submitOrder({ amount })
-}
-
-async function director (opts, price) {
+async function director (clients, trader, price) {
   const isProfitable = compose(
     gte(price),
     prop('priceOpen')
   )
 
   const hasEnoughToSell = compose(
-    lte(opts.limitSell),
+    lte(trader.limitSell),
     length,
     takeWhile(isProfitable)
   )
 
   const hasEnoughToKeep = compose(
-    lte(opts.limitKeep),
+    lte(trader.limitKeep),
     length,
     dropWhile(isProfitable)
   )
@@ -56,10 +57,16 @@ async function director (opts, price) {
 
   // Mock
 
-  const slots = []
+  const slots = await monk
+    .get('orders')
+    .find(
+      { trader: trader._id,
+        dateClosed: { $exists: false } },
+      { sort: { priceOpen: 1 } }
+    )
 
   if (shouldSell(slots)) {
-    const selling = take(opts.limitSell, slots)
+    const selling = take(trader.limitSell, slots)
 
     debug('Should sell %O', selling)
 
@@ -77,5 +84,4 @@ async function director (opts, price) {
   return Promise.resolve()
 }
 
-
-module.exports = director
+module.exports = curryN(3, director)
