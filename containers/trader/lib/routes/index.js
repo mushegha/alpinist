@@ -1,13 +1,14 @@
 const Router = require('koa-router')
 
-async function get (ctx) {
-  ctx.body = 'exo'
-}
+const crud = require('./crud')
+const stat = require('./stat')
 
 module.exports = () => {
   const router = new Router()
 
-  router.get('/', get)
+  router
+    .use(crud())
+    .use(stat())
 
   return router.routes()
 }

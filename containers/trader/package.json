@@ -7,10 +7,13 @@
   "dependencies": {
     "bitfinex-api-node": "^2.0.0-beta",
     "bull": "^3.3.10",
+    "date-fns": "^1.29.0",
     "debug": "^3.1.0",
     "getenv": "^0.7.0",
     "ioredis": "^3.2.2",
     "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-compose": "^4.0.0",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "monk": "^6.0.5",
