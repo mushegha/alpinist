@@ -1,4 +1,4 @@
-const createClient = require('../clients/redis')
+const { Monk } = require('../clients')
 
 /**
  * Middleware factory
@@ -9,10 +9,10 @@ const createClient = require('../clients/redis')
  */
 
 module.exports = opts => {
-  const client = createClient(opts)
+  const client = new Monk(opts)
 
   return async function redis (ctx, next) {
-    ctx.redis = client
+    ctx.monk = client
 
     return next()
   }

@@ -4,14 +4,14 @@ const logger = require('koa-logger')
 
 const routes = require('./routes')
 
-const redis = require('./middlewares/redis')
+const monk = require('./middlewares/monk')
 
 module.exports = () => {
   const app = new Koa()
 
   app.use(logger())
 
-  app.use(redis())
+  app.use(monk())
 
   app.use(routes())
 
