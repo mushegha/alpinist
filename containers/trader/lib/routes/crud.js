@@ -92,11 +92,11 @@ function destroy () {
 module.exports = () => {
   const router = new Router()
 
-    router.get('/', list())
-    router.post('/', create())
-    router.get('/:id', read())
-    router.put('/:id', update())
-    router.delete('/:id', destroy())
+  router.get('/', list())
+  router.post('/', create())
+  router.get('/:id', read())
+  router.put('/:id', update())
+  router.delete('/:id', destroy())
 
   return router.routes()
 }
