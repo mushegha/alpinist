@@ -9,7 +9,7 @@ const getenv = require('getenv')
  */
 
 const HOST = getenv('MONGODB_HOST', 'localhost')
-const PORT = getenv.int('MONGODB_HOST', 27017)
+const PORT = getenv.int('MONGODB_PORT', 27017)
 const PATH = getenv('MONGODB_PATH', 'alpinist')
 
 const DEFAULT_URI = `mongodb://${HOST}:${PORT}/${PATH}`
