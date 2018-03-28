@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:ticker:redis')
+const debug = require('debug')('alp:trader:client:redis')
 
 const Redis  = require('ioredis')
 
@@ -11,9 +11,8 @@ const { merge } = require('ramda')
  */
 
 const DEFAULTS = getenv.multi({
-  host      : ['REDIS_HOST', 'localhost'],
-  port      : ['REDIS_PORT', 6379, 'int'],
-  keyPrefix : ['REDIS_PREFIX', '']
+  host : ['REDIS_HOST', 'localhost'],
+  port : ['REDIS_PORT', 6379, 'int']
 })
 
 /**
@@ -27,7 +26,7 @@ const DEFAULTS = getenv.multi({
 function create (opts = {}) {
   const options = merge(DEFAULTS, opts)
 
-  debug('Creating client with options: %j', options)
+  debug('Creating...')
 
   return new Redis(options)
 }
