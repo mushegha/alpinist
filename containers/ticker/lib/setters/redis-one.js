@@ -2,14 +2,12 @@ const debug = require('debug')('alp:ticker:setters')
 
 const { curryN } = require('ramda')
 
-function setOne (client, payload) {
-  const { symbol, bid, ask } = payload
+function setOne (client, ticker) {
+  const key = `ticker:${ticker.symbol}`
 
-  const key = `ticker:${symbol}`
+  debug('Updating %s', ticker.symbol)
 
-  debug('Updating %s', symbol)
-
-  return client.hmset(key, { bid, ask })
+  return client.hmset(key, ticker)
 }
 
 module.exports = curryN(2, setOne)

@@ -6,25 +6,24 @@ const createClient = require('../clients/redis')
 
 const getTicker = require('../getters/redis-ticker')
 
-function create (symbol) {
+function Tickers () {
   const client = createClient()
 
-  const sub = createClient()
+  const prefix = `__keyspace@0__:ticker:`
+  const pattern = `${prefix}*`
 
-  const key = `ticker:${symbol}`
-  const channel = `__keyspace@0__:${key}`
-
-  sub.subscribe(channel)
+  client.psubscribe(pattern)
 
   const emitter = observer => {
     const emit = x =>
       observer.next(x)
 
-    sub.on('message', () => {
+    client.on('pmessage', (pattern, channel) => {
+      const symbol = channel.replace(prefix, '')
+
       debug('Updated ticker for %s', symbol)
 
-      getTicker(client, symbol)
-        .then(emit)
+      observer.next(symbol)
     })
 
     // unsubscribe
@@ -35,4 +34,10 @@ function create (symbol) {
 }
 
 
-module.exports = create
+module.exports = () => {
+  const client = createClient()
+
+  return Tickers()
+    .flatMap(getTicker(client))
+    .do(data => debug('Ticker data received: %O', data))
+}
