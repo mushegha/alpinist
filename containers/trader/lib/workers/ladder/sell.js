@@ -4,24 +4,14 @@ const Axios = require('axios')
 
 const {
   curryN,
-  reduce,
-  take,
-  map,
   both,
-  length,
   filter,
-  lte,
-  gte,
   prop,
-  compose,
-  takeWhile,
-  dropWhile,
-  drop
 } = require('ramda')
 
 const Records = Axios.create({ baseURL: 'http://records/' })
 
-async function director (clients, trader, price) {
+async function director (trader, price) {
   const isProfitable = record => {
     return record.priceInitial < price
   }
@@ -67,10 +57,9 @@ async function director (clients, trader, price) {
         }
       })
       .then(prop('data'))
-      .then(console.log)
   }
 
   return Promise.resolve()
 }
 
-module.exports = curryN(3, director)
+module.exports = curryN(2, director)

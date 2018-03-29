@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:observable:traders')
+const debug = require('debug')('alp:trader:observable')
 
 const { Observable } = require('rxjs')
 
@@ -13,7 +13,7 @@ function Traders ({ monk }, query) {
   const emit = observer => (trader, cursor) => {
     close = cursor.close
 
-    debug('Trader %s', trader._id)
+    debug('Emit trader %s', trader._id)
     observer.next(trader)
   }
 
@@ -26,7 +26,7 @@ function Traders ({ monk }, query) {
       .each(emit(observer))
 
     return () => {
-      debug('Closing cursor')
+      debug('Closing Traders cursor')
       close()
     }
   }

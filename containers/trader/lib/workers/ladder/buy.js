@@ -16,20 +16,11 @@ const {
   cond
 } = require('ramda')
 
-// const { getOpenSlots } = require('../getters/mongodb-ladder')
-//
-// const { openPosition } = require('../actions/mongodb-ladder')
-//
-// const { submitOrder }  = require('../actions/bitfinex-order')
-//
 
 const Records = Axios.create({ baseURL: 'http://records/' })
 
 
-async function director (clients, trader, price) {
-
-  const { monk } = clients
-
+async function director (trader, price) {
   /**
    * Helpers
    */
@@ -37,10 +28,7 @@ async function director (clients, trader, price) {
   const isInitial = isEmpty
 
   const renderInitial = () => {
-    const investment = trader.investment
-    const amount = investment / price
-
-    return { amount, price }
+    return trader.investment
   }
 
   const isNextFoot = compose(
@@ -53,10 +41,7 @@ async function director (clients, trader, price) {
     const prev = head(slots)
     const prevInvestment = prev.priceInitial * prev.amount
 
-    const investment = prevInvestment * trader.buyDownK + trader.buyDownB
-    const amount = investment / price
-
-    return { amount, price }
+    return prevInvestment * trader.buyDownK + trader.buyDownB
   }
 
   const isNextHead = compose(
@@ -69,10 +54,7 @@ async function director (clients, trader, price) {
     const prev = last(slots)
     const prevInvestment = prev.priceInitial * prev.amount
 
-    const investment = prevInvestment * trader.buyUpK + trader.buyUpB
-    const amount = investment / price
-
-    return { amount, price }
+    return prevInvestment * trader.buyUpK + trader.buyUpB
   }
 
   const renderNext = cond([
@@ -95,23 +77,19 @@ async function director (clients, trader, price) {
     })
     .then(prop('data'))
 
-  const nextSlot = renderNext(slots)
+  const investment = renderNext(slots)
 
-  if (!nextSlot) return null
+  if (!investment) return void 0
 
-  nextSlot.symbol = trader.symbol
-  nextSlot.trader = trader._id
+  const next = {
+    amount: investment / price,
+    symbol: trader.symbol,
+    trader: trader._id
+  }
 
-  // nextSlot.priceInitial = price
-  // nextSlot.dateOpened = new Date()
+  debug('Open position %O', next)
 
-  debug('Open position %O', nextSlot)
-
-  Records.post('/', nextSlot)
-  //
-  // await monk
-  //   .get('orders')
-  //   .insert(nextSlot)
+  return  Records.post('/', next)
 }
 
-module.exports = curryN(3, director)
+module.exports = curryN(2, director)

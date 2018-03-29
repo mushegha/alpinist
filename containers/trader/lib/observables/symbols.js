@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:observable:symbols')
+const debug = require('debug')('alp:trader:observable')
 
 const { Observable } = require('rxjs')
 
@@ -34,13 +34,13 @@ function Symbols ({ redis }) {
     client.on('pmessage', (pattern, channel) => {
       const symbol = withoutPrefix(channel)
 
-      debug('Updated for %s', symbol)
+      debug('Updated symbol %s', symbol)
       observer.next(symbol)
     })
 
     // unsubscribe
     return () => {
-      debug('Unsubscribe')
+      debug('Unsubscribe from Symbols$')
 
       debug('Closing Redis connection')
       client.quit(() => {
@@ -50,7 +50,7 @@ function Symbols ({ redis }) {
   }
 
   client.psubscribe(pattern, () => {
-    debug('Subscribed to %s', pattern)
+    debug('Subscribed to Redis %s', pattern)
   })
 
   return Observable.create(emitter)

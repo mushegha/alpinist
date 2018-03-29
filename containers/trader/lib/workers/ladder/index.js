@@ -1,17 +1,17 @@
-const Buyer = require('./buy')
-const Seller = require('./sell')
+const performBuy = require('./buy')
+const performSell = require('./sell')
 
-function Worker (clients) {
-  const { monk } = clients
-
-  const performBuy = Buyer(clients)
-  const performSell = Seller(clients)
+function Worker () {
 
   return async function evaluate (job) {
     const { trader, ticker } = job.data
 
-    await performBuy(trader, ticker.ask)
-    await performSell(trader, ticker.bid)
+    try {
+      await performBuy(trader, ticker.ask)
+      await performSell(trader, ticker.bid)
+    } catch (err) {
+      console.log(err)
+    }
 
     return new Promise(res => setTimeout(res, 250))
   }
