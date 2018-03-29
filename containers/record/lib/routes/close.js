@@ -1,3 +1,5 @@
+const debug = require('debug')('alp:records')
+
 const { del } = require('koa-route')
 
 const {
@@ -41,6 +43,8 @@ async function close (ctx) {
 
   const orderData = combine(slots)
 
+  debug('Closing %d with total %O', slots.length, orderData)
+
   const res = await update(
     queryIds(slots),
     {
@@ -48,7 +52,8 @@ async function close (ctx) {
         priceFinal: Number(request.body.price),
         dateClosed: new Date()
       }
-    }
+    },
+    { multi: true }
   )
 
   ctx.body = res

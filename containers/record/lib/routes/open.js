@@ -1,3 +1,5 @@
+const debug = require('debug')('alp:records')
+
 const { post } = require('koa-route')
 
 const prepare = data => {
@@ -21,6 +23,8 @@ async function open (ctx) {
   const { monk, request } = ctx
 
   const data = prepare(request.body)
+
+  debug('Opening %O', data)
 
   await monk
     .get('records')
