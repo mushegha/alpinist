@@ -7,7 +7,8 @@ const {
   negate,
   sum,
   map,
-  applySpec
+  applySpec,
+  assoc
 } = require('ramda')
 
 const combine = applySpec({
@@ -15,22 +16,36 @@ const combine = applySpec({
   amount: compose(negate, sum, map(prop('amount')))
 })
 
+
+const queryOpen = assoc('dateClosed', { $exists: false })
+
+const queryIds = compose(
+  $in => ({ _id: { $in } }),
+  map(prop('_id'))
+)
+
 async function close (ctx) {
   const { monk, request, state } = ctx
 
-  const { query, options } = state
-
   const { find, update } = monk.get('records')
 
-  const slots = await find(query, options)
+  const slots = await find(
+    queryOpen(state.query),
+    state.options
+  )
+
+  if (slots.length === 0) {
+    ctx.status = 204
+    return void 0
+  }
 
   const orderData = combine(slots)
 
   const res = await update(
-    { _id: { $in: map(prop('_id'), slots) } },
+    queryIds(slots),
     {
       $set: {
-        priceFinal: 8000,
+        priceFinal: Number(request.body.price),
         dateClosed: new Date()
       }
     }
