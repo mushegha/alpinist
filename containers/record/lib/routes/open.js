@@ -4,16 +4,16 @@ const prepare = data => {
   const {
     symbol,
     amount,
-    traderId,
+    trader,
     price,
   } = data
 
   return {
+    trader,
     symbol,
-    amount: Number(amount),
-    traderId,
-    priceOpen: Number(price),
-    dateCreated: new Date()
+    amount       : Number(amount),
+    priceInitial : Number(price),
+    dateCreated  : new Date()
   }
 }
 
@@ -23,7 +23,7 @@ async function open (ctx) {
   const data = prepare(request.body)
 
   await monk
-    .get('accords')
+    .get('records')
     .insert(data)
 
   ctx.status = 201

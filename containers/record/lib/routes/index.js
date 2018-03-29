@@ -1,9 +1,10 @@
 const compose = require('koa-compose')
 
 const open = require('./open')
-// const close = require('./close')
+const list = require('./list')
 
 module.exports = () =>
   compose([
-    open()
+    open(),
+    list()
   ])
