@@ -1,11 +1,9 @@
-const Router = require('koa-router')
+const compose = require('koa-compose')
 
-const crud = require('./crud')
+const open = require('./open')
+// const close = require('./close')
 
-module.exports = () => {
-  const router = new Router()
-
-  router.use(crud())
-
-  return router.routes()
-}
+module.exports = () =>
+  compose([
+    open()
+  ])
