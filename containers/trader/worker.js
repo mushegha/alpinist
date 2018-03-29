@@ -14,14 +14,14 @@ const { Targets } = require('./lib/observables')
  * Initialize clients
  */
 
-const bull = new Bull('traders')
-
 const monk = new Monk()
 
 const redis = new Redis()
 
+const bull = new Bull('traders')
 
-bull.process(Ladder({ monk }))
+
+bull.process(Ladder())
 
 /**
  *
