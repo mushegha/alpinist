@@ -5,7 +5,7 @@
     "dev": "pm2-dev ecosystem.json"
   },
   "dependencies": {
-    "bitfinex-api-node": "^2.0.0-beta",
+    "axios": "^0.18.0",
     "bull": "^3.3.10",
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",

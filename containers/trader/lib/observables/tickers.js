@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:observable:tickers')
+const debug = require('debug')('alp:trader:observable')
 
 const { Observable } = require('rxjs')
 
@@ -12,8 +12,6 @@ const Symbols = require('./symbols')
 
 const getter = client => symbol => {
   const key = `ticker:${symbol}`
-
-  console.log(key)
 
   const format = evolve({
     bid: Number,
@@ -30,7 +28,7 @@ const getter = client => symbol => {
  */
 
 function Tickers ({ redis }) {
-  debug('Creating...')
+  debug('Subscribed to Tickers$')
 
   return Symbols({ redis })
     .flatMap(getter(redis))

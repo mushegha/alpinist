@@ -1,19 +1,19 @@
-const Buyer = require('./buy')
-const Seller = require('./sell')
+const debug = require('debug')('alp:trader:worker')
 
-function Worker (clients) {
-  const { monk } = clients
+const performBuy = require('./buy')
+const performSell = require('./sell')
 
-  const performBuy = Buyer(clients)
-  const performSell = Seller(clients)
+function Worker () {
 
   return async function evaluate (job) {
     const { trader, ticker } = job.data
 
-    await performBuy(trader, ticker.ask)
-    await performSell(trader, ticker.bid)
-
-    return new Promise(res => setTimeout(res, 250))
+    try {
+      await performBuy(trader, ticker.ask)
+      await performSell(trader, ticker.bid)
+    } catch (err) {
+      debug('Failed with err %s', err.message)
+    }
   }
 }
 

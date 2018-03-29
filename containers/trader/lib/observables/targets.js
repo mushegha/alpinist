@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:observable:targets')
+const debug = require('debug')('alp:trader:observable')
 
 const { Observable } = require('rxjs')
 
@@ -20,6 +20,8 @@ function Targets (clients) {
     return Traders({ monk }, query)
       .map(toPair)
   }
+
+  debug('Subscribe to Targets$')
 
   return Tickers({ redis })
     .flatMap(propogateTraders)

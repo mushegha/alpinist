@@ -13,6 +13,12 @@ const {
   assoc
 } = require('ramda')
 
+const { submit } = require('./actions/order')
+
+/**
+ * Helpers
+ */
+
 const combine = applySpec({
   symbol: compose(prop('symbol'), head),
   amount: compose(negate, sum, map(prop('amount')))
@@ -26,8 +32,14 @@ const queryIds = compose(
   map(prop('_id'))
 )
 
+/**
+ *
+ */
+
 async function close (ctx) {
   const { monk, request, state } = ctx
+
+  const { ws } = ctx.bitfinex
 
   const { find, update } = monk.get('records')
 
@@ -43,20 +55,31 @@ async function close (ctx) {
 
   const orderData = combine(slots)
 
-  debug('Closing %d with total %O', slots.length, orderData)
+  debug('Submitting %O', orderData)
 
-  const res = await update(
-    queryIds(slots),
-    {
-      $set: {
-        priceFinal: Number(request.body.price),
-        dateClosed: new Date()
-      }
-    },
-    { multi: true }
-  )
+  try {
+    const real = await submit(ws, orderData)
 
-  ctx.body = res
+    debug('Closing %d with at price %d', slots.length, real.price)
+
+    const res = await update(
+      queryIds(slots),
+      {
+        $set: {
+          priceFinal: real.price,
+          dateClosed: new Date()
+        }
+      },
+      { multi: true }
+    )
+
+    ctx.status = 204
+  } catch (err) {
+    debug('Failed with %s', err.message)
+
+    ctx.status = 500
+  }
+
 }
 
 module.exports = () =>

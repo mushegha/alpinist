@@ -1,5 +1,7 @@
 const debug = require('debug')('alp:trader:strategies:buy')
 
+const Axios = require('axios')
+
 const {
   curryN,
   unless,
@@ -14,17 +16,11 @@ const {
   cond
 } = require('ramda')
 
-// const { getOpenSlots } = require('../getters/mongodb-ladder')
-//
-// const { openPosition } = require('../actions/mongodb-ladder')
-//
-// const { submitOrder }  = require('../actions/bitfinex-order')
+
+const Records = Axios.create({ baseURL: 'http://records/' })
 
 
-async function director (clients, trader, price) {
-
-  const { monk } = clients
-
+async function director (trader, price) {
   /**
    * Helpers
    */
@@ -32,42 +28,33 @@ async function director (clients, trader, price) {
   const isInitial = isEmpty
 
   const renderInitial = () => {
-    const investment = trader.investment
-    const amount = investment / price
-
-    return { amount, price }
+    return trader.investment
   }
 
   const isNextFoot = compose(
     lte(price + trader.treshold),
-    prop('priceOpen'),
+    prop('priceInitial'),
     head
   )
 
   const renderNextFoot = slots => {
     const prev = head(slots)
-    const prevInvestment = prev.priceOpen * prev.amount
+    const prevInvestment = prev.priceInitial * prev.amount
 
-    const investment = prevInvestment * trader.buyDownK + trader.buyDownB
-    const amount = investment / price
-
-    return { amount, price }
+    return prevInvestment * trader.buyDownK + trader.buyDownB
   }
 
   const isNextHead = compose(
     gte(price - trader.treshold),
-    prop('priceOpen'),
+    prop('priceInitial'),
     last
   )
 
   const renderNextHead = slots => {
     const prev = last(slots)
-    const prevInvestment = prev.priceOpen * prev.amount
+    const prevInvestment = prev.priceInitial * prev.amount
 
-    const investment = prevInvestment * trader.buyUpK + trader.buyUpB
-    const amount = investment / price
-
-    return { amount, price }
+    return prevInvestment * trader.buyUpK + trader.buyUpB
   }
 
   const renderNext = cond([
@@ -80,27 +67,30 @@ async function director (clients, trader, price) {
    * Actions
    */
 
-  const slots = await monk
-    .get('orders')
-    .find(
-      { trader: trader._id,
-        dateClosed: { $exists: false } },
-      { sort: { priceOpen: 1 } }
-    )
+  const slots = await Records
+    .get('/', {
+      params: {
+        trader: trader._id,
+        status: 'open',
+        sort  : 'priceInitial'
+      }
+    })
+    .then(prop('data'))
 
-  const nextSlot = renderNext(slots)
+  const investment = renderNext(slots)
 
-  if (!nextSlot) return null
+  if (!investment) return void 0
 
-  nextSlot.trader = trader._id
-  nextSlot.priceOpen = price
-  nextSlot.dateOpened = new Date()
+  const next = {
+    amount: investment / price,
+    symbol: trader.symbol,
+    trader: trader._id,
+    price
+  }
 
-  debug('Open position %O', nextSlot)
+  debug('Open position %O', next)
 
-  await monk
-    .get('orders')
-    .insert(nextSlot)
+  return  Records.post('/', next)
 }
 
-module.exports = curryN(3, director)
+module.exports = curryN(2, director)
