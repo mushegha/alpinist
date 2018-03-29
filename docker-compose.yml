@@ -23,6 +23,7 @@ services:
     links:
       - tickers
       - traders
+      - records
       - wallets
 
   tickers:
@@ -51,6 +52,7 @@ services:
     links:
       - redis
       - mongodb
+      - records
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -60,6 +62,23 @@ services:
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
       NODE_PORT: 80
       DEBUG: 'alp:trader:*'
+      DEBUG_COLORS: 'true'
+      DEBUG_HIDE_DATE: 'false'
+    command: npm run dev
+
+  records:
+    build: ./containers/record
+    volumes:
+      - ./containers/record/lib:/usr/src/app/lib
+    links:
+      - mongodb
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
+      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
+      NODE_PORT: 80
+      DEBUG: 'alp:records:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
