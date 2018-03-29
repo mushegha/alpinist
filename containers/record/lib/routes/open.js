@@ -2,35 +2,47 @@ const debug = require('debug')('alp:records')
 
 const { post } = require('koa-route')
 
+const { submit } = require('./actions/order')
+
 const prepare = data => {
   const {
     symbol,
     amount,
     trader,
-    price,
   } = data
 
   return {
     trader,
     symbol,
-    amount       : Number(amount),
-    priceInitial : Number(price),
-    dateOpened   : new Date()
+    amount     : Number(amount),
+    dateOpened : new Date()
   }
 }
 
 async function open (ctx) {
   const { monk, request } = ctx
 
+  const { ws } = ctx.bitfinex
+
   const data = prepare(request.body)
 
-  debug('Opening %O', data)
+  debug('Submitting %O', data)
 
-  await monk
-    .get('records')
-    .insert(data)
+  try {
+    const real = await submit(ws, data)
 
-  ctx.status = 201
+    data.priceInitial = real.price
+
+    await monk
+      .get('records')
+      .insert(data)
+
+    ctx.status = 201
+  } catch (err) {
+    debug('Failed with %s', err.message)
+
+    ctx.status = 500
+  }
 }
 
 module.exports = () =>

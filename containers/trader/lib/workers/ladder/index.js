@@ -1,3 +1,5 @@
+const debug = require('debug')('alp:trader:worker')
+
 const performBuy = require('./buy')
 const performSell = require('./sell')
 
@@ -10,10 +12,8 @@ function Worker () {
       await performBuy(trader, ticker.ask)
       await performSell(trader, ticker.bid)
     } catch (err) {
-      console.log(err)
+      debug('Failed with err %s', err.message)
     }
-
-    return new Promise(res => setTimeout(res, 250))
   }
 }
 
