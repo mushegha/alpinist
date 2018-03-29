@@ -5,6 +5,7 @@ const bodyparser = require('koa-bodyparser')
 
 const monk = require('./monk')
 const bitfinex = require('./bitfinex')
+const queryparser = require('./queryparser')
 
 module.exports = () =>
   compose([
@@ -12,4 +13,5 @@ module.exports = () =>
     bodyparser(),
     monk(),
     bitfinex(),
+    queryparser()
   ])
