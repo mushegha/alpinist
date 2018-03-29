@@ -1,5 +1,7 @@
 const debug = require('debug')('alp:trader:strategies:sell')
 
+const Axios = require('axios')
+
 const {
   curryN,
   reduce,
@@ -13,42 +15,26 @@ const {
   prop,
   compose,
   takeWhile,
-  dropWhile
+  dropWhile,
+  drop
 } = require('ramda')
 
-// const mongo = require('../clients/mongo')
-//
-// const { getOpenSlots } = require('../getters/mongodb-ladder')
-//
-// const { markClose } = require('../actions/mongodb-ladder')
-//
-// const { submitOrder }  = require('../actions/bitfinex-order')
-
-// const sellGiven = (slots) => {
-//   const amount = reduce((sum, slot) => {
-//     return sum - slot.amount
-//   }, 0, slots)
-//
-//   return submitOrder({ amount })
-// }
+const Records = Axios.create({ baseURL: 'http://records/' })
 
 async function director (clients, trader, price) {
-  const isProfitable = compose(
-    gte(price),
-    prop('priceOpen')
-  )
+  const isProfitable = record => {
+    return record.priceInitial < price
+  }
 
-  const hasEnoughToSell = compose(
-    lte(trader.limitSell),
-    length,
-    takeWhile(isProfitable)
-  )
+  const hasEnoughToSell = records => {
+    const profitable = filter(isProfitable, records)
+    return profitable.length >= trader.limitSell
+  }
 
-  const hasEnoughToKeep = compose(
-    lte(trader.limitKeep),
-    length,
-    dropWhile(isProfitable)
-  )
+  const hasEnoughToKeep = records => {
+    const { limitSell, limitKeep } = trader
+    return records.length >= limitSell + limitKeep
+  }
 
   const shouldSell = both(
     hasEnoughToSell,
@@ -57,28 +43,31 @@ async function director (clients, trader, price) {
 
   // Mock
 
-  const slots = await monk
-    .get('orders')
-    .find(
-      { trader: trader._id,
-        dateClosed: { $exists: false } },
-      { sort: { priceOpen: 1 } }
-    )
+  const slots = await Records
+    .get('/', {
+      params: {
+        trader: trader._id,
+        status: 'open',
+        sort  : 'priceInitial'
+      }
+    })
+    .then(prop('data'))
 
   if (shouldSell(slots)) {
-    const selling = take(trader.limitSell, slots)
 
-    debug('Should sell %O', selling)
+    debug('Should sell')
 
-    // try {
-    //   // TODO: exo
-    //   // await sellGiven(selling)
-    //   return markClose(price, selling)
-    // } catch (err) {
-    //   debug('Selling not complete: %s', err.message)
-    // }
-    //
-    // return markClose(price, selling)
+    return Records
+      .delete('/', {
+        params: {
+          trader: trader._id,
+          status: 'open',
+          sort  : 'priceInitial',
+          limit : trader.limitSell
+        }
+      })
+      .then(prop('data'))
+      .then(console.log)
   }
 
   return Promise.resolve()
