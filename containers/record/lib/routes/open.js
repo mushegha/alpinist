@@ -13,7 +13,7 @@ const prepare = data => {
     symbol,
     amount       : Number(amount),
     priceInitial : Number(price),
-    dateCreated  : new Date()
+    dateOpened   : new Date()
   }
 }
 
@@ -31,5 +31,4 @@ async function open (ctx) {
 
 module.exports = () =>
   post('/', open)
-
 
