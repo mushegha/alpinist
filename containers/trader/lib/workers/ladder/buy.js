@@ -84,7 +84,8 @@ async function director (trader, price) {
   const next = {
     amount: investment / price,
     symbol: trader.symbol,
-    trader: trader._id
+    trader: trader._id,
+    price
   }
 
   debug('Open position %O', next)
