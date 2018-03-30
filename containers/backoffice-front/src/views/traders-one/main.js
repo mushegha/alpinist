@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex'
 
 import RecordColumn from '@/record-column'
+import TickerStatus from '@/ticker-status'
 
 
 // import TickerPanel from '@/ticker-panel'
@@ -10,10 +11,16 @@ import RecordColumn from '@/record-column'
 const props = ['id']
 
 const components = {
-  RecordColumn
+  RecordColumn,
+  TickerStatus
 }
 
-const computed = mapGetters(['activeScope'])
+const computed = {
+  symbol () {
+    return 'ethusd'
+  },
+  ...mapGetters(['activeScope'])
+}
 
 export default {
   name: 'view-traders-one',

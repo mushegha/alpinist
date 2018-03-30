@@ -6,7 +6,7 @@ import { tap, prop } from 'ramda'
  * Constants
  */
 
-const baseURL = '/api/v1/ticker'
+const baseURL = '/api/v1/tickers'
 
 /**
  * Remote API
@@ -31,11 +31,11 @@ const { get } = Axios.create({ baseURL })
  * @returns {Promise}
  */
 
-export async function fetch ({ commit }) {
-  const update = data =>
-    commit('PUT', data)
+export async function fetch ({ commit }, symbol) {
+  const update = tap(data => commit('PUT', data))
 
-  return get('/')
+  const uri = `/${symbol}`
+  return get(uri)
     .then(prop('data'))
-    .then(tap(update))
+    .then(update)
 }

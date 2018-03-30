@@ -3,7 +3,7 @@
     .container
       .columns
         .column.is-3
-          | Exo
+          ticker-status(:symbol="symbol")
 
         .column.is-9
           record-column(:trader="id")

@@ -1,42 +1,39 @@
 import { Observable } from 'rxjs/Observable'
 
-import {
-  mapActions,
-  mapGetters,
-  mapMutations
-} from 'vuex'
+import { mapActions } from 'vuex'
 
 import { pick } from 'ramda'
 
-import TickerChart from '@/ticker-chart'
+const props = ['symbol']
 
-const components = {
-  TickerChart
+function data () {
+  return {
+    bid: null,
+    ask: null
+  }
 }
-
-const props = ['target']
 
 function mounted () {
   const fromRemote = () =>
-    this.fetch()
+    this.fetch(this.symbol)
 
   const stream = Observable
     .timer(0, 2000)
     .flatMap(fromRemote)
 
-  this.$subscribeTo(stream, _ => _)
+  this.$subscribeTo(stream, ({ bid, ask }) => {
+    this.bid = bid
+    this.ask = ask
+  })
 }
 
 const methods = {
   ...mapActions('ticker', ['fetch'])
 }
 
-const computed = mapGetters('ticker', ['last'])
-
 export default {
-  components,
+  data,
   props,
-  computed,
   methods,
   mounted
 }
