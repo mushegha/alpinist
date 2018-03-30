@@ -7,10 +7,14 @@ import {
   pick
 } from 'ramda'
 
-const { destroyOne } = mapActions('trader', ['destroyOne'])
+const {
+  destroyOne,
+  updateOne
+} = mapActions('trader', ['destroyOne', 'updateOne'])
 
 export {
-  destroyOne
+  destroyOne,
+  updateOne
 }
 
 export function destroyTrader (input) {
@@ -21,8 +25,12 @@ export function destroyTrader (input) {
     })
 }
 
-export function resetValues () {
-  this.setValues(this.value)
+export function toggleStatus () {
+  const { id } = this
+  const { isRunning } = this.value
+
+  return this
+    .updateOne({ id, isRunning })
 }
 
 export function submitValues () {

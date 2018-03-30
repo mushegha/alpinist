@@ -1,5 +1,15 @@
 <template lang="pug">
 .panel
+  div.panel-block
+    .field.is-horizontal
+      .field-label
+        | {{ value.isRunning ? 'Pause' : 'Start' }}
+      .field-body
+        .control
+          b-switch(
+            v-model="value.isRunning"
+            @input="toggleStatus"
+          )
   a.panel-block(:href="'/' + id + '/edit'")
     | Edit Configuration
   a.panel-block(@click.prevent="destroyTrader")
