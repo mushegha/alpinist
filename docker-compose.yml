@@ -19,7 +19,7 @@ services:
       - ./containers/nginx/conf.d:/etc/nginx/conf.d
       - ./containers/nginx/.htpasswd:/etc/nginx/.htpasswd
     ports:
-      - '8080:80'
+      - '8082:80'
     links:
       - tickers
       - traders
@@ -32,6 +32,9 @@ services:
       - ./containers/ticker/lib:/usr/src/app/lib
     links:
       - redis
+    dns:
+      - 192.168.0.1
+      - 8.8.8.8
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -70,6 +73,9 @@ services:
       - ./containers/record/lib:/usr/src/app/lib
     links:
       - mongodb
+    dns:
+      - 192.168.0.1
+      - 8.8.8.8
     environment:
       MONGODB_HOST: mongodb
       MONGODB_PORT: 27017
@@ -85,6 +91,9 @@ services:
     build: ./containers/wallet
     volumes:
       - ./containers/wallet/lib:/usr/src/app/lib
+    dns:
+      - 192.168.0.1
+      - 8.8.8.8
     environment:
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
