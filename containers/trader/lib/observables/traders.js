@@ -13,12 +13,12 @@ function Traders ({ monk }, query) {
   const emit = observer => (trader, cursor) => {
     close = cursor.close
 
-    debug('Emit trader %s', trader._id)
+    debug('Evaluate trader %s', trader._id)
     observer.next(trader)
   }
 
   const emitter = observer => {
-    debug('Fetching traders for query %O', query)
+    debug('Select traders %O', query)
 
     monk
       .get('traders')
