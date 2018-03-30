@@ -6,7 +6,7 @@ import { tap, prop } from 'ramda'
  * Constants
  */
 
-const baseURL = '/api/v1/wallet'
+const baseURL = '/api/v1/wallets'
 
 /**
  * Remote API
@@ -24,18 +24,14 @@ const { get } = Axios.create({ baseURL })
  * @async
  *
  * @param {Object} store - Vuex store
- * @param {Object} params - Ticker params
- * @param {string} params.origin - Exchange or provider
- * @param {string} params.symbol - Ticker symbol
  *
  * @returns {Promise}
  */
 
-export async function fetch ({ commit }, params) {
-  const update = data =>
-    commit('PUT', data)
+export async function fetch ({ commit }) {
+  const update = tap(data => commit('PUT', data))
 
-  return get('/')
+  return get('/exchange')
     .then(prop('data'))
-    .then(tap(update))
+    .then(update)
 }

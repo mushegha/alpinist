@@ -1,36 +1,14 @@
 import Vue from 'vue'
 
-import {
-  filter,
-  whereEq,
-  pick,
-  append,
-  compose,
-  equals,
-  evolve,
-  flip,
-  prop,
-  takeLastWhile,
-  uniqBy
-} from 'ramda'
-
-/**
- * Settings
- */
-
-const MAX_TIME = 3 * 60 * 1e3 // 3 minutes
-
-/**
- * Helpers
- */
-
-const time = t => new Date(t)
-
-/**
- * Mutations
- */
+import { toPairs } from 'ramda'
 
 export function PUT (state, data) {
-  Vue.set(state, 'usd', data.usd)
-  Vue.set(state, 'eth', data.eth)
+  const pairs = toPairs(data)
+
+  const set = pair => {
+    const [ key, val ] = pair
+    Vue.set(state, key, val)
+  }
+
+  pairs.forEach(set)
 }
