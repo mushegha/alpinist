@@ -13,7 +13,10 @@ function Targets (clients) {
   const { redis, monk } = clients
 
   const propogateTraders = ticker => {
-    const query = { symbol: ticker.symbol }
+    const query = {
+      symbol: ticker.symbol,
+      isRunning: true
+    }
 
     const toPair = trader => ({ ticker, trader })
 
