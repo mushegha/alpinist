@@ -22,10 +22,10 @@ export async function fetchAll () {
   return get('/').then(prop('data'))
 }
 
-export async function fetch ({ commit }) {
+export async function fetchOne ({ commit }, id) {
   const update = tap(data => commit('PUT', data))
 
-  return get('/exchange')
+  return get(`/${id}`)
     .then(prop('data'))
     .then(update)
 }

@@ -1,8 +1,18 @@
-import { mapGetters } from 'vuex'
+import { Observable } from 'rxjs/Observable'
+
+import {
+  mapState,
+  mapGetters,
+  mapActions
+} from 'vuex'
+
+import {
+  isEmpty,
+  identity
+} from 'ramda'
 
 import RecordColumn from '@/record-column'
 import TickerStatus from '@/ticker-status'
-
 
 // import TickerPanel from '@/ticker-panel'
 // import LadderPanel from '@/ladder-panel'
@@ -16,15 +26,26 @@ const components = {
 }
 
 const computed = {
-  symbol () {
-    return 'ethusd'
+  isLoaded () {
+    return !isEmpty(this.body)
   },
-  ...mapGetters(['activeScope'])
+  ...mapGetters(['activeScope']),
+  ...mapState({ body: 'trader' })
+}
+
+const methods = {
+  ...mapActions('trader', ['fetchOne'])
+}
+
+function beforeMount () {
+  this.fetchOne(this.id)
 }
 
 export default {
   name: 'view-traders-one',
   props,
   components,
-  computed
+  methods,
+  computed,
+  beforeMount
 }
