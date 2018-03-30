@@ -7,7 +7,7 @@
 
       .columns
         .column.is-4
-          trader-panel(:value="body")
+          trader-panel(:id="id" :value="body")
 
         .column.is-8
           record-column(:trader="id")

@@ -75,7 +75,7 @@ function update () {
 
     ctx.body = await monk
       .get('traders')
-      .findOneAndUpdate(params.id, request.body)
+      .findOneAndUpdate(params.id, { $set: request.body })
   }
 }
 

@@ -1,6 +1,9 @@
 <template lang="pug">
-div
-  | exo
+.panel
+  a.panel-block(:href="'/' + id + '/edit'")
+    | Edit Configuration
+  a.panel-block(@click.prevent="destroyTrader")
+    | Destroy instance
 </template>
 
 <script src="./script.js"></script>

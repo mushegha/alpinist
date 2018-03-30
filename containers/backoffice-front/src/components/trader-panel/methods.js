@@ -1,14 +1,24 @@
 import Vue from 'vue'
 
+import { mapActions } from 'vuex'
+
 import {
   keys,
   pick
 } from 'ramda'
 
-export function setValues (input) {
-  const values = pick(this.fields, input)
+const { destroyOne } = mapActions('trader', ['destroyOne'])
 
-  Vue.set(this, 'input', values)
+export {
+  destroyOne
+}
+
+export function destroyTrader (input) {
+  return this
+    .destroyOne(this.id)
+    .then(_ => {
+      this.$router.push('/')
+    })
 }
 
 export function resetValues () {

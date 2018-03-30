@@ -2,7 +2,7 @@ import * as computed from './computed'
 
 import * as methods from './methods'
 
-const props = ['value']
+const props = ['id', 'value']
 
 function data () {
   return {

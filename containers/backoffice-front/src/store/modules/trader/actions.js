@@ -12,28 +12,45 @@ const baseURL = '/api/v1/traders'
  * Remote API
  */
 
-const {
-  get,
-  post
-} = Axios.create({ baseURL })
+const request = Axios.create({ baseURL })
 
 /**
  * Actions
  */
 
 export async function fetchAll () {
-  return get('/').then(prop('data'))
+  return request
+    .get('/')
+    .then(prop('data'))
 }
 
 export async function fetchOne ({ commit }, id) {
   const update = tap(data => commit('PUT', data))
 
-  return get(`/${id}`)
+  return request
+    .get(`/${id}`)
     .then(prop('data'))
     .then(update)
 }
 
 export async function createOne ({ commit }, payload) {
-  return post('/', payload)
+  return request
+    .post('/', payload)
+    .then(prop('data'))
+}
+
+export async function updateOne ({ commit }, payload) {
+  const uri = `/${payload.id}`
+  return request
+    .put(uri, payload)
+    .then(prop('data'))
+}
+
+export async function destroyOne ({ commit }, id) {
+  const uri = `/${id}`
+
+
+  return request
+    .delete(uri)
     .then(prop('data'))
 }
