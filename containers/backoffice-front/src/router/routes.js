@@ -1,11 +1,13 @@
-import TheDashboard from '~/views/the-dashboard'
+import TradersAll from '~/views/traders-all'
+import TradersOne from '~/views/traders-one'
 
 const routes = [
-  { path: '*', redirect: '/dashboard' },
   {
-    path: '/dashboard',
-    component: TheDashboard,
-    props: true
+    path: '/',
+    component: TradersAll
+  }, {
+    path: '/:id',
+    component: TradersOne
   }
 ]
 

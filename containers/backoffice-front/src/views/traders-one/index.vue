@@ -3,11 +3,10 @@
     .container
       .columns
         .column.is-3
-          ladder-panel
+          | Exo
 
         .column.is-9
-          config-panel
-          ticker-panel
+          | Hopar
 
 </template>
 
