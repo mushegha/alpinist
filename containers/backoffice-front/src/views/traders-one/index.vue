@@ -6,7 +6,7 @@
           | Exo
 
         .column.is-9
-          | Hopar
+          record-column(:trader="id")
 
 </template>
 

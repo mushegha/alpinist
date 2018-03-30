@@ -7,7 +7,8 @@ const routes = [
     component: TradersAll
   }, {
     path: '/:id',
-    component: TradersOne
+    component: TradersOne,
+    props: true
   }
 ]
 
