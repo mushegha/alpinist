@@ -12,17 +12,16 @@ import {
   reverse
 } from 'ramda'
 
+import ConfigForm from '@/config-form'
+
 import * as computed from './computed'
 
 import * as methods from './methods'
 
-const props = {
-  value: {
-    type: Object,
-    default () {
-      return {}
-    }
-  }
+const props = ['value']
+
+const components = {
+  ConfigForm
 }
 
 function data () {
@@ -31,14 +30,10 @@ function data () {
   }
 }
 
-function beforeMount () {
-  this.setValues(this.value)
-}
-
 export default {
+  components,
   props,
   data,
   computed,
-  beforeMount,
   methods
 }

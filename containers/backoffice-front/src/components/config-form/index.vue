@@ -1,5 +1,5 @@
 <template lang="pug">
-form(@submit.prevent="submitValues")
+div
   .field.is-horizontal
     .field-label.is-normal
       | Threshold
@@ -89,22 +89,6 @@ form(@submit.prevent="submitValues")
             v-model.number="input.limitKeep"
           )
         .help Keep
-
-  .field.is-horizontal
-    .field-label
-    .field-body
-      .field
-        .control
-          button.button.is-outlined.is-success(type="submit")
-            | Submit
-      .field
-        .control
-          button.button.is-outlined(
-            v-on:click.prevent="resetValues"
-            :disabled="isClean"
-          )
-            | Reset
-
 
 </template>
 

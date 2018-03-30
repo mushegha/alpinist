@@ -4,8 +4,9 @@
       .columns
         .column.is-4.is-offset-4
           div(v-if="isEmpty")
-            button.button.is-large.is-outlined.is-primary
-              | Create a trader
+            config-form(
+              @input="updateConfig"
+            )
 
 </template>
 

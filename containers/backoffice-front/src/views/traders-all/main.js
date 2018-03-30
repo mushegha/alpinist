@@ -6,9 +6,18 @@ import {
   head
 } from 'ramda'
 
-const components = {}
+import ConfigForm from '@/config-form'
 
-const data = always({ traders: void 0 })
+const components = {
+  ConfigForm
+}
+
+function data () {
+  return {
+    traders: void 0,
+    config: void 0
+  }
+}
 
 const computed = {
   isEmpty () {
@@ -17,7 +26,15 @@ const computed = {
   }
 }
 
-const methods = mapActions('trader', ['fetchAll'])
+const methods = {
+  updateConfig (config) {
+    console.log(config.investment)
+  },
+  ...mapActions('trader', [
+    'fetchAll',
+    'createOne'
+  ])
+}
 
 const watch = {
   traders (arr) {
@@ -40,5 +57,5 @@ export default {
   computed,
   watch,
   methods,
-  beforeMount,
+  beforeMount
 }

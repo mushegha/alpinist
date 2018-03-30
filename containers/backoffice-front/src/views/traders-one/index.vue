@@ -1,11 +1,15 @@
 <template lang="pug">
   section.section
-    .container
-      .columns
-        .column.is-3(v-if="isLoaded")
+    .container(v-if="isLoaded")
+      .level
+        .level-rigth
           ticker-status(:symbol="body.symbol")
 
-        .column.is-9
+      .columns
+        .column.is-4
+          trader-panel(:value="body")
+
+        .column.is-8
           record-column(:trader="id")
 
 </template>

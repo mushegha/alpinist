@@ -2,12 +2,14 @@ const columns = [
   {
     field: 'priceInitial',
     label: 'Initial price',
-    numeric: true
+    numeric: true,
+    // sortable: true
   },
   {
     field: 'amount',
     label: 'Amount',
-    numeric: true
+    numeric: true,
+    // sortable: true
   },
   {
     field: 'symbol',
@@ -15,7 +17,8 @@ const columns = [
   },
   {
     field: 'time',
-    label: 'Open time'
+    label: 'Open time',
+    // sortable: true
   }
 ]
 

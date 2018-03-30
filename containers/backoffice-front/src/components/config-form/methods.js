@@ -2,13 +2,22 @@ import Vue from 'vue'
 
 import {
   keys,
-  pick
+  pick,
+  merge,
+  compose
 } from 'ramda'
 
 export function setValues (input) {
-  const values = pick(this.fields, input)
+  const prepare = compose(
+    pick(this.fields),
+    merge(this.defaults)
+  )
 
-  Vue.set(this, 'input', values)
+  const formData = prepare(input)
+
+  Vue.set(this, 'input', formData)
+
+  this.$emit('input', formData)
 }
 
 export function resetValues () {
@@ -16,6 +25,6 @@ export function resetValues () {
 }
 
 export function submitValues () {
-  const values = pick(this.fields, this.input)
-  this.$emit('input', values)
+  const formData = pick(this.fields, this.input)
+  this.$emit('input', formData)
 }
