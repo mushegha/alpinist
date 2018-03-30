@@ -9,6 +9,7 @@ div
           input.input(
             type="number"
             v-model.number="input.treshold"
+            @input="submitValues"
           )
         .help Step size
 
@@ -21,6 +22,7 @@ div
           input.input.is-expanded(
             type="number"
             v-model.number="input.investment"
+            @input="submitValues"
           )
         .help Initial buyin
 
@@ -35,6 +37,7 @@ div
           input.input(
             type="number"
             v-model.number="input.buyUpK"
+            @input="submitValues"
           )
         .help Multiply
 
@@ -43,6 +46,7 @@ div
           input.input(
             type="number"
             v-model.number="input.buyUpB"
+            @input="submitValues"
           )
         .help Add
 
@@ -57,6 +61,7 @@ div
           input.input(
             type="number"
             v-model.number="input.buyDownK"
+            @input="submitValues"
           )
         .help Multiply
 
@@ -65,6 +70,7 @@ div
           input.input(
             type="number"
             v-model.number="input.buyDownB"
+            @input="submitValues"
           )
         .help Add
 
@@ -79,6 +85,7 @@ div
           input.input(
             type="number"
             v-model.number="input.limitSell"
+            @input="submitValues"
           )
         .help Sell
 
@@ -87,6 +94,7 @@ div
           input.input(
             type="number"
             v-model.number="input.limitKeep"
+            @input="submitValues"
           )
         .help Keep
 

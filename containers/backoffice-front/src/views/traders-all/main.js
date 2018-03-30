@@ -3,19 +3,21 @@ import { mapActions } from 'vuex'
 import {
   always,
   isEmpty,
-  head
+  head,
+  assoc
 } from 'ramda'
 
-import ConfigForm from '@/config-form'
+import TraderConfigFieldset from '@/trader-config-fieldset'
 
 const components = {
-  ConfigForm
+  TraderConfigFieldset
 }
 
 function data () {
   return {
     traders: void 0,
-    config: void 0
+    config: void 0,
+    symbol: 'btcusd'
   }
 }
 
@@ -27,8 +29,25 @@ const computed = {
 }
 
 const methods = {
-  updateConfig (config) {
-    console.log(config.investment)
+  createTrader (e) {
+    const { config, symbol } = this
+    const formData = assoc('symbol', symbol, config)
+
+    return this
+      .createOne(formData)
+      .then(_ => {
+        this.init()
+      })
+  },
+  async init () {
+    const traders = await this.fetchAll()
+
+    if (isEmpty(traders)) {
+      this.traders = traders
+    } else {
+      const { _id } = head(traders)
+      this.$router.push(`/${_id}`)
+    }
   },
   ...mapActions('trader', [
     'fetchAll',
@@ -36,18 +55,8 @@ const methods = {
   ])
 }
 
-const watch = {
-  traders (arr) {
-    if (isEmpty(arr)) return void 0
-
-    const { _id } = head(arr)
-
-    this.$router.push(`/${_id}`)
-  }
-}
-
 async function beforeMount () {
-  this.traders = await this.fetchAll()
+  this.init()
 }
 
 export default {
@@ -55,7 +64,6 @@ export default {
   components,
   data,
   computed,
-  watch,
   methods,
   beforeMount
 }

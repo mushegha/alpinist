@@ -1,16 +1,6 @@
 <template lang="pug">
 div
-  b-collapse.card(:open="false")
-    .card-header(
-      slot="trigger"
-      slot-scope="props"
-    )
-      .card-header-title
-        | Settings
-    .card-content
-      config-form(
-        :value="value"
-      )
+  | exo
 </template>
 
 <script src="./script.js"></script>

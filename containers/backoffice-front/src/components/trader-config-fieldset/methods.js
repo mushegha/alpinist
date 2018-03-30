@@ -15,9 +15,9 @@ export function setValues (input) {
 
   const formData = prepare(input)
 
-  Vue.set(this, 'input', formData)
-
   this.$emit('input', formData)
+
+  Vue.set(this, 'input', formData)
 }
 
 export function resetValues () {

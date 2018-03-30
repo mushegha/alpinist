@@ -1,17 +1,3 @@
-import Vue from 'vue'
-
-import { Observable } from 'rxjs/Observable'
-
-import {
-  mapActions,
-  mapState
-} from 'vuex'
-
-import {
-  pick,
-  reverse
-} from 'ramda'
-
 import * as computed from './computed'
 
 import * as methods from './methods'
@@ -36,6 +22,7 @@ function beforeMount () {
 }
 
 export default {
+  name: 'trader-config-fieldset',
   props,
   data,
   computed,
