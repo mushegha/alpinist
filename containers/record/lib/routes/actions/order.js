@@ -46,9 +46,13 @@ function submit (client, params) {
 
   order.on('close', (x) => {
     debug('order closed: %s', order.status)
+    debug('order closed (details): %O', order)
+    debug('order closed (amount): %d', order.amount)
   })
 
   debug('submitting order %d', order.cid)
+  debug('submitting order (details) %O', params)
+  debug('submitting order (amount) %d', params.amount)
 
   return order
     .submit()

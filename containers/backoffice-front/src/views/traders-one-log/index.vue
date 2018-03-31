@@ -4,7 +4,7 @@
       .level
         .level-right
           .level-item
-            a(href="'/' + id")
+            a(:href="'/' + id")
               | Back to dashboard
         .level-left
           .level-item
