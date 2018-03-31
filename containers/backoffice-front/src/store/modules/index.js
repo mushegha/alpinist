@@ -1,11 +1,11 @@
+import trader from './trader'
+import record from './record'
 import ticker from './ticker'
-import ladder from './ladder'
 import wallet from './wallet'
-import config from './config'
 
 export default {
+  trader,
   ticker,
-  ladder,
+  record,
   wallet,
-  config
 }

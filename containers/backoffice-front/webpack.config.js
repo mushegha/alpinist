@@ -53,8 +53,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api/v1': {
-        target: 'http://localhost:8080',
-        pathRewrite: {'^/api/v1' : ''}
+        target: 'http://localhost:8082/',
       }
     }
   },

@@ -7,8 +7,12 @@ import {
 } from 'vuex'
 
 import {
-  pick,
-  reverse
+  identity,
+  compose,
+  map,
+  zipObj,
+  toPairs,
+  toUpper
 } from 'ramda'
 
 
@@ -17,10 +21,10 @@ function subscriptions () {
     this.fetch()
 
   const stream = Observable
-    .timer(0, 2000)
+    .timer(0, 10e3)
     .flatMap(fromRemote)
 
-  this.$subscribeTo(stream, _ => _)
+  this.$subscribeTo(stream, identity)
 }
 
 const methods = {
@@ -28,11 +32,28 @@ const methods = {
 }
 
 const computed = {
+  rows () {
+    const fields = ['currency', 'balance']
+
+    const transform = compose(
+      map(zipObj(fields)),
+      toPairs
+    )
+
+    return transform(this.wallet)
+  },
   ...mapState(['wallet'])
+}
+
+const filters = {
+  toUpper (val) {
+    return val.toUpperCase()
+  }
 }
 
 export default {
   subscriptions,
   methods,
-  computed
+  computed,
+  filters
 }

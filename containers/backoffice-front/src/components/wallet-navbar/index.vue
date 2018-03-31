@@ -1,9 +1,9 @@
 <template lang="pug">
 div
-  .navbar-item
-    | USD: {{ wallet.usd }}
-  .navbar-item
-    | ETH: {{ wallet.eth }}
+  .navbar-item(v-for="row in rows")
+    .tags.has-addons
+      .tag.is-white {{ row.currency | toUpper }}
+      .tag.is-dark {{ row.balance }}
 
 </template>
 

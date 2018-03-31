@@ -5,6 +5,5 @@ import Vue from 'vue'
  */
 
 export function PUT (state, data) {
-  Vue.set(state, 'bid', data.bid)
-  Vue.set(state, 'ask', data.ask)
+  state.splice(0, state.length, ...data)
 }
