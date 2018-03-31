@@ -41,9 +41,9 @@ services:
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
       NODE_PORT: 80
-      TICKER_SYMBOLS: 'btcusd,ethusd,neousd'
+      TICKER_SYMBOLS: 'btcusd,ethusd,neousd,xrpusd,bchusd,etcusd,ltcusd'
       TICKER_SLEEP: 6000
-      DEBUG: 'alp:ticker:*'
+      DEBUG: 'alp:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
@@ -62,7 +62,7 @@ services:
       MONGODB_HOST: mongodb
       MONGODB_PORT: 27017
       NODE_PORT: 80
-      DEBUG: 'alp:trader:*'
+      DEBUG: 'alp:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
@@ -82,7 +82,7 @@ services:
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
       NODE_PORT: 80
-      DEBUG: 'alp:record:*'
+      DEBUG: 'alp:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
@@ -98,7 +98,7 @@ services:
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
       BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
       NODE_PORT: 80
-      DEBUG: 'alp:wallet:*'
+      DEBUG: 'alp:*'
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
