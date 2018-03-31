@@ -1,16 +1,24 @@
 import {
   map,
-  assoc
+  assoc,
+  compose
 } from 'ramda'
 
 import { format } from 'date-fns'
 
 export function data () {
   const transform = record => {
-    const date = new Date(record.dateOpened)
-    const time = format(date, 'HH:mm:ss')
+    const { amount, priceInitial, dateOpened } = record
 
-    return assoc('time', time, record)
+    const time = format(new Date(dateOpened), 'HH:mm:ss')
+    const investment = amount * priceInitial
+
+    const fn = compose(
+      assoc('time', time),
+      assoc('investment', investment)
+    )
+
+    return fn(record)
   }
 
   return map(transform, this.rows)

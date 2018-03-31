@@ -12,8 +12,9 @@ const columns = [
     // sortable: true
   },
   {
-    field: 'symbol',
-    label: 'Symbol'
+    field: 'investment',
+    label: 'Investment',
+    numeric: true
   },
   {
     field: 'time',

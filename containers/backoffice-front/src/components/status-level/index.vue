@@ -4,8 +4,7 @@
     .level-item
       .tags.has-addons
         .tag.is-dark {{ symbol }}
-        .tag.is-success {{ bid }}
-        .tag.is-danger {{ ask }}
+        .tag.is-light {{ bid }}  /  {{ ask }}
   .level-left
     .level-item
       .tags.has-addons(v-if="worth")
