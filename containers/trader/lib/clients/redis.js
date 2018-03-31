@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:client:redis')
+const debug = require('debug')('alp:trader')
 
 const Redis  = require('ioredis')
 
@@ -26,7 +26,7 @@ const DEFAULTS = getenv.multi({
 function create (opts = {}) {
   const options = merge(DEFAULTS, opts)
 
-  debug('Creating...')
+  debug('Creating Redis client')
 
   return new Redis(options)
 }

@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:strategies:sell')
+const debug = require('debug')('alp:trader:strategies')
 
 const Axios = require('axios')
 
@@ -45,7 +45,7 @@ async function director (trader, price) {
 
   if (shouldSell(slots)) {
 
-    debug('Should sell')
+    debug('Should sell %d positions for %d', trader.limitSell, price)
 
     return Records
       .delete('/', {

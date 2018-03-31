@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:strategies:buy')
+const debug = require('debug')('alp:trader:strategies')
 
 const Axios = require('axios')
 
@@ -88,7 +88,7 @@ async function director (trader, price) {
     price
   }
 
-  debug('Open position %O', next)
+  debug('Should open position %O', next)
 
   return  Records.post('/', next)
 }
