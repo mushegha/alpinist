@@ -18,16 +18,17 @@ const request = Axios.create({ baseURL })
  * Actions
  */
 
-/**
- * Fetch ticker data and commit
- *
- * @async
- *
- * @param {Object} store - Vuex store
- * @param {Object} trader
- *
- * @returns {Promise}
- */
+export async function fetchAllOf ({ commit }, trader) {
+  const params = {
+    trader,
+    sort: 'dateOpened'
+  }
+
+  return request
+    .get('/', { params })
+    .then(prop('data'))
+}
+
 
 export async function fetchOpen ({ commit }, trader) {
   const update = tap(data => commit('PUT', data))

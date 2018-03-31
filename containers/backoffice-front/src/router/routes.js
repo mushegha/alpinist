@@ -1,6 +1,7 @@
 import TradersAll from '~/views/traders-all'
 import TradersOne from '~/views/traders-one'
 import TradersOneEdit from '~/views/traders-one-edit'
+import TradersOneLog from '~/views/traders-one-log'
 
 const routes = [
   {
@@ -13,6 +14,10 @@ const routes = [
   }, {
     path: '/:id/edit',
     component: TradersOneEdit,
+    props: true
+  }, {
+    path: '/:id/log',
+    component: TradersOneLog,
     props: true
   }
 ]

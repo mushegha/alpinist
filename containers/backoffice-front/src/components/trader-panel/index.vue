@@ -11,9 +11,11 @@
             @input="toggleStatus"
           )
   a.panel-block(:href="'/' + id + '/edit'")
-    | Edit Configuration
+    | Edit configuration
+  a.panel-block(:href="'/' + id + '/log'")
+    | View transactions
   a.panel-block(@click.prevent="liquidateAll")
-    | Liquidate Assets
+    | Liquidate assets
   a.panel-block(@click.prevent="destroyTrader")
     | Destroy instance
 </template>
