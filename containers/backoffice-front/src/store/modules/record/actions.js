@@ -12,7 +12,7 @@ const baseURL = '/api/v1/records'
  * Remote API
  */
 
-const { get } = Axios.create({ baseURL })
+const request = Axios.create({ baseURL })
 
 /**
  * Actions
@@ -38,7 +38,22 @@ export async function fetchOpen ({ commit }, trader) {
     sort: 'priceInitial'
   }
 
-  return get('/', { params })
+  return request
+    .get('/', { params })
     .then(prop('data'))
     .then(tap(update))
+}
+
+export async function destroyAllOf ({ commit }, trader) {
+  const update = tap(_ => commit('PUT', []))
+
+  const params = {
+    trader,
+    status: 'open'
+  }
+
+  return request
+    .delete('/', { params })
+    .then(prop('data'))
+    .then(update)
 }

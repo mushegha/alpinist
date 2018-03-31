@@ -12,6 +12,8 @@
           )
   a.panel-block(:href="'/' + id + '/edit'")
     | Edit Configuration
+  a.panel-block(@click.prevent="liquidateAll")
+    | Liquidate Assets
   a.panel-block(@click.prevent="destroyTrader")
     | Destroy instance
 </template>
