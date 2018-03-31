@@ -10,7 +10,10 @@
           .level-item
             .tags.has-addons
               .tag.is-light Total P/L
-              .tag.is-dark {{ total }}
+              .tag(
+                :class="total > 0 ? 'is-success' : 'is-danger'"
+              )
+                | {{ total }}
       div(v-if="rows")
         b-table(
           :columns="columns"
