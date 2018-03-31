@@ -1,9 +1,7 @@
 <template lang="pug">
   section.section
     .container(v-if="isLoaded")
-      .level
-        .level-rigth
-          ticker-status(:symbol="body.symbol")
+      status-level(:symbol="body.symbol")
 
       .columns
         .column.is-4

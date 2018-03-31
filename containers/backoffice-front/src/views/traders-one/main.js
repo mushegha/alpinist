@@ -14,6 +14,7 @@ import {
 import RecordColumn from '@/record-column'
 import TickerStatus from '@/ticker-status'
 import TraderPanel from '@/trader-panel'
+import StatusLevel from '@/status-level'
 
 // import TickerPanel from '@/ticker-panel'
 // import LadderPanel from '@/ladder-panel'
@@ -24,7 +25,8 @@ const props = ['id']
 const components = {
   RecordColumn,
   TickerStatus,
-  TraderPanel
+  TraderPanel,
+  StatusLevel
 }
 
 const computed = {
