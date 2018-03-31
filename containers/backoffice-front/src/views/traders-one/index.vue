@@ -2,7 +2,7 @@
   section.section
     .container(v-if="isLoaded")
       .columns
-        .column.is-8.is-offset-2
+        .column.is-10.is-offset-1
           status-level(:symbol="body.symbol")
 
           hr
