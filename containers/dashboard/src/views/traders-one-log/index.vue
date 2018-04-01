@@ -1,28 +1,9 @@
 <template lang="pug">
   section.section
     .container
-      .level
-        .level-right
-          .level-item
-            a(:href="'/' + id")
-              | Back to dashboard
-        .level-left
-          .level-item
-            .tags.has-addons
-              .tag.is-light Total P/L
-              .tag(
-                :class="total > 0 ? 'is-success' : 'is-danger'"
-              )
-                | {{ total }}
-      div(v-if="rows")
-        b-table(
-          :columns="columns"
-          :data="data"
-          :paginated="true"
-          :per-page="50"
-          :row-class="row => row.xClass"
-          :hoverable="true"
-        )
+      .columns
+        .column.is-8.is-offset-4
+          the-chart(:value="records")
 
 </template>
 
