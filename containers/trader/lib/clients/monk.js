@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:client:monk')
+const debug = require('debug')('alp:trader')
 
 const monk = require('monk')
 
@@ -15,7 +15,7 @@ const PATH = getenv('MONGODB_PATH', 'alpinist')
 const DEFAULT_URI = `mongodb://${HOST}:${PORT}/${PATH}`
 
 function create (uri) {
-  debug('Creating..')
+  debug('Creating Monk client')
   return monk(uri || DEFAULT_URI)
 }
 

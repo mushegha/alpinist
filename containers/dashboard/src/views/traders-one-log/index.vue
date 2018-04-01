@@ -4,13 +4,16 @@
       .level
         .level-right
           .level-item
-            a(href="'/' + id")
+            a(:href="'/' + id")
               | Back to dashboard
         .level-left
           .level-item
             .tags.has-addons
               .tag.is-light Total P/L
-              .tag.is-dark {{ total }}
+              .tag(
+                :class="total > 0 ? 'is-success' : 'is-danger'"
+              )
+                | {{ total }}
       div(v-if="rows")
         b-table(
           :columns="columns"

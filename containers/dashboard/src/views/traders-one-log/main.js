@@ -11,6 +11,8 @@ import {
   reduce
 } from 'ramda'
 
+import { format } from 'date-fns'
+
 const props = ['id']
 
 function data () {
@@ -86,7 +88,24 @@ const computed = {
       return record
     }
 
-    const fn = compose(mark, calc)
+    const date = record => {
+      const { dateOpened, dateClosed } = record
+
+      record.dateOpened = format(
+        new Date(dateOpened),
+        'MM/DD/YYYY HH:mm:ss'
+      )
+
+      if (dateClosed)
+        record.dateClosed = format(
+          new Date(dateClosed),
+          'MM/DD/YYYY HH:mm:ss'
+        )
+
+      return record
+    }
+
+    const fn = compose(mark, calc, date)
 
     return map(fn, this.rows)
   },

@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:worker')
+const debug = require('debug')('alp:trader')
 
 const {
   Bull,

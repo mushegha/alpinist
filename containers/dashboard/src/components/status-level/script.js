@@ -53,10 +53,17 @@ const computed = {
   ...mapState({ slots: 'record' })
 }
 
+const filters = {
+  toUpper (val) {
+    return val.toUpperCase()
+  }
+}
+
 export default {
   data,
   props,
   methods,
   mounted,
-  computed
+  computed,
+  filters
 }

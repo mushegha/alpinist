@@ -1,6 +1,7 @@
-const debug = require('debug')('alp:trader:strategies:sell')
+const debug = require('debug')('alp:trader:strategies')
 
 const Axios = require('axios')
+
 
 const {
   curryN,
@@ -18,18 +19,18 @@ async function director (trader, price) {
 
   const hasEnoughToSell = records => {
     const profitable = filter(isProfitable, records)
-    return profitable.length >= trader.limitSell
+    return profitable.length >= trader.limitSell + trader.limitKeep
   }
 
-  const hasEnoughToKeep = records => {
-    const { limitSell, limitKeep } = trader
-    return records.length >= limitSell + limitKeep
-  }
+  // const hasEnoughToKeep = records => {
+  //   const { limitSell, limitKeep } = trader
+  //   return records.length >= limitSell + limitKeep
+  // }
 
-  const shouldSell = both(
-    hasEnoughToSell,
-    hasEnoughToKeep
-  )
+  // const shouldSell = both(
+  //   hasEnoughToSell,
+  //   hasEnoughToKeep
+  // )
 
   // Mock
 
@@ -43,9 +44,9 @@ async function director (trader, price) {
     })
     .then(prop('data'))
 
-  if (shouldSell(slots)) {
+  if (hasEnoughToSell(slots)) {
 
-    debug('Should sell')
+    debug('Should sell %d positions for %d', trader.limitSell, price)
 
     return Records
       .delete('/', {

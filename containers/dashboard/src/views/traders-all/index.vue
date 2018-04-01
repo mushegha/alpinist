@@ -18,6 +18,10 @@
                       option btcusd
                       option neousd
                       option xrpusd
+                      option bchusd
+                      option etcusd
+                      option ltcusd
+                  .help Could not change in trader lifetime
             trader-config-fieldset(v-model="config")
             hr
             .field.is-horizontal

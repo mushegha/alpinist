@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:server')
+const debug = require('debug')('alp:trader')
 
 const Koa = require('koa')
 
@@ -25,5 +25,5 @@ app.use(middlewares())
 app.use(routes())
 
 app.listen(PORT, () => {
-  debug('Listening to %d', PORT)
+  debug('Server listening to %d', PORT)
 })
