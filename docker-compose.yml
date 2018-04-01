@@ -1,16 +1,21 @@
 version: '3'
 
-# Containers
 services:
-  mongodb:
-    image: mongo:jessie
-    ports:
-      - '27017:27017'
 
-  redis:
-    build: ./containers/redis
+  # Front
+
+  dashboard:
+    build: ./containers/dashboard
+    volumes:
+      - ./containers/dashboard/src:/usr/src/app/lib
     ports:
-      - '6379:6379'
+      - '8080:8080'
+    links:
+      - nginx
+    command: npm run dev
+
+
+  # Reverse proxy
 
   nginx:
     restart: always
@@ -25,6 +30,8 @@ services:
       - traders
       - records
       - wallets
+
+  # API
 
   tickers:
     build: ./containers/ticker
@@ -102,3 +109,15 @@ services:
       DEBUG_COLORS: 'true'
       DEBUG_HIDE_DATE: 'false'
     command: npm run dev
+
+  # Data
+
+  mongodb:
+    image: mongo:jessie
+    ports:
+      - '27017:27017'
+
+  redis:
+    build: ./containers/redis
+    ports:
+      - '6379:6379'
