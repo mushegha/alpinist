@@ -7,9 +7,9 @@ services:
   dashboard:
     build: ./containers/dashboard
     volumes:
-      - ./containers/dashboard/src:/usr/src/app/lib
+      - ./containers/dashboard/src:/usr/src/app/src
     ports:
-      - '8080:8080'
+      - '3000:3000'
     links:
       - nginx
     command: npm run dev
@@ -23,8 +23,6 @@ services:
     volumes:
       - ./containers/nginx/conf.d:/etc/nginx/conf.d
       - ./containers/nginx/.htpasswd:/etc/nginx/.htpasswd
-    ports:
-      - '8082:80'
     links:
       - tickers
       - traders
