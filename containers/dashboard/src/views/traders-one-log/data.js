@@ -22,16 +22,23 @@ const xOpenOrder = (ticker) => {
   return { price, amount }
 }
 
+const orderClose = {
+  price: 520,
+  amount: void 0
+}
+
 const records = [
   {
     _id: 0,
     tickerOpen: xTicker(0),
-    tickerClose: xTicker(4, 21)
+    tickerClose: xTicker(4, 21),
+    orderClose
   },
   {
     _id: 1,
     tickerOpen: xTicker(1, 10),
-    tickerClose: xTicker(4, 21)
+    tickerClose: xTicker(4, 21),
+    orderClose
   },
   {
     _id: 2,
@@ -40,7 +47,8 @@ const records = [
   {
     _id: 3,
     tickerOpen: xTicker(3, -10),
-    tickerClose: xTicker(4, 21)
+    tickerClose: xTicker(4, 21),
+    orderClose
   },
   {
     _id: 5,

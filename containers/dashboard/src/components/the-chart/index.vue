@@ -1,6 +1,6 @@
 <template lang="pug">
 pre
-  code {{ value }}
+  code {{ data }}
 
 </template>
 
