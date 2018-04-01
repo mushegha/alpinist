@@ -48,12 +48,14 @@ module.exports = {
     }
   },
   devServer: {
+    host: '0.0.0.0',
+    port: 3000,
     historyApiFallback: true,
     noInfo: true,
     disableHostCheck: true,
     proxy: {
       '/api/v1': {
-        target: 'http://localhost:8082/',
+        target: 'http://nginx/',
       }
     }
   },
