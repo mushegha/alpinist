@@ -13,6 +13,7 @@ const {
   gte,
   lte,
   prop,
+  path,
   cond
 } = require('ramda')
 
@@ -20,7 +21,8 @@ const {
 const Records = Axios.create({ baseURL: 'http://records/' })
 
 
-async function director (trader, price) {
+async function director (trader, ticker) {
+  const price = ticker.ask
   /**
    * Helpers
    */
@@ -33,26 +35,28 @@ async function director (trader, price) {
 
   const isNextFoot = compose(
     lte(price + trader.treshold),
-    prop('priceInitial'),
+    path(['orderOpen', 'price']),
     head
   )
 
   const renderNextFoot = slots => {
-    const prev = head(slots)
-    const prevInvestment = prev.priceInitial * prev.amount
+    const { orderOpen } = head(slots)
+
+    const prevInvestment = orderOpen.price * orderOpen.amount
 
     return prevInvestment * trader.buyDownK + trader.buyDownB
   }
 
   const isNextHead = compose(
     gte(price - trader.treshold),
-    prop('priceInitial'),
+    path(['orderOpen', 'price']),
     last
   )
 
   const renderNextHead = slots => {
-    const prev = last(slots)
-    const prevInvestment = prev.priceInitial * prev.amount
+    const { orderOpen } = last(slots)
+
+    const prevInvestment = orderOpen.price * orderOpen.amount
 
     return prevInvestment * trader.buyUpK + trader.buyUpB
   }
@@ -85,12 +89,13 @@ async function director (trader, price) {
     amount: investment / price,
     symbol: trader.symbol,
     trader: trader._id,
-    price
+    tickerOpen: ticker
   }
 
   debug('Should open position %O', next)
 
-  return  Records.post('/', next)
+  return  Records
+    .post('/', next)
 }
 
 module.exports = curryN(2, director)

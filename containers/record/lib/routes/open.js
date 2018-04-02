@@ -2,6 +2,13 @@ const debug = require('debug')('alp:records')
 
 const { post } = require('koa-route')
 
+const {
+  compose,
+  pick,
+  prop,
+  applySpec
+} = require('ramda')
+
 const { submit } = require('./actions/order')
 
 const prepare = data => {
@@ -9,15 +16,26 @@ const prepare = data => {
     symbol,
     amount,
     trader,
+    tickerOpen
   } = data
 
   return {
     trader,
     symbol,
+    tickerOpen,
     amount     : Number(amount),
     dateOpened : new Date()
   }
 }
+
+const useOrder = applySpec({
+  id        : prop('id'),
+  price     : prop('price'),
+  amount    : prop('amountOrig'),
+  mtsCreate : prop('mtsCreate'),
+  mtsUpdate : prop('mtsUpdate'),
+})
+
 
 async function open (ctx) {
   const { monk, request } = ctx
@@ -29,9 +47,7 @@ async function open (ctx) {
   debug('Submitting %O', data)
 
   try {
-    const real = await submit(ws, data)
-
-    data.priceInitial = real.price
+    data.orderOpen = await submit(ws, data).then(useOrder)
 
     await monk
       .get('records')

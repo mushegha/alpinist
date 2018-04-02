@@ -53,8 +53,12 @@ export async function destroyAllOf ({ commit }, trader) {
     status: 'open'
   }
 
+  const tickerClose = {
+    mts: Date.now()
+  }
+
   return request
-    .delete('/', { params })
+    .put('/', { tickerClose }, { params })
     .then(prop('data'))
     .then(update)
 }

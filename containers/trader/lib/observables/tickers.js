@@ -2,7 +2,10 @@ const debug = require('debug')('alp:trader:observable')
 
 const { Observable } = require('rxjs')
 
-const { evolve } = require('ramda')
+const {
+  evolve,
+  assoc
+} = require('ramda')
 
 const Symbols = require('./symbols')
 
@@ -18,9 +21,15 @@ const getter = client => symbol => {
     ask: Number
   })
 
+  const stamp = data => {
+    const t = Date.now()
+    return assoc('mts', t, data)
+  }
+
   return client
     .hgetall(key)
     .then(format)
+    .then(stamp)
 }
 
 /**
