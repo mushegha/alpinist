@@ -1,4 +1,4 @@
-const debug = require('alp:wallet')
+const debug = require('debug')('alp:wallet')
 
 const Router = require('koa-router')
 
