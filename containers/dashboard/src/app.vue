@@ -5,7 +5,7 @@ div
     nav.container
       .navbar-brand
         a.navbar-item(href="/")
-          | Alpinist
+          img(src="/assets/logo.png")
       .navbar-menu
         .navbar-start
           .navbar-item
