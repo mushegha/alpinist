@@ -13,13 +13,18 @@ const {
 } = mapActions('trader', ['destroyOne', 'updateOne'])
 
 const {
-  liquidate
-} = mapActions('record', { liquidate: 'destroyAllOf' })
+  liquidate,
+  downloadCSV
+} = mapActions('record', {
+  liquidate: 'destroyAllOf',
+  downloadCSV: 'downloadCSV'
+})
 
 export {
   destroyOne,
   updateOne,
-  liquidate
+  liquidate,
+  downloadCSV
 }
 
 export function destroyTrader (input) {

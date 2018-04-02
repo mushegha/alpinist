@@ -1,3 +1,5 @@
+const debug = require('alp:wallet')
+
 const Router = require('koa-router')
 
 const {
@@ -31,6 +33,10 @@ function read () {
       .wallets(callback)
       .then(filter(whereEq(params)))
       .then(reduce(scanTo, {}))
+      .catch(err => {
+        debug('Error while getting from remote')
+        debug('Error: %s', err.message)
+      })
   }
 }
 
