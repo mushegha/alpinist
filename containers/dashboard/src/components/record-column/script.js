@@ -14,12 +14,12 @@ import {
   filter
 } from 'ramda'
 
-import RecordStats from '@/record-stats'
+import TheChart from '@/the-chart'
 import RecordTable from '@/record-table'
 
 
 const components = {
-  RecordStats,
+  TheChart,
   RecordTable
 }
 

@@ -17,15 +17,15 @@ import {
  * Helpers
  */
 
-const tOf = prop('timestamp')
+const tOf = prop('mts')
 
 const compactTickers = compose(
-  uniqBy(prop('timestamp')),
+  uniqBy(prop('mts')),
   reject(isNil)
 )
 
 const sortedTickersFrom = compose(
-  sortBy(prop('timestamp')),
+  sortBy(prop('mts')),
   compactTickers,
   chain(props(['tickerOpen', 'tickerClose']))
 )
@@ -88,7 +88,7 @@ export function money () {
 
       const sub = orderOpen.price * orderOpen.amount
 
-      const add = orderClose && (tickerClose.timestamp <= t)
+      const add = orderClose && (tickerClose.mts <= t)
         ? orderClose.price * orderOpen.amount
         : 0
 

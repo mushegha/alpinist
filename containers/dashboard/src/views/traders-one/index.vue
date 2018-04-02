@@ -1,18 +1,16 @@
 <template lang="pug">
   section.section
     .container(v-if="isLoaded")
+      status-level(:symbol="body.symbol")
+
+      hr
+
       .columns
-        .column.is-10.is-offset-1
-          status-level(:symbol="body.symbol")
+        .column.is-3
+          trader-panel(:id="id" :value="body")
 
-          hr
-
-          .columns
-            .column.is-4
-              trader-panel(:id="id" :value="body")
-
-            .column.is-8
-              record-column(:trader="id")
+        .column.is-9
+          record-column(:trader="id")
 
 </template>
 
