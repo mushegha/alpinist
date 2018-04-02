@@ -14,6 +14,35 @@ const {
 
 const fromPlainSymbol = compose(concat('t'), toUpper)
 
+async function connect (ws) {
+  const authenticate = () => {
+    const perform = (resolve, reject) => {
+      ws.once('auth', () => {
+        debug('Bitfinex authenticated')
+        resolve(ws)
+      })
+
+      ws.once('error', err => {
+        debug('Error happened: %s', err.message)
+        reject(err)
+      })
+
+      debug('Auth Bitfinex socket')
+
+      ws.auth()
+    }
+
+    return new Promise(perform)
+  }
+
+  if (!ws.isAuthenticated()) {
+    await authenticate()
+  }
+
+  return ws
+}
+
+
 /**
  * Buy
  *
@@ -27,7 +56,9 @@ const fromPlainSymbol = compose(concat('t'), toUpper)
  * @return {Promise}
  */
 
-function submit (client, params) {
+async function submit (client, params) {
+  const ws = await connect(client)
+
   const data = {
     cid: Date.now(),
     symbol: fromPlainSymbol(params.symbol),
@@ -52,7 +83,6 @@ function submit (client, params) {
 
   debug('submitting order %d', order.cid)
   debug('submitting order (details) %O', params)
-  debug('submitting order (amount) %d', params.amount)
 
   return order
     .submit()
