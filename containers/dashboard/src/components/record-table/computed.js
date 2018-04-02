@@ -6,19 +6,43 @@ import {
 
 import { format } from 'date-fns'
 
+const toFixed = x =>
+  x ? x.toFixed(8)
+    : x
+
+const timeOf = x =>
+  x ? format(new Date(x.mts), 'HH:mm:ss')
+    : x
+
 export function data () {
   const transform = record => {
-    const { amount, priceInitial, dateOpened } = record
+    const {
+      tickerOpen,
+      orderOpen,
+      tickerClose,
+      orderClose
+    } = record
 
-    const time = format(new Date(dateOpened), 'HH:mm:ss')
-    const investment = amount * priceInitial
+    const priceOpen = orderOpen.price
 
-    const fn = compose(
-      assoc('time', time),
-      assoc('investment', investment)
-    )
+    const amount = orderOpen.amount
+    const investment = amount * priceOpen
 
-    return fn(record)
+    const base = {
+      priceOpen,
+      amount: toFixed(amount),
+      investment: toFixed(investment),
+      timeOpen: timeOf(tickerOpen)
+    }
+
+    if (tickerClose) {
+      base.priceClose = orderClose.price
+      base.timeClose = timeOf(tickerClose)
+
+      base.profit = investment - orderClose.price * amount
+    }
+
+    return base
   }
 
   return map(transform, this.rows)

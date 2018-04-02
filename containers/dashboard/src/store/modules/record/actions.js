@@ -19,14 +19,16 @@ const request = Axios.create({ baseURL })
  */
 
 export async function fetchAllOf ({ commit }, trader) {
+  const update = tap(data => commit('PUT', data))
+
   const params = {
-    trader,
-    sort: 'dateOpened'
+    trader
   }
 
   return request
     .get('/', { params })
     .then(prop('data'))
+    .then(update)
 }
 
 
