@@ -9,6 +9,14 @@
   .level-left
     .level-item
       .tags.has-addons(v-if="worth")
+        .tag.is-light Real P/L
+        .tag.is-dark {{ profitClosed }}
+    .level-item
+      .tags.has-addons(v-if="worth")
+        .tag.is-light Potential P/L
+        .tag.is-dark {{ profitOpen }}
+    .level-item
+      .tags.has-addons(v-if="worth")
         .tag.is-light Assets worth
         .tag.is-dark {{ worth }}
 
