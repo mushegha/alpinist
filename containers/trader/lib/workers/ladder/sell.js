@@ -12,7 +12,9 @@ const {
 
 const Records = Axios.create({ baseURL: 'http://records/' })
 
-async function director (trader, price) {
+async function director (trader, ticker) {
+  const price = ticker.bid
+
   const isProfitable = record => {
     return record.priceInitial < price
   }
@@ -48,15 +50,15 @@ async function director (trader, price) {
 
     debug('Should sell %d positions for %d', trader.limitSell, price)
 
+    const params = {
+      trader: trader._id,
+      status: 'open',
+      sort  : 'priceInitial',
+      limit : trader.limitSell
+    }
+
     return Records
-      .delete('/', {
-        params: {
-          trader: trader._id,
-          status: 'open',
-          sort  : 'priceInitial',
-          limit : trader.limitSell
-        }
-      })
+      .put('/', { tickerClose: ticker }, { params })
       .then(prop('data'))
   }
 

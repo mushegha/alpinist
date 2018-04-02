@@ -10,15 +10,16 @@ import {
   pick,
   reverse,
   identity,
-  reduce
+  reduce,
+  filter
 } from 'ramda'
 
-import RecordStats from '@/record-stats'
+import TheChart from '@/the-chart'
 import RecordTable from '@/record-table'
 
 
 const components = {
-  RecordStats,
+  TheChart,
   RecordTable
 }
 
@@ -26,7 +27,7 @@ const props = ['trader']
 
 function subscriptions () {
   const fromRemote = () =>
-    this.fetchOpen(this.trader)
+    this.fetchAllOf(this.trader)
 
   const stream = Observable
     .timer(0, 2000)
@@ -36,10 +37,13 @@ function subscriptions () {
 }
 
 const methods = {
-  ...mapActions('record', ['fetchOpen'])
+  ...mapActions('record', ['fetchAllOf'])
 }
 
 const computed = {
+  open () {
+    return filter(x => !x.tickerClose, this.rows)
+  },
   count () {
     return this.rows.length
   },
@@ -48,7 +52,7 @@ const computed = {
       return acc + row.amount
     }
 
-    return reduce(sum, 0, this.rows)
+    return reduce(sum, 0, this.open)
   },
   ...mapState({ rows: 'record' })
 }

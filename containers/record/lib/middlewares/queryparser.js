@@ -18,7 +18,7 @@ const {
 
 const trader = prop('trader')
 
-const dateClosed = compose(
+const tickerClose = compose(
   cond([
     [ equals('open'), always({ $exists: false }) ],
     [ equals('closed'), always({ $exists: true }) ],
@@ -51,7 +51,7 @@ const parseQuery = compose(
   reject(isNil),
   applySpec({
     trader,
-    dateClosed
+    tickerClose
   })
 )
 

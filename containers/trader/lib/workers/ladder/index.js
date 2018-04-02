@@ -9,8 +9,8 @@ function Worker () {
     const { trader, ticker } = job.data
 
     try {
-      await performBuy(trader, ticker.ask)
-      await performSell(trader, ticker.bid)
+      await performBuy(trader, ticker)
+      await performSell(trader, ticker)
     } catch (err) {
       debug('Failed with err %s', err.message)
     }

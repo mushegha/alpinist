@@ -1,8 +1,5 @@
-import { Observable } from 'rxjs/Observable'
-
 import {
   mapState,
-  mapGetters,
   mapActions
 } from 'vuex'
 
@@ -15,6 +12,7 @@ import RecordColumn from '@/record-column'
 import TickerStatus from '@/ticker-status'
 import TraderPanel from '@/trader-panel'
 import StatusLevel from '@/status-level'
+import TheChart from '@/the-chart'
 
 // import TickerPanel from '@/ticker-panel'
 // import LadderPanel from '@/ladder-panel'
@@ -33,7 +31,6 @@ const computed = {
   isLoaded () {
     return !isEmpty(this.body)
   },
-  ...mapGetters(['activeScope']),
   ...mapState({ body: 'trader' })
 }
 
