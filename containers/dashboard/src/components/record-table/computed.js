@@ -39,7 +39,8 @@ export function data () {
       base.priceClose = orderClose.price
       base.timeClose = timeOf(tickerClose)
 
-      base.profit = investment - orderClose.price * amount
+      const profit = orderClose.price * amount - investment
+      base.profit = toFixed(profit)
     }
 
     return base
