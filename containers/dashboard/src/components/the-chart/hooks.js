@@ -12,7 +12,7 @@ export function beforeMount () {
     x     : 't',
     y     : 'worth',
     color : 'type',
-    data  : this.data,
+    data  : [],
     plugins: [
       Tooltip()
     ]
@@ -21,5 +21,6 @@ export function beforeMount () {
 
 export function mounted () {
   this.chart.renderTo(this.$el)
+  this.render()
 }
 
