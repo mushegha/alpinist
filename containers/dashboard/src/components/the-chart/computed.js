@@ -49,6 +49,10 @@ const isOpenedBefore = t => record => {
  * Getters
  */
 
+export function moments () {
+  return sortedTickersFrom(this.value)
+}
+
 export function assets () {
   const { value } = this
 
@@ -71,7 +75,7 @@ export function assets () {
     return map(toRow, recordsBy(isOpenAt(t)))
   }
 
-  return chain(recordsAt, sortedTickersFrom(value))
+  return chain(recordsAt, this.moments)
 }
 
 export function money () {
@@ -107,9 +111,7 @@ export function money () {
     return reduce(toRow, xx, recordsBy(isOpenedBefore(t)))
   }
 
-  const tickers = sortedTickersFrom(value)
-
-  return map(moneyAt, tickers)
+  return map(moneyAt, this.moments)
 }
 
 export function data () {
