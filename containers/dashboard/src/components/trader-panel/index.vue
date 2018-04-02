@@ -12,8 +12,8 @@
           )
   a.panel-block(:href="'/' + id + '/edit'")
     | Edit configuration
-  a.panel-block(:href="'/' + id + '/log'")
-    | View transactions
+  a.panel-block(@click.prevent="downloadCSV")
+    | Download spreadsheet
 
   .panel-block.has-text-danger
     h4 Danger Zone

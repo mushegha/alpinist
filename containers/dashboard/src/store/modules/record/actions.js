@@ -64,3 +64,19 @@ export async function destroyAllOf ({ commit }, trader) {
     .then(prop('data'))
     .then(update)
 }
+
+export async function downloadCSV ({ getters }) {
+  const str = getters.csv
+  const buf = btoa(str)
+
+  var element = document.createElement('a')
+  element.setAttribute('href', 'data:text/csv;base64,' + buf)
+  element.setAttribute('download', 'records.csv')
+
+  element.style.display = 'none'
+  document.body.appendChild(element)
+
+  element.click()
+
+  document.body.removeChild(element)
+}
