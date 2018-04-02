@@ -83,7 +83,6 @@ export function money () {
 
   const recordsBy = pred => filter(pred, value)
 
-
   const moneyAt = ticker => {
     const t = tOf(ticker)
 
@@ -111,7 +110,16 @@ export function money () {
     return reduce(toRow, xx, recordsBy(isOpenedBefore(t)))
   }
 
-  return map(moneyAt, this.moments)
+  const getMoments = compose(
+    sortBy(prop('mts')),
+    compactTickers,
+    chain(props(['tickerOpen']))
+  )
+
+
+  const moments = getMoments(this.value)
+
+  return map(moneyAt, moments)
 }
 
 export function data () {
