@@ -1,12 +1,12 @@
 import {
+  uniq,
   reduce,
   concat,
   filter,
   compose,
   map,
   props,
-  chain,
-  reject,
+  chain, reject,
   isNil,
   uniqBy,
   prop,
@@ -83,9 +83,7 @@ export function money () {
 
   const recordsBy = pred => filter(pred, value)
 
-  const moneyAt = ticker => {
-    const t = tOf(ticker)
-
+  const moneyAt = t => {
     function toRow (acc, record) {
       const { orderOpen, orderClose, tickerClose } = record
 
@@ -111,13 +109,11 @@ export function money () {
   }
 
   const getMoments = compose(
-    sortBy(prop('mts')),
-    compactTickers,
-    chain(props(['tickerOpen']))
+    uniq,
+    map(prop('t'))
   )
 
-
-  const moments = getMoments(this.value)
+  const moments = getMoments(this.assets)
 
   return map(moneyAt, moments)
 }

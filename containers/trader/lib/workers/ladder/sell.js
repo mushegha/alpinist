@@ -16,7 +16,7 @@ async function director (trader, ticker) {
   const price = ticker.bid
 
   const isProfitable = record => {
-    return record.priceInitial < price
+    return record.orderOpen.price < price
   }
 
   const hasEnoughToSell = records => {
