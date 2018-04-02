@@ -76,7 +76,7 @@ async function director (trader, ticker) {
       params: {
         trader: trader._id,
         status: 'open',
-        sort  : 'priceInitial'
+        sort  : 'orderOpen.price'
       }
     })
     .then(prop('data'))

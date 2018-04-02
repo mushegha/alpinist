@@ -24,24 +24,12 @@ async function director (trader, ticker) {
     return profitable.length >= trader.limitSell + trader.limitKeep
   }
 
-  // const hasEnoughToKeep = records => {
-  //   const { limitSell, limitKeep } = trader
-  //   return records.length >= limitSell + limitKeep
-  // }
-
-  // const shouldSell = both(
-  //   hasEnoughToSell,
-  //   hasEnoughToKeep
-  // )
-
-  // Mock
-
   const slots = await Records
     .get('/', {
       params: {
         trader: trader._id,
         status: 'open',
-        sort  : 'priceInitial'
+        sort  : 'orderOpen.price'
       }
     })
     .then(prop('data'))
@@ -53,7 +41,7 @@ async function director (trader, ticker) {
     const params = {
       trader: trader._id,
       status: 'open',
-      sort  : 'priceInitial',
+      sort  : 'orderOpen.price',
       limit : trader.limitSell
     }
 
