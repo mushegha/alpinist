@@ -73,13 +73,13 @@ const computed = {
     const closedSlots = filter(x => x.tickerClose, this.slots)
 
     const getProfit = reduce((acc, r) => {
-      const { orderOpen, orderClosed } = r
+      const { orderOpen, orderClose } = r
 
       const amount = orderOpen.amount
 
       const sub = amount * orderOpen.price
-      const add = orderClosed
-        ? orderClosed.price * amount
+      const add = orderClose
+        ? orderClose.price * amount
         : 0
 
       return acc + add - sub
