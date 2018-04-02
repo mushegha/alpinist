@@ -14,10 +14,19 @@
     | Edit configuration
   a.panel-block(:href="'/' + id + '/log'")
     | View transactions
-  a.panel-block(@click.prevent="liquidateAll")
-    | Liquidate assets
-  a.panel-block(@click.prevent="destroyTrader")
-    | Destroy instance
+
+  .panel-block.has-text-danger
+    h4 Danger Zone
+
+  .panel-block
+    .control
+      a.button.is-warning(@click.prevent="liquidateAll")
+        | Liquidate
+
+  .panel-block
+    .control
+      a.button.is-danger.is-outlined(@click.prevent="destroyTrader")
+        | Destroy instance
 </template>
 
 <script src="./script.js"></script>

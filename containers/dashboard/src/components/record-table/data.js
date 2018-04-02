@@ -31,6 +31,10 @@ const columns = [
     field: 'timeClose',
     label: 'Close time',
     // sortable: true
+  },
+  {
+    field: 'profit',
+    label: 'Profit'
   }
 ]
 
