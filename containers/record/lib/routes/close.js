@@ -1,6 +1,6 @@
 const debug = require('debug')('alp:records')
 
-const { del } = require('koa-route')
+const { put } = require('koa-route')
 
 const {
   compose,
@@ -21,8 +21,18 @@ const { submit } = require('./actions/order')
 
 const combine = applySpec({
   symbol: compose(prop('symbol'), head),
-  amount: compose(negate, sum, map(prop('amount')))
+  amount: compose(negate, sum, map(prop('amount'))),
 })
+
+
+const useOrder = applySpec({
+  id        : prop('id'),
+  price     : prop('price'),
+  amount    : prop('amountOrig'),
+  mtsCreate : prop('mtsCreate'),
+  mtsUpdate : prop('mtsUpdate')
+})
+
 
 
 const queryOpen = assoc('dateClosed', { $exists: false })
@@ -43,6 +53,8 @@ async function close (ctx) {
 
   const { find, update } = monk.get('records')
 
+  const { tickerClose } = request.body
+
   const slots = await find(
     queryOpen(state.query),
     state.options
@@ -58,15 +70,16 @@ async function close (ctx) {
   debug('Submitting %O', orderData)
 
   try {
-    const real = await submit(ws, orderData)
+    const orderClose = await submit(ws, orderData).then(useOrder)
 
-    debug('Closing %d with at price %d', slots.length, real.price)
+    debug('Closing %d with at price %d', slots.length, orderClose.price)
 
     const res = await update(
       queryIds(slots),
       {
         $set: {
-          priceFinal: real.price,
+          tickerClose,
+          orderClose,
           dateClosed: new Date()
         }
       },
@@ -83,7 +96,7 @@ async function close (ctx) {
 }
 
 module.exports = () =>
-  del('/', close)
+  put('/', close)
 
 
 

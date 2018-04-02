@@ -5,7 +5,10 @@ import {
   mapState
 } from 'vuex'
 
-import { reduce } from 'ramda'
+import {
+  reduce,
+  filter
+} from 'ramda'
 
 const props = ['symbol']
 
@@ -35,17 +38,20 @@ const methods = {
 }
 
 const computed = {
+  openSlots () {
+    return filter(x => !x.tickerClose, this.slots)
+  },
   count () {
-    return this.slots && this.slots.length
+    return this.openSlots && this.openSlots.length
   },
   amount () {
-    if (!this.slots) return void 0
+    if (!this.openSlots) return void 0
 
     const sum = (acc, row) => {
       return acc + row.amount
     }
 
-    return reduce(sum, 0, this.slots || [])
+    return reduce(sum, 0, this.openSlots || [])
   },
   worth () {
     if (this.amount) return this.bid * this.amount
