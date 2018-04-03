@@ -1,8 +1,8 @@
 <template lang="pug">
 
 div
-  header.navbar.is-light
-    nav.container
+  .navbar.is-light
+    .container
       .navbar-brand
         a.navbar-item(href="/")
           img(src="/assets/logo.png")
@@ -14,6 +14,13 @@ div
         wallet-navbar.navbar-end
 
   router-view
+
+  .footer
+    .container
+      .content.has-text-centered
+        a(href="/") Alpinist
+        span &nbsp; by company behind the &nbsp;
+        a(href="http://cleversniper.com") CleverSniper
 
 </template>
 
