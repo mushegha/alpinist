@@ -7,12 +7,12 @@ const columns = [
   },
   {
     field: 'investment',
-    label: 'Investment',
+    label: 'Investment (USD)',
     numeric: true
   },
   {
     field: 'priceOpen',
-    label: 'Open Price',
+    label: 'Open Price (USD)',
     numeric: true,
     // sortable: true
   },
@@ -23,7 +23,7 @@ const columns = [
   },
   {
     field: 'priceClose',
-    label: 'Close Price',
+    label: 'Close Price (USD)',
     numeric: true,
     // sortable: true
   },
@@ -34,7 +34,7 @@ const columns = [
   },
   {
     field: 'profit',
-    label: 'Profit'
+    label: 'Profit (USD)'
   }
 ]
 

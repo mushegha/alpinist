@@ -65,7 +65,7 @@ export function assets () {
       const { amount, price } = record.orderOpen
 
       return {
-        t,
+        time: t,
         type: 'assets',
         worth: amount * ticker.bid,
         price: price
@@ -83,18 +83,18 @@ export function money () {
 
   const recordsBy = pred => filter(pred, value)
 
-  const moneyAt = t => {
+  const moneyAt = time => {
     function toRow (acc, record) {
       const { orderOpen, orderClose, tickerClose } = record
 
       const sub = orderOpen.price * orderOpen.amount
 
-      const add = orderClose && (tickerClose.mts <= t)
+      const add = orderClose && (tickerClose.mts <= time)
         ? orderClose.price * orderOpen.amount
         : 0
 
       return {
-        t,
+        time: time,
         type: 'money',
         worth: acc.worth - sub + add
       }
@@ -105,12 +105,12 @@ export function money () {
       type: 'money'
     }
 
-    return reduce(toRow, xx, recordsBy(isOpenedBefore(t)))
+    return reduce(toRow, xx, recordsBy(isOpenedBefore(time)))
   }
 
   const getMoments = compose(
     uniq,
-    map(prop('t'))
+    map(prop('time'))
   )
 
   const moments = getMoments(this.assets)
