@@ -7,7 +7,10 @@ const { Bitfinex } = require('../clients')
 const {
   compose,
   concat,
-  toUpper
+  toUpper,
+  prop,
+  head,
+  applySpec
 } = require('ramda')
 
 /**
@@ -24,6 +27,12 @@ const Record = ({ symbol, amount }) => {
     type: 'EXCHANGE MARKET'
   }
 }
+
+const fromOrder = applySpec({
+  id     : prop('id'),
+  price  : prop('price'),
+  amount : prop('amountOrig')
+})
 
 /**
  * Connection helpers
@@ -92,6 +101,7 @@ async function submit (client, params) {
 
   return order
     .submit()
+    .then(fromOrder)
     .catch(err => {
       debug('Declined with error: %s', err.message)
       return Promise.reject(err)

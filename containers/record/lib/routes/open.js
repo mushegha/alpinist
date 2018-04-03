@@ -6,8 +6,6 @@ const {
   tap,
   compose,
   pick,
-  prop,
-  applySpec
 } = require('ramda')
 
 const prepare = data => {
@@ -27,14 +25,6 @@ const prepare = data => {
   }
 }
 
-const useOrder = applySpec({
-  id        : prop('id'),
-  price     : prop('price'),
-  amount    : prop('amountOrig'),
-  mtsCreate : prop('mtsCreate'),
-  mtsUpdate : prop('mtsUpdate'),
-})
-
 async function open (ctx) {
   const { monk, bull, request } = ctx
 
@@ -45,10 +35,7 @@ async function open (ctx) {
   try {
     const job = await bull.add(data)
 
-    const res =  await job
-      .finished()
-      .then(tap(console.log))
-      .then(useOrder)
+    const res =  await job.finished()
 
     data.orderOpen = res
 
