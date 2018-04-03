@@ -6,8 +6,16 @@ import {
 
 import { format } from 'date-fns'
 
-const toFixed = x =>
+const toFixed = k => x =>
   x ? x.toFixed(8)
+    : x
+
+const toFixed8 = x =>
+  x ? x.toFixed(8, x)
+    : x
+
+const toFixed2 = x =>
+  x ? x.toFixed(2, x)
     : x
 
 const timeOf = x =>
@@ -30,8 +38,8 @@ export function data () {
 
     const base = {
       priceOpen,
-      amount: toFixed(amount),
-      investment: toFixed(investment),
+      amount: toFixed8(amount),
+      investment: toFixed2(investment),
       timeOpen: timeOf(tickerOpen)
     }
 
@@ -40,7 +48,7 @@ export function data () {
       base.timeClose = timeOf(tickerClose)
 
       const profit = orderClose.price * amount - investment
-      base.profit = toFixed(profit)
+      base.profit = toFixed2(profit)
     }
 
     return base
