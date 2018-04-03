@@ -1,15 +1,14 @@
-const debug = require('debug')('alp:records')
+const debug = require('debug')('alp:record')
 
 const { post } = require('koa-route')
 
 const {
+  tap,
   compose,
   pick,
   prop,
   applySpec
 } = require('ramda')
-
-const { submit } = require('./actions/order')
 
 const prepare = data => {
   const {
@@ -36,18 +35,22 @@ const useOrder = applySpec({
   mtsUpdate : prop('mtsUpdate'),
 })
 
-
 async function open (ctx) {
-  const { monk, request } = ctx
-
-  const { ws } = ctx.bitfinex
+  const { monk, bull, request } = ctx
 
   const data = prepare(request.body)
 
   debug('Submitting %O', data)
 
   try {
-    data.orderOpen = await submit(ws, data).then(useOrder)
+    const job = await bull.add(data)
+
+    const res =  await job
+      .finished()
+      .then(tap(console.log))
+      .then(useOrder)
+
+    data.orderOpen = res
 
     await monk
       .get('records')
@@ -63,4 +66,3 @@ async function open (ctx) {
 
 module.exports = () =>
   post('/', open)
-
