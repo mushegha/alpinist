@@ -4,7 +4,7 @@ const logger = require('koa-logger')
 const bodyparser = require('koa-bodyparser')
 
 const monk = require('./monk')
-const bitfinex = require('./bitfinex')
+const bull = require('./bull')
 const queryparser = require('./queryparser')
 
 module.exports = () =>
@@ -12,6 +12,6 @@ module.exports = () =>
     logger(),
     bodyparser(),
     monk(),
-    bitfinex(),
+    bull(),
     queryparser()
   ])

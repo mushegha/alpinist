@@ -82,6 +82,8 @@ services:
       - 192.168.0.1
       - 8.8.8.8
     environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       MONGODB_HOST: mongodb
       MONGODB_PORT: 27017
       BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'

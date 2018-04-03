@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:trader:client:bull')
+const debug = require('debug')('alp:record')
 
 const Bull = require('bull')
 
@@ -26,7 +26,7 @@ const DEFAULT_OPTS = {
 function create (name, opts = {}) {
   const options = merge(DEFAULT_OPTS, opts)
 
-  debug('Creating %s ...', name)
+  debug('Creating Bull client "%s" ...', name)
 
   return new Bull(name, options)
 }

@@ -1,11 +1,16 @@
-const debug = require('debug')('alp:record:order')
+const debug = require('debug')('alp:record')
 
 const { Order } = require('bitfinex-api-node/lib/models')
+
+const { Bitfinex } = require('../clients')
 
 const {
   compose,
   concat,
-  toUpper
+  toUpper,
+  prop,
+  head,
+  applySpec
 } = require('ramda')
 
 /**
@@ -14,37 +19,55 @@ const {
 
 const fromPlainSymbol = compose(concat('t'), toUpper)
 
-async function connect (ws) {
-  const authenticate = () => {
-    const perform = (resolve, reject) => {
+const Record = ({ symbol, amount }) => {
+  return {
+    cid: Date.now(),
+    symbol: fromPlainSymbol(symbol),
+    amount,
+    type: 'EXCHANGE MARKET'
+  }
+}
+
+const fromOrder = applySpec({
+  id     : prop('id'),
+  price  : prop('price'),
+  amount : prop('amountOrig')
+})
+
+/**
+ * Connection helpers
+ */
+
+async function connect () {
+  const client = new Bitfinex()
+
+  const ws = client.ws(2)
+
+  const connect = resolve => {
+    ws.once('open', () => {
+      debug('Bitfinex socket open')
+
       ws.once('auth', () => {
         debug('Bitfinex authenticated')
         resolve(ws)
       })
 
-      ws.once('error', err => {
-        debug('Error happened: %s', err.message)
-        reject(err)
-      })
-
       debug('Auth Bitfinex socket')
 
       ws.auth()
-    }
+    })
 
-    return new Promise(perform)
+    debug('Opening Bitfinex socket')
+
+    ws.open()
   }
 
-  if (!ws.isAuthenticated()) {
-    await authenticate()
-  }
-
-  return ws
+  return new Promise(connect)
 }
 
 
 /**
- * Buy
+ * Submit
  *
  * @async
  *
@@ -57,16 +80,8 @@ async function connect (ws) {
  */
 
 async function submit (client, params) {
-  const ws = await connect(client)
 
-  const data = {
-    cid: Date.now(),
-    symbol: fromPlainSymbol(params.symbol),
-    amount: params.amount,
-    type: 'EXCHANGE MARKET'
-  }
-
-  const order = new Order(data, client)
+  const order = new Order(params, client)
 
   // Enable automatic updates
   order.registerListeners()
@@ -86,10 +101,23 @@ async function submit (client, params) {
 
   return order
     .submit()
+    .then(fromOrder)
     .catch(err => {
       debug('Declined with error: %s', err.message)
       return Promise.reject(err)
     })
 }
 
-module.exports = { submit }
+/**
+ * Worker
+ */
+
+module.exports = async function (job) {
+  const data = Record(job.data)
+
+  const client = await connect()
+
+  debug('Evaluating order %O', data)
+
+  return submit(client, data)
+}

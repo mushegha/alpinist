@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:records')
+const debug = require('debug')('alp:record')
 
 const { put } = require('koa-route')
 
@@ -13,8 +13,6 @@ const {
   assoc
 } = require('ramda')
 
-const { submit } = require('./actions/order')
-
 /**
  * Helpers
  */
@@ -24,18 +22,7 @@ const combine = applySpec({
   amount: compose(negate, sum, map(prop('amount'))),
 })
 
-
-const useOrder = applySpec({
-  id        : prop('id'),
-  price     : prop('price'),
-  amount    : prop('amountOrig'),
-  mtsCreate : prop('mtsCreate'),
-  mtsUpdate : prop('mtsUpdate')
-})
-
-
-
-const queryOpen = assoc('dateClosed', { $exists: false })
+const queryOpen = assoc('tickerClose', { $exists: false })
 
 const queryIds = compose(
   $in => ({ _id: { $in } }),
@@ -47,9 +34,7 @@ const queryIds = compose(
  */
 
 async function close (ctx) {
-  const { monk, request, state } = ctx
-
-  const { ws } = ctx.bitfinex
+  const { monk, bull, request, state } = ctx
 
   const { find, update } = monk.get('records')
 
@@ -70,7 +55,9 @@ async function close (ctx) {
   debug('Submitting %O', orderData)
 
   try {
-    const orderClose = await submit(ws, orderData).then(useOrder)
+    const job = await bull.add(orderData)
+
+    const orderClose = await job.finished()
 
     debug('Closing %d with at price %d', slots.length, orderClose.price)
 
