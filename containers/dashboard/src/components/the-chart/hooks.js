@@ -2,19 +2,36 @@ import { Chart } from 'taucharts'
 
 import Tooltip from 'taucharts/dist/plugins/tooltip'
 
+import { format } from 'date-fns'
+
+function tooltip () {
+  const time = {
+    label: 'Time',
+    format (epoch) {
+      return format(epoch, 'DD/MM/YYYY HH:mm')
+    }
+  }
+
+  const formatters = {
+    time
+  }
+
+  return Tooltip({ formatters })
+}
+
 export function beforeMount () {
   this.chart = new Chart({
     type: 'stacked-bar',
     dimensions: {
-      t     : { type : 'order' },
+      time  : { type : 'order' },
       worth : { type: 'measure' }
     },
-    x     : 't',
+    x     : 'time',
     y     : 'worth',
     color : 'type',
     data  : [],
     plugins: [
-      Tooltip()
+      tooltip()
     ]
   })
 }
