@@ -24,12 +24,53 @@ services:
       - ./containers/nginx/conf.d:/etc/nginx/conf.d
       - ./containers/nginx/.htpasswd:/etc/nginx/.htpasswd
     links:
+      - auth
       - tickers
       - traders
       - records
       - wallets
 
   # API
+
+  auth:
+    build: ./containers/auth
+    volumes:
+      - ./containers/auth/lib:/usr/src/app/lib
+    links:
+      - redis
+    dns:
+      - 192.168.0.1
+      - 8.8.8.8
+    environment:
+      JWT_SECRET: 'nexus'
+      AUTH_PASSPHRASE: 'nalpinist nalpinist'
+      NODE_PORT: 80
+      DEBUG: 'alp:*'
+      DEBUG_COLORS: 'true'
+      DEBUG_HIDE_DATE: 'false'
+    command: npm run dev
+
+  tickers:
+    build: ./containers/ticker
+    volumes:
+      - ./containers/ticker/lib:/usr/src/app/lib
+    links:
+      - redis
+    dns:
+      - 192.168.0.1
+      - 8.8.8.8
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
+      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
+      NODE_PORT: 80
+      TICKER_SYMBOLS: 'btcusd,ethusd,neousd,xrpusd,bchusd,etcusd,ltcusd'
+      TICKER_SLEEP: 6000
+      DEBUG: 'alp:*'
+      DEBUG_COLORS: 'true'
+      DEBUG_HIDE_DATE: 'false'
+    command: npm run dev
 
   tickers:
     build: ./containers/ticker
