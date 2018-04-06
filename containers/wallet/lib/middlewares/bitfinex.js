@@ -9,10 +9,8 @@ const { Bitfinex } = require('../clients')
  */
 
 module.exports = opts => {
-  const client = new Bitfinex(opts)
-
   return async function bitfinex (ctx, next) {
-    ctx.bitfinex = client
+    ctx.bitfinex = new Bitfinex(opts)
 
     return next()
   }
