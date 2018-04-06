@@ -13,7 +13,10 @@ div
 
         wallet-navbar.navbar-end
 
-  router-view
+  template(v-if="isAdmin")
+    router-view
+  template(v-else)
+    auth-login
 
   .footer
     .container
@@ -27,16 +30,26 @@ div
 <script>
 
 import WalletNavbar from '@/wallet-navbar'
+import AuthLogin from './views/auth-login'
 
 import VueClock from 'vue-clock-simple'
 
 const components = {
+  AuthLogin,
   WalletNavbar,
   VueClock
 }
 
+const computed = {
+  isAdmin () {
+    const { auth } = this.$store.state
+    return auth && auth.token
+  }
+}
+
 export default {
-  components
+  components,
+  computed
 }
 
 </script>
