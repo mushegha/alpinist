@@ -1,12 +1,16 @@
 import TradersAll from '~/views/traders-all'
 import TradersOne from '~/views/traders-one'
 import TradersOneEdit from '~/views/traders-one-edit'
-import TradersOneLog from '~/views/traders-one-log'
+import AuthLogin from '~/views/auth-login'
 
 const routes = [
   {
     path: '/',
     component: TradersAll
+  }, {
+    path: '/login',
+    component: AuthLogin,
+    props: true
   }, {
     path: '/:id',
     component: TradersOne,
@@ -14,10 +18,6 @@ const routes = [
   }, {
     path: '/:id/edit',
     component: TradersOneEdit,
-    props: true
-  }, {
-    path: '/:id/log',
-    component: TradersOneLog,
     props: true
   }
 ]
