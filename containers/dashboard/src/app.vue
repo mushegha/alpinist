@@ -11,7 +11,7 @@ div
           .navbar-item
             vue-clock
 
-        wallet-navbar.navbar-end
+        wallet-navbar.navbar-end(v-if="isAdmin")
 
   template(v-if="isAdmin")
     router-view
