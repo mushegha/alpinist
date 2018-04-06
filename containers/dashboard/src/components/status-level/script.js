@@ -67,7 +67,9 @@ const computed = {
       return acc + add - sub
     }, 0)
 
-    return getProfit(openSlots)
+    const total = getProfit(openSlots)
+
+    return total.toFixed(2)
   },
   profitClosed () {
     const closedSlots = filter(x => x.tickerClose, this.slots)
@@ -85,10 +87,15 @@ const computed = {
       return acc + add - sub
     }, 0)
 
-    return getProfit(closedSlots)
+    const total = getProfit(closedSlots)
+
+    return total.toFixed(2)
   },
   worth () {
-    if (this.amount) return this.bid * this.amount
+    if (this.amount) {
+      const worth = this.bid * this.amount
+      return worth.toFixed(2)
+    }
   },
   ...mapState({ slots: 'record', ticker: 'ticker' })
 }
