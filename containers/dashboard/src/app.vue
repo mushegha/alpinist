@@ -22,7 +22,7 @@ div
     .container
       .content.has-text-centered
         a(href="/") Alpinist
-        span &nbsp; by company behind the &nbsp;
+        span &nbsp; under &nbsp;
         a(href="http://cleversniper.com") CleverSniper
 
 </template>
