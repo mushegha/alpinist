@@ -4,8 +4,6 @@ const Bitfinex = require('bitfinex-api-node')
 
 const getenv = require('getenv')
 
-const { merge } = require('ramda')
-
 /**
  * Settings
  */
@@ -24,21 +22,21 @@ const CONFIG = getenv.multi({
  */
 
 function open (ws) {
-  debug('Opening WebSocket client connection')
+  debug('Connecting to Bitfinex servers')
 
   if (ws.isOpen()) {
-    debug('Client already open')
+    debug('Client is already connected')
     return Promise.resolve(ws)
   }
 
   const open = (resolve, reject) => {
     ws.on('error', err => {
-      debug('Could not open WebSocket, reason: %s', err.message)
+      debug('Could not open WebSocket connection, reason: %s', err.message)
       reject(err)
     })
 
     ws.on('open', () => {
-      debug('Client is open')
+      debug('Connected')
       resolve(ws)
     })
 
@@ -52,8 +50,8 @@ function open (ws) {
  * Auth
  */
 
-function auth (ws) {
-  debug('Authenticate WebSocket client')
+function authenticate (ws) {
+  debug('Authenticate client')
 
   if (ws.isAuthenticated()) {
     debug('Already authenticated')
@@ -82,13 +80,13 @@ function auth (ws) {
  */
 
 function create () {
-  debug('Creating WebSocket client')
+  debug('Creating a client')
 
   const bfx = new Bitfinex(CONFIG)
 
   const ws = bfx.ws(2)
 
-  return open(ws).then(auth)
+  return open(ws).then(authenticate)
 }
 
 /**
@@ -98,7 +96,20 @@ function create () {
 function destroy (ws) {
   debug('Closing WebSocket connection')
 
-  return ws.close(0, 'Destroyed by pool')
+  return ws.close(1012, 'Destroyed by pool')
+}
+
+/**
+ * Validate
+ */
+
+function validate (ws) {
+  debug('Validating client state')
+
+  const isOpen = ws.isOpen()
+  const isAuthenticated = ws.isAuthenticated()
+
+  return isOpen && isAuthenticated
 }
 
 /**
@@ -107,5 +118,6 @@ function destroy (ws) {
 
 module.exports = {
   create,
-  destroy
+  destroy,
+  validate
 }

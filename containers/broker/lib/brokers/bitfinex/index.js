@@ -2,8 +2,13 @@ const debug = require('debug')('alp:broker:bitfinex')
 
 const { Order } = require('bitfinex-api-node/lib/models')
 
-const wsPool = require('./pool')
+const ClientPool = require('./pool')
 
+/**
+ * Init pool
+ */
+
+const clientPool = new ClientPool()
 
 /**
  * Expose worker
@@ -11,12 +16,12 @@ const wsPool = require('./pool')
 
 module.exports = async job => {
   debug('job %s', job.id)
-  const ws = await wsPool.acquire()
+  const ws = await clientPool.acquire()
 
   return new Promise(resolve => {
     setTimeout(async () => {
       debug('job done %s', job.id)
-      await wsPool.release(ws)
+      await clientPool.release(ws)
       resolve({ exo: 'done' })
     }, 1000)
   })
