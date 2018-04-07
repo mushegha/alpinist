@@ -11,7 +11,7 @@ div
               v-model="value.isRunning"
               @input="toggleStatus"
             )
-    a.panel-block(:href="'/' + id + '/edit'")
+    router-link.panel-block(:to="'/' + id + '/edit'")
       | Edit configuration
     a.panel-block(@click.prevent="downloadCSV")
       | Download spreadsheet

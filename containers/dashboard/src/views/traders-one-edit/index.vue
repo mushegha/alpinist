@@ -18,7 +18,7 @@
                       | Update
                 .field
                   .control
-                    a.button.is-outlined(:href="'/'+id")
+                    router-link.button.is-outlined(:to="'/'+id")
                       | Cancel
 
 </template>
