@@ -1,6 +1,8 @@
-const Bull = require('bull')
+const debug = require('debug')('alp:broker')
 
-const broker = new Bull('orders')
+const { Bull } = require('./lib/clients')
+
+
 
 /**
  * Settings
@@ -20,5 +22,8 @@ const pathToWorker = name =>
 /**
  * Workers
  */
+const broker = new Bull('orders')
+
+debug('Add worker for %s', 'bitfinex')
 
 broker.process('bitfinex', pathToWorker('bitfinex'))
