@@ -1,0 +1,17 @@
+{
+  "description": "Broker system to manage orders on different exchange markets",
+  "main": "worker.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
+  },
+  "dependencies": {
+    "ajv": "^6.4.0",
+    "bull": "^3.3.10",
+    "debug": "^3.1.0",
+    "getenv": "^0.7.0",
+    "ramda": "^0.25.0"
+  }
+}
