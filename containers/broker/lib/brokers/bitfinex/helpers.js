@@ -43,7 +43,20 @@ const toPlainSymbol = compose(drop(1), toLower)
  */
 
 function convert (data) {
+  const symbol = fromPlainSymbol(data.symbol)
 
+  const amount = data.side === 'SELL'
+    ? data.amount * -1
+    : data.amount
+
+
+  const type = 'EXCHANGE MARKET'
+
+  return {
+    symbol,
+    amount,
+    type
+  }
 }
 
 /**
@@ -55,11 +68,25 @@ function convert (data) {
  */
 
 function recover (data) {
+  const symbol = toPlainSymbol(data.symbol)
 
+  const amount = Math.abs(data.amount)
+
+  const side = data.amount >= 0
+    ? 'BUY'
+    : 'SELL'
+
+  return {
+    symbol,
+    amount,
+    side
+  }
 }
 
 
 module.exports = {
   toPlainSymbol,
-  fromPlainSymbol
+  fromPlainSymbol,
+  convert,
+  recover
 }
