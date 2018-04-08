@@ -1,8 +1,10 @@
 const debug = require('debug')('alp:broker:bitfinex')
 
-const { Order } = require('bitfinex-api-node/lib/models')
+const { tap } = require('ramda')
 
 const ClientPool = require('./pool')
+
+const { submit } = require('./actions')
 
 /**
  * Init pool
@@ -15,14 +17,25 @@ const clientPool = new ClientPool()
  */
 
 module.exports = async job => {
-  debug('job %s', job.id)
+  debug('job %s: %O', job.id, job.data)
+
   const ws = await clientPool.acquire()
 
-  return new Promise(resolve => {
-    setTimeout(async () => {
-      debug('job done %s', job.id)
-      await clientPool.release(ws)
-      resolve({ exo: 'done' })
-    }, 1000)
-  })
+  const done = tap(
+    order => {
+      debug('Order closed %s', order.cid)
+      clientPool.release(ws)
+    }
+  )
+
+  const fail = tap(
+    err => {
+      debug('Error: %s', err.message)
+      clientPool.release(ws)
+    }
+  )
+
+  return submit(ws, job.data)
+    .then(done)
+    .catch(fail)
 }

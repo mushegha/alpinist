@@ -49,7 +49,6 @@ function convert (data) {
     ? data.amount * -1
     : data.amount
 
-
   const type = 'EXCHANGE MARKET'
 
   return {
@@ -67,18 +66,28 @@ function convert (data) {
  * @returns {Object}
  */
 
-function recover (data) {
-  const symbol = toPlainSymbol(data.symbol)
+function recover (order) {
+  const id = order.id
+  const ts = order.mtsUpdate
 
-  const amount = Math.abs(data.amount)
+  const price = order.price
+  const value = order.getNotionalValue()
 
-  const side = data.amount >= 0
+  const symbol = toPlainSymbol(order.symbol)
+
+  const amount = Math.abs(order.getLastFillAmount())
+
+  const side = order.amountOrig >= 0
     ? 'BUY'
     : 'SELL'
 
   return {
+    id,
+    ts,
     symbol,
     amount,
+    price,
+    value,
     side
   }
 }
