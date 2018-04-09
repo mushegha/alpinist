@@ -16,26 +16,24 @@ const clientPool = new ClientPool()
  * Expose worker
  */
 
-module.exports = async job => {
+module.exports = async (job, cb) => {
   debug('job %s: %O', job.id, job.data)
 
   const ws = await clientPool.acquire()
 
-  const done = tap(
-    order => {
-      debug('Order closed %s', order.cid)
-      clientPool.release(ws)
-    }
-  )
+  const done = order => {
+    debug('Order closed %s', order.cid)
+    clientPool.release(ws)
+    cb(null, order)
+  }
 
-  const fail = tap(
-    err => {
-      debug('Error: %s', err.message)
-      clientPool.release(ws)
-    }
-  )
+  const fail = err => {
+    debug('Error: %s', err.message)
+    clientPool.release(ws)
+    cb(err)
+  }
 
-  return submit(ws, job.data)
+  submit(ws, job.data)
     .then(done)
     .catch(fail)
 }
