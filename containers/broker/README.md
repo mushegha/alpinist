@@ -47,10 +47,31 @@ submit(order)
   .then(console.log)
   .catch(console.error)
 
+
+
 ```
 
 ## Order Schema
 
-TODO
+New order
 
+```json
+{ 
+  "symbol" : "ethusd",
+  "amount" : 0.02,
+  "side"   : "BUY" 
+}
+```
 
+Closed order
+
+```json
+{ 
+  "id"     : 10492348851,
+  "ts"     : 1523274798600,
+  "symbol" : "ethusd",
+  "amount" : 0.02,
+  "price"  : 394.9,
+  "side"   : "BUY" 
+}
+```
