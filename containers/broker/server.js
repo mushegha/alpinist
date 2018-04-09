@@ -1,17 +1,11 @@
 const debug = require('debug')('alp:broker')
 
-const queue = require('./lib/queue')
+const getenv = require('getenv')
 
-/**
- * Settings
- */
+const queue = require('./lib')
 
-// const WORKERS = [
-//   'bitfinex'
-// ]
+const PORT = getenv.int('NODE_PORT', 8080)
 
-//
-// broker.process('bitfinex', pathToWorker('bitfinex'))
-//
+debug('Server listening to port %d', PORT)
 
-queue.app.listen(4000)
+queue.app.listen(PORT)
