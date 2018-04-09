@@ -23,7 +23,7 @@ const DEFAULT_CONFIG = {
  * Manual
  */
 
-const name = 'order'
+const name = 'broker'
 
 debug('Creating job queue "%s" ...', name)
 

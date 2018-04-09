@@ -1,31 +1,30 @@
 const queue = require('./lib/queue')
 
-const doc = {
+// Submit function in async fashion
+
+async function submit (order) {
+  const job = queue
+    .create('bitfinex', order)
+    .save()
+
+  const listen = (resolve, reject) => {
+    job
+      .on('complete', resolve)
+      .on('fail', reject)
+  }
+
+  return new Promise(listen)
+}
+
+// Perform
+
+const order = {
   symbol: 'ethusd',
-  amount: 0.02,
+  amount: 0.01,
+  type  : 'MARKET',
   side  : 'BUY'
 }
 
-const job = queue
-  .create('bitfinex', doc)
-  .save(err => {
-    if (err) {
-      console.log(err.message)
-    }
-
-    console.log(job.id)
-  })
-
-job.on('complete', function(result){
-  console.log('Job completed with data ', result)
-
-}).on('failed attempt', function(errorMessage, doneAttempts){
-  console.log('Job failed', errorMessage, doneAttempts)
-
-}).on('failed', function(errorMessage){
-  console.log('Job failed', errorMessage)
-
-}).on('progress', function(progress, data){
-  console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data )
-
-})
+submit(order)
+  .then(console.log)
+  .catch(console.error)

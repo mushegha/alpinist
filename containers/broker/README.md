@@ -1,12 +1,9 @@
 # Broker
 
-Broker system on top of [Bull][bull-repo] to manage orders on different exchange
+Broker system on top of [Kue][kue-repo] job queue to manage orders on different exchange
 markets using common API.
 
-*Bull* provides [API and event system][bull-docs] to follow job completion.
-
-[bull-repo]: https://github.com/OptimalBits/bull
-[bull-docs]: https://github.com/OptimalBits/bull/blob/master/REFERENCE.md
+[kue-repo]: https://github.com/Automattic/kue
 
 ## Flow
 
@@ -17,9 +14,27 @@ High-level diagram of interconnected parts.
 ## Usage
 
 ```js
-const Bull = require('bull')
+const kue = require('kue')
 
-const broker = new Bull('broker')
+const broker = kue.createQueue('broker')
+
+// Submit function in async fashion
+
+async function submit (order) {
+  const job = broker
+    .create('bitfinex', order)
+    .save()
+
+  const listen = (resolve, reject) => {
+    job
+      .on('complete', resolve)
+      .on('fail', reject)
+  }
+
+  return new Promise(listen)
+}
+
+// Perform
 
 const order = {
   symbol: 'ethusd',
@@ -28,14 +43,10 @@ const order = {
   side  : 'BUY'
 }
 
-broker
-  .add('bitfinex', order)
-  // await for `job` instantiation
-  .then(job => job.finished())
-  // process successful job completion
-  .then(res => console.log(res))
-  // process failure
-  .catch(err => console.error(err.message))
+submit(order)
+  .then(console.log)
+  .catch(console.error)
+
 ```
 
 ## Order Schema
