@@ -8,6 +8,12 @@ markets using common API.
 [bull-repo]: https://github.com/OptimalBits/bull
 [bull-docs]: https://github.com/OptimalBits/bull/blob/master/REFERENCE.md
 
+## Flow
+
+High-level diagram of interconnected parts.
+
+![diagram](assets/hl-diagram.png)
+
 ## Usage
 
 ```js
