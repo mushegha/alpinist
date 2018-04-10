@@ -1,10 +1,15 @@
 <template lang="pug">
-div
+div#the-chart
 </template>
 
 <script src="./main.js"></script>
 
 <style>
+
+#the-chart {
+  height: 300px;
+}
+
 /*!
  * /*
  * taucharts@2.1.0 (2018-03-21)
