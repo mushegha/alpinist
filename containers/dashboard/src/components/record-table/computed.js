@@ -1,6 +1,7 @@
 import {
   map,
   assoc,
+  filter,
   compose
 } from 'ramda'
 
@@ -21,6 +22,14 @@ const toFixed2 = x =>
 const timeOf = x =>
   x ? format(new Date(x.mts), 'HH:mm:ss')
     : x
+
+export function all () {
+  const pred = row => {
+    return !(this.hideHistory && row.orderClose)
+  }
+
+  return filter(pred, this.rows)
+}
 
 export function data () {
   const transform = record => {
@@ -54,5 +63,5 @@ export function data () {
     return base
   }
 
-  return map(transform, this.rows)
+  return map(transform, this.all)
 }
