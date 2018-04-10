@@ -1,6 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 const resolve = p => path.resolve(__dirname, p)
 
 module.exports = {
@@ -62,5 +64,13 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  // devtool: '#eval-source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new UglifyJsPlugin()
+  ]
 }
