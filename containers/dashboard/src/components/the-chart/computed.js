@@ -6,11 +6,14 @@ import {
   compose,
   map,
   props,
-  chain, reject,
+  chain,
+  reject,
   isNil,
   uniqBy,
   prop,
-  sortBy
+  sortBy,
+  take,
+  toUpper
 } from 'ramda'
 
 /**
@@ -18,6 +21,12 @@ import {
  */
 
 const tOf = prop('mts')
+
+const symbolOf = compose(
+  toUpper,
+  take(3),
+  prop('symbol')
+)
 
 const compactTickers = compose(
   uniqBy(prop('mts')),
@@ -66,7 +75,7 @@ export function assets () {
 
       return {
         time: t,
-        type: 'assets',
+        type: symbolOf(ticker),
         worth: amount * ticker.bid,
         price: price
       }
@@ -95,14 +104,13 @@ export function money () {
 
       return {
         time: time,
-        type: 'money',
-        worth: acc.worth - sub + add
+        worth: acc.worth - sub + add,
+        type: 'USD'
       }
     }
 
     const xx = {
-      worth: 0,
-      type: 'money'
+      worth: 0
     }
 
     return reduce(toRow, xx, recordsBy(isOpenedBefore(time)))
