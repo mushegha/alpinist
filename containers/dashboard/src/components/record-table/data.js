@@ -34,10 +34,14 @@ const columns = [
   },
   {
     field: 'profit',
-    label: 'Profit (USD)'
+    label: 'Profit (USD)',
+    numeric: true
   }
 ]
 
 export default function () {
-  return { columns }
+  return {
+    columns,
+    hideHistory: true
+  }
 }

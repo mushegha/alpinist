@@ -1,6 +1,6 @@
 <template lang="pug">
 
-div
+div.site
   .navbar.is-light
     .container
       .navbar-brand
@@ -13,17 +13,18 @@ div
 
         wallet-navbar.navbar-end(v-if="isAdmin")
 
-  template(v-if="isAdmin")
-    router-view
-  template(v-else)
-    auth-login
+  .main
+    template(v-if="isAdmin")
+      router-view
+    template(v-else)
+      auth-login
 
   .footer
     .container
       .content.has-text-centered
-        a(href="/") Alpinist
-        span &nbsp; under &nbsp;
-        a(href="http://cleversniper.com") CleverSniper
+        strong Alpinist
+        span &nbsp; strategy implementation at &nbsp;
+        a(href="https://www.talisant.com/") CleverSniper Network
 
 </template>
 
@@ -53,3 +54,15 @@ export default {
 }
 
 </script>
+
+<style>
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site .main {
+  flex: 1;
+}
+</style>

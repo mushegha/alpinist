@@ -21,8 +21,11 @@ services:
     restart: always
     build: ./containers/nginx
     volumes:
+      - ./containers/nginx/www:/var/www
       - ./containers/nginx/conf.d:/etc/nginx/conf.d
       - ./containers/nginx/.htpasswd:/etc/nginx/.htpasswd
+    ports:
+      - '80:80'
     links:
       - auth
       - tickers
