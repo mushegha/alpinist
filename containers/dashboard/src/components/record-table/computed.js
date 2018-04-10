@@ -65,3 +65,13 @@ export function data () {
 
   return map(transform, this.all)
 }
+
+export function classOf () {
+  return row => {
+    if (!row.profit) return ''
+
+    return row.profit < 0
+      ? 'is-danger'
+      : 'is-success'
+  }
+}
