@@ -3,11 +3,11 @@ import test from 'ava'
 import { commitClose } from '../lib/slots'
 
 const SLOTS = [
-  { level: 100 },
-  { level: 105 },
-  { level: 110 },
-  { level: 115 },
-  { level: 120 },
+  { _id: 'a', price: 100 },
+  { _id: 'b', price: 105 },
+  { _id: 'c', price: 110 },
+  { _id: 'd', price: 115 },
+  { _id: 'e', price: 120 },
 ]
 
 const commit = commitClose({
@@ -25,8 +25,8 @@ test('some', t => {
   const newSlots = commit(116, SLOTS)
 
   t.deepEqual(newSlots, [
-    { level: 110 },
-    { level: 115 },
-    { level: 120 },
+    { _id: 'c', price: 110 },
+    { _id: 'd', price: 115 },
+    { _id: 'e', price: 120 },
   ])
 })

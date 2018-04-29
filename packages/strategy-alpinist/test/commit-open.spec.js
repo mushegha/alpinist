@@ -12,44 +12,44 @@ const commit = commitOpen({
 })
 
 test('empty', t => {
-  const level = 100
+  const price = 100
 
   const oldSlots = []
 
-  const newSlots = commit(level, oldSlots)
+  const newSlots = commit(price, oldSlots)
 
   t.deepEqual(newSlots, [
-    { level: 100, volume: 1 }
+    { price: 100, volume: 1 }
   ])
 })
 
 test('some', t => {
   const oldSlots = [
-    { level: 100, volume: 1 }
+    { price: 100, volume: 1 }
   ]
 
   const newSlotsUp = commit(105, oldSlots)
   const newSlotsDown = commit(95, oldSlots)
 
   t.deepEqual(newSlotsUp, [
-    { level: 100, volume: 1 },
-    { level: 105, volume: 2 }
+    { price: 100, volume: 1 },
+    { price: 105, volume: 2 }
   ])
 
   t.deepEqual(newSlotsDown, [
-    { level: 95, volume: 2 },
-    { level: 100, volume: 1 }
+    { price: 95, volume: 2 },
+    { price: 100, volume: 1 }
   ])
 })
 
 test('none', t => {
   const oldSlots = [
-    { level: 100, volume: 1 }
+    { price: 100, volume: 1 }
   ]
 
   const newSlotsUp = commit(104, oldSlots)
 
   t.deepEqual(newSlotsUp, [
-    { level: 100, volume: 1 }
+    { price: 100, volume: 1 }
   ])
 })

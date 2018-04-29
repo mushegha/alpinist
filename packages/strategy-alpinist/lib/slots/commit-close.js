@@ -12,13 +12,13 @@ const {
  * @param {Array}
  */
 
-function commitClose (opts, level, slots = []) {
+function commitClose (opts, price, slots = []) {
   const {
     limit_close,
     limit_keep
   } = opts
 
-  const isUnder = slot => slot.level < level
+  const isUnder = slot => slot.price < price
 
   const { length } = filter(isUnder, slots)
 

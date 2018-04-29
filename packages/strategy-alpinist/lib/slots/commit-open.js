@@ -13,24 +13,24 @@ const {
 
 const { Maybe } = require('monet')
 
-const sorted = sortBy(prop('level'))
+const sorted = sortBy(prop('price'))
 
 const header = compose(last, sorted)
 const footer = compose(head, sorted)
 
-const headerLevel = compose(prop('level'), header)
-const footerLevel = compose(prop('level'), footer)
+const headerLevel = compose(prop('price'), header)
+const footerLevel = compose(prop('price'), footer)
 
 const headerVolume = compose(prop('volume'), header)
 const footerVolume = compose(prop('volume'), footer)
 
-const weightOf = ({ level, volume }) => level * volume
+const weightOf = ({ price, volume }) => price * volume
 
 const headerInvestment = compose(weightOf, header)
 const footerInvestment = compose(weightOf, footer)
 
 /**
- * Append new slot on given `level` if available
+ * Append new slot on given `price` if available
  *
  * @param {Object} opts
  * @param {number} opts.level_threshold
@@ -39,13 +39,13 @@ const footerInvestment = compose(weightOf, footer)
  * @param {number} opts.weight_up_k - Multiplication
  * @param {number} opts.weight_down_b
  * @param {number} opts.weight_down_k
- * @param {number} level
+ * @param {number} price
  * @param {Array}  slots
  *
  * @returm {Maybe} - Next volume
  */
 
-function renderVolume (opts, level, slots = []) {
+function renderVolume (opts, price, slots = []) {
   const {
     level_threshold,
     weight_initial,
@@ -56,11 +56,11 @@ function renderVolume (opts, level, slots = []) {
   } = opts
 
   if (isEmpty(slots)) {
-    const volume = weight_initial / level
+    const volume = weight_initial / price
     return Maybe.Some(volume)
   }
 
-  const toVolume = weight => weight / level
+  const toVolume = weight => weight / price
 
   const weightNextHeader = compose(
     toVolume,
@@ -79,20 +79,20 @@ function renderVolume (opts, level, slots = []) {
   const marginHeader = headerLevel(slots) + level_threshold
   const marginFooter = footerLevel(slots) - level_threshold
 
-  if (level >= marginHeader) {
+  if (price >= marginHeader) {
     return Maybe.Some(weightNextHeader(slots))
   }
 
-  if (level <= marginFooter) {
+  if (price <= marginFooter) {
     return Maybe.Some(weightNextFooter(slots))
   }
 
   return Maybe.None()
 }
 
-function commitOpen (opts, level, slots = []) {
-  return renderVolume(opts, level, slots)
-    .map(volume => ({ level, volume }))
+function commitOpen (opts, price, slots = []) {
+  return renderVolume(opts, price, slots)
+    .map(volume => ({ price, volume }))
     .map(slot => append(slot, slots))
     .map(sorted)
     .orSome(slots)
