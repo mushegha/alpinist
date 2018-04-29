@@ -4,6 +4,9 @@ const {
   drop
 } = require('ramda')
 
+const range = require('./range')
+const rangeByPrice = require('./range-by-price')
+
 /**
  * @param {Object} opts
  * @param {number} opts.limit_close
@@ -18,15 +21,13 @@ function commitClose (opts, price, slots = []) {
     limit_keep
   } = opts
 
-  const isUnder = slot => slot.price < price
-
-  const { length } = filter(isUnder, slots)
+  const { length } = rangeByPrice(-Infinity, price, slots)
 
   if (length <= limit_close + limit_keep) {
     return slots
   }
 
-  return drop(limit_close, slots)
+  return range(limit_close, Infinity, slots)
 }
 
 module.exports = curryN(3, commitClose)

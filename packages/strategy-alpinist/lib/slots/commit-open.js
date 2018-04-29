@@ -1,6 +1,4 @@
 const {
-  add,
-  multiply,
   append,
   sortBy,
   prop,
@@ -12,6 +10,8 @@ const {
 } = require('ramda')
 
 const { Maybe } = require('monet')
+
+const add = require('./add')
 
 const sorted = sortBy(prop('price'))
 
@@ -64,15 +64,13 @@ function renderVolume (opts, price, slots = []) {
 
   const weightNextHeader = compose(
     toVolume,
-    add(weight_up_b),
-    multiply(weight_up_k),
+    x => weight_up_b + weight_up_k * x,
     headerInvestment
   )
 
   const weightNextFooter = compose(
     toVolume,
-    add(weight_down_b),
-    multiply(weight_down_k),
+    x => weight_down_b + weight_down_k * x,
     footerInvestment
   )
 
@@ -93,7 +91,7 @@ function renderVolume (opts, price, slots = []) {
 function commitOpen (opts, price, slots = []) {
   return renderVolume(opts, price, slots)
     .map(volume => ({ price, volume }))
-    .map(slot => append(slot, slots))
+    .map(slot => add(slot, slots))
     .map(sorted)
     .orSome(slots)
 }
