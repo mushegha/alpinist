@@ -1,33 +1,9 @@
 const {
-  append,
-  sortBy,
-  prop,
   isEmpty,
-  compose,
-  last,
-  head,
   curryN
 } = require('ramda')
 
-const { Maybe } = require('monet')
-
-const add = require('./add')
-
-const sorted = sortBy(prop('price'))
-
-const header = compose(last, sorted)
-const footer = compose(head, sorted)
-
-const headerLevel = compose(prop('price'), header)
-const footerLevel = compose(prop('price'), footer)
-
-const headerVolume = compose(prop('volume'), header)
-const footerVolume = compose(prop('volume'), footer)
-
-const weightOf = ({ price, volume }) => price * volume
-
-const headerInvestment = compose(weightOf, header)
-const footerInvestment = compose(weightOf, footer)
+const Z = require('./helpers')
 
 /**
  * Append new slot on given `price` if available
@@ -45,7 +21,7 @@ const footerInvestment = compose(weightOf, footer)
  * @returm {Maybe} - Next volume
  */
 
-function renderVolume (opts, price, slots = []) {
+function commit (opts, price, slots = []) {
   const {
     level_threshold,
     weight_initial,
@@ -55,45 +31,38 @@ function renderVolume (opts, price, slots = []) {
     weight_down_k
   } = opts
 
+  const weightOf = ({ price, volume }) => price * volume
+
+  const fromWeight = weight => ({
+    price,
+    volume: weight / price
+  })
+
+  const push = weight => Z.add(fromWeight(weight), slots)
+
+
+  const header = Z.maxByPrice(slots)
+  const footer = Z.minByPrice(slots)
+
+  // on first run
   if (isEmpty(slots)) {
-    const volume = weight_initial / price
-    return Maybe.Some(volume)
+    return push(weight_initial)
   }
 
-  const toVolume = weight => weight / price
-
-  const weightNextHeader = compose(
-    toVolume,
-    x => weight_up_b + weight_up_k * x,
-    headerInvestment
-  )
-
-  const weightNextFooter = compose(
-    toVolume,
-    x => weight_down_b + weight_down_k * x,
-    footerInvestment
-  )
-
-  const marginHeader = headerLevel(slots) + level_threshold
-  const marginFooter = footerLevel(slots) - level_threshold
-
-  if (price >= marginHeader) {
-    return Maybe.Some(weightNextHeader(slots))
+  // when goes up
+  if (price >= header.price + level_threshold) {
+    const weight = weightOf(header) * weight_up_k + weight_up_b
+    return push(weight)
   }
 
-  if (price <= marginFooter) {
-    return Maybe.Some(weightNextFooter(slots))
+  // when goes down
+  if (price <= footer.price - level_threshold) {
+    const weight = weightOf(footer) * weight_down_k + weight_down_b
+    return push(weight)
   }
 
-  return Maybe.None()
+  // no action
+  return slots
 }
 
-function commitOpen (opts, price, slots = []) {
-  return renderVolume(opts, price, slots)
-    .map(volume => ({ price, volume }))
-    .map(slot => add(slot, slots))
-    .map(sorted)
-    .orSome(slots)
-}
-
-module.exports = curryN(3, commitOpen)
+module.exports = curryN(3, commit)
