@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import H from '../../lib/slots/helpers'
+import H from '../lib/helpers'
 
 const A = { _id: 'a', price: 100 }
 const B = { _id: 'b', price: 200 }

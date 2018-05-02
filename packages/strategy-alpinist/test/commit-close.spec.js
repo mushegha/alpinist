@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { commitClose } from '../lib/slots'
+import commitDrop from '../lib/commit-drop'
 
 const SLOTS = [
   { _id: 'a', price: 100 },
@@ -10,7 +10,7 @@ const SLOTS = [
   { _id: 'e', price: 120 },
 ]
 
-const commit = commitClose({
+const commit = commitDrop({
   limit_close: 2,
   limit_keep: 1
 })

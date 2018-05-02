@@ -1,8 +1,8 @@
 import test from 'ava'
 
-import { commitOpen } from '../lib/slots'
+import commitFill from '../lib/commit-fill'
 
-const commit = commitOpen({
+const commit = commitFill({
   level_threshold: 5,
   weight_initial: 100,
   weight_up_b: 10,
