@@ -2,7 +2,8 @@ const {
   compose,
   assoc,
   merge,
-  pick
+  pick,
+  curryN
 } = require('ramda')
 
 const { ulid } = require('ulid')
@@ -11,23 +12,54 @@ const { ulid } = require('ulid')
  *
  */
 
-const FIELDS = [
-  'status',
+const EVENT_FIELDS = [
+  'subject',
+  'agent',
+  'time'
+]
+
+const ORDER_FIELDS = [
   'market',
   'symbol',
   'type',
   'side',
+  'amount',
   'price',
-  'amount'
+  'status'
 ]
 
 /**
  * Class Order
  */
 
-class Order {
-  constructor (data) {
-    return Object.assign(this, data)
+class AggregateOrder {
+  constructor (ctx, members = []) {
+    const env = {
+      subject : ctx.subject || ulid(),
+      agent   : ctx.agent || void 0,
+      time    : ctx.time || Date.now(),
+    }
+
+    const data = {
+      market : ctx.market,
+      symbol : ctx.symbol,
+      type   : ctx.type,
+      side   : ctx.side,
+      amount : ctx.amount,
+      price  : ctx.price,
+      status : ctx.status || 'new'
+    }
+
+    this.members = members.map(m => {
+      return {
+        subject : m.subject || ulid(),
+        amount  : m.amount,
+        price   : m.price,
+        side    : m.side
+      }
+    })
+
+    return Object.assign(this, env, data)
   }
 }
 
@@ -39,19 +71,14 @@ class Order {
  * Create a new order
  */
 
-function create (data) {
-  const from = compose(
-    assoc('_id', ulid()),
-    assoc('status', 'new')
-  )
-
-  return new Order(from(data))
+function create (context, members) {
+  return new AggregateOrder(context, members)
 }
 
 /**
  * Expose
  */
 
-module.exports = Order
+module.exports = AggregateOrder
 
-module.exports.create = create
+module.exports.create = curryN(2, create)
