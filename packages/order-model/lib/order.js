@@ -1,4 +1,5 @@
 const {
+  reduce,
   compose,
   assoc,
   merge,
@@ -27,6 +28,40 @@ const ORDER_FIELDS = [
   'price',
   'status'
 ]
+
+/**
+ * Helpers
+ */
+
+const aggregate = members => {
+  const init = {
+    cost: 0,
+    amount: 0
+  }
+
+  const toTotal = (acc, order) => {
+    const {
+      amount,
+      price,
+      side
+    } = order
+
+    const k = side === 'buy' ? 1 : -1
+
+    return {
+      cost: acc.cost + amount * price * k,
+      amount: acc.amount + amount * k
+    }
+  }
+
+  const { cost, amount } = reduce(toTotal, init, members)
+
+  return {
+    amount: Math.abs(amount),
+    price: cost / amount,
+    side: amount > 0 ? 'buy' : 'sell'
+  }
+}
 
 /**
  * Class Order
@@ -61,11 +96,18 @@ class AggregateOrder {
 
     return Object.assign(this, env, data)
   }
-}
 
-/**
- * Helpers
- */
+  toJSON () {
+    const acc = aggregate(this.members)
+
+    const side   = this.side || acc.side
+    const price  = this.price || acc.price
+    const amount = this.amount || acc.amount
+
+    return merge(this, { side, price, amount })
+  }
+
+}
 
 /**
  * Create a new order
