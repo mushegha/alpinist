@@ -6,11 +6,11 @@ import { omit, mergeAll } from 'ramda'
 
 import { reduceP } from 'ramda-adjunct'
 
-import through from '../lib/transactions/through-couchdb'
+import Transactions from '../lib/transactions'
 
 const TRANSACTION_LIFECYCLE = [
   {
-    "subject" : "s1",
+    "subject" : "s2",
     "status"  : "new",
     "type"    : "market",
     "symbol"  : "ethusd",
@@ -31,20 +31,23 @@ const TRANSACTION_LIFECYCLE = [
       }
     ]
   }, {
-    "subject" : "s1",
+    "subject" : "s2",
     "status"  : "open"
   }, {
-    "subject" : "s1",
+    "subject" : "s2",
     "status"  : "closed",
     "amount"  : 0.4,
-    "price"   : 505
+    "price"   : 505,
   }
 ]
 
 
-test('init', async t => {
+test('put CouchDB', async t => {
+  const update = (acc, t) =>
+    Transactions.putCouchDB(t)
+
   const resultP = reduceP(
-    (acc, order) => through(order),
+    update,
     null,
     TRANSACTION_LIFECYCLE
   )

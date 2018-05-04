@@ -28,7 +28,7 @@ const connect = () => {
   return new PouchDB(uri)
 }
 
-function through (transaction) {
+function put (transaction) {
   const { subject } = transaction
 
   const db = connect()
@@ -47,4 +47,4 @@ function through (transaction) {
     .then(put)
 }
 
-module.exports = through
+module.exports = put
