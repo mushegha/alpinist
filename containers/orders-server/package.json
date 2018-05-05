@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "getenv": "^0.7.0",
+    "koa": "^2.5.1",
+    "koa-logger": "^3.2.0",
     "pouchdb": "^6.4.3",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.7.0",
