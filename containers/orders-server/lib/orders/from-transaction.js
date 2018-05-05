@@ -1,26 +1,24 @@
-const {
-  map,
-  compose
-} = require('ramda')
+const { map } = require('ramda')
 
+const { from } = require('rxjs/observable/from')
+const { flatMap } = require('rxjs/operators')
 
-function from (transaction) {
+const membersOf = transaction => {
   const {
     subject,
     status,
-    price,
-    members
+    price
   } = transaction
 
-  const prepare = order => {
+  const prepared = map(order => {
     order.memberOf = subject
     order.price = price || order.price
     order.status = status
 
     return order
-  }
+  })
 
-  return map(prepare, members)
+  return from(prepared(transaction.members))
 }
 
-module.exports = from
+module.exports = flatMap(membersOf)

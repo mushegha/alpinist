@@ -2,14 +2,11 @@ const PouchDB = require('pouchdb')
 
 const getenv = require('getenv')
 
-const {
-  assoc,
-  compose
-} = require('ramda')
+const { assoc  } = require('ramda')
 
-const {
-  mergeRight
-} = require('ramda-adjunct')
+const { mergeRight } = require('ramda-adjunct')
+
+const { concatMap } = require('rxjs/operators')
 
 /**
  * Helpers
@@ -28,23 +25,27 @@ const connect = () => {
   return new PouchDB(uri)
 }
 
-function put (transaction) {
+function through (transaction) {
   const { subject } = transaction
 
   const db = connect()
 
+  const idWithSubject = assoc('_id', transaction.subject)
+
   const get = doc =>
-    db.get(doc.subject)
-      .catch(_ => doc)
-      .then(assoc('_id', doc.subject))
+    db
+      .get(doc.subject)
       .then(mergeRight(doc))
+      .catch(_ => idWithSubject(doc))
 
   const put = doc =>
     db.put(doc)
-      .then(_ => doc)
+      .then(res => {
+        return assoc('_rev', res.rev, doc)
+      })
 
   return get(transaction)
     .then(put)
 }
 
-module.exports = put
+module.exports = concatMap(through)

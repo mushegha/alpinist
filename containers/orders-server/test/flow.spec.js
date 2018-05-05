@@ -25,8 +25,9 @@ test(async t => {
   const flow = source
     // .concatMap(Transactions.putCouchDB)
     .pipe(
-      concatMap(Transactions.putCouchDB),
-      flatMap(Orders.fromTransaction)
+      Transactions.throughCouchDB,
+      Orders.fromTransaction,
+      Orders.throughCouchDB
     )
 
     // .flatMap(Transactions.putCouchDB)

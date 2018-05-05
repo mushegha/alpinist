@@ -1,1 +1,1 @@
-module.exports.putCouchDB = require('./put-couchdb')
+module.exports.throughCouchDB = require('./through-couchdb')
