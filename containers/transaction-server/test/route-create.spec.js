@@ -1,5 +1,7 @@
 import test from 'ava'
 
+import mqtt from 'mqtt'
+
 import {
   dissoc,
   whereEq
@@ -10,16 +12,38 @@ import {
   resolveP
 } from 'ramda-adjunct'
 
-
 import { create } from '../lib/routes'
 
-const call = (ctx = {}) => {
-  const fn = create()
-  return fn(ctx, _ => resolveP(ctx))
-}
+test.beforeEach(async t => {
+  const client = mqtt.connect('mqtt://localhost')
+
+  await new Promise(done => {
+    client.on('connect', done)
+  })
+
+  client.subscribe('orders')
+
+  client.on('message', (topic, buffer) => {
+    const data = JSON.parse(buffer.toString())
+
+    if (data.status !== 'new') {
+      return
+    }
+
+    setTimeout(() => {
+      data.status = 'created'
+      const res = JSON.stringify(data)
+      client.publish(`orders`, res)
+    }, 50)
+  })
+
+  t.context.mqtt = client
+})
 
 test('valid', async t => {
-  const request = {
+  const { context } = t
+
+  context.request = {
     body: {
       operation : 'buy',
       kind      : 'market',
@@ -31,15 +55,22 @@ test('valid', async t => {
     }
   }
 
+  const call = (ctx = {}) => {
+    const fn = create()
+    return fn(ctx, _ => resolveP(ctx))
+  }
+
   const assertResponse = ({ body }) => {
     t.true(isString(body.subject), 'generate `subject`')
 
     t.is(body.status, 'new')
 
-    t.true(whereEq(dissoc('etc', request.body), body))
-    t.false(whereEq(request.body, body))
+    t.true(whereEq(dissoc('etc', context.request.body), body))
+    t.false(whereEq(context.request.body, body))
   }
 
-  await call({ request })
+  await call(context)
     .then(assertResponse)
+
+  await new Promise(r => setTimeout(r, 2000))
 })

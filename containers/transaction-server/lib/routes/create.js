@@ -24,9 +24,30 @@ const fromContext = R.compose(
   R.view(bodyLens)
 )
 
+const asBuffer = R.compose(
+  Buffer.from,
+  JSON.stringify
+)
+
 function create () {
   return async (ctx, next) => {
     ctx.body = fromContext(ctx)
+
+    ctx.mqtt.publish('orders', asBuffer(ctx.body))
+
+    await new Promise(resolve => {
+      ctx.mqtt.on('message', (topic, buffer) => {
+        const data = JSON.parse(buffer.toString())
+
+        if (data.subject === ctx.body.subject) {
+          if (data.status === 'created') {
+            console.log(data)
+            resolve(data)
+          }
+        }
+
+      })
+    })
 
     return next()
   }
