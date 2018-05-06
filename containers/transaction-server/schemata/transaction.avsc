@@ -1,0 +1,62 @@
+{
+  "type": "record",
+  "namespace": "melbourne.prism.transactions",
+  "name": "Transaction",
+  "doc": "Avro Schema for Transaction event",
+  "fields": [{
+      "name": "subject",
+      "type": "string",
+      "doc": "ULID for events' correlation"
+    },
+    {
+      "name": "time",
+      "type": "long",
+      "doc": "Timestamp of event"
+    },
+    {
+      "name": "operation",
+      "type": "enum",
+      "symbols": ["buy", "sell"],
+      "doc": "Side"
+    },
+    {
+      "name": "kind",
+      "type": "enum",
+      "symbols": ["market", "limit"]
+    },
+    {
+      "name": "status",
+      "type": "enum",
+      "symbols": ["new", "open", "close"],
+      "doc": "Actual status at time of event"
+    },
+    {
+      "name": "exchange",
+      "type": "string",
+      "doc": "Exchange market id"
+    },
+    {
+      "name": "symbol",
+      "type": "string"
+    },
+    {
+      "name": "quantity",
+      "type": "float"
+    },
+    {
+      "name": "price",
+      "type": "float"
+    },
+    {
+      "name": "members",
+      "type": "array",
+      "items": "string",
+      "doc": "Corelation ULIDs for members"
+    },
+    {
+      "name": "token",
+      "type": "string",
+      "doc": "Token to access"
+    }
+  ]
+}
