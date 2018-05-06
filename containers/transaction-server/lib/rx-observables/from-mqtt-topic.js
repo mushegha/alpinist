@@ -19,4 +19,3 @@ function fromMqttTopic (topic) {
 }
 
 module.exports = fromMqttTopic
-

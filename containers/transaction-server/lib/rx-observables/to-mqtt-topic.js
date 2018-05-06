@@ -2,8 +2,6 @@ const mqtt = require('mqtt')
 
 const { Observable } = require('rxjs/Rx')
 
-const { flatMap } = require('rxjs/operators')
-
 function toMqttTopic (topic) {
   const client = mqtt.connect('mqtt://localhost')
 
@@ -25,5 +23,4 @@ function toMqttTopic (topic) {
   }
 }
 
-module.exports = topic => flatMap(toMqttTopic(topic))
-
+module.exports = toMqttTopic

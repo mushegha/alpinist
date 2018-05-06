@@ -1,8 +1,8 @@
 {
   "type": "record",
-  "namespace": "melbourne.prism.transactions",
-  "name": "Transaction",
-  "doc": "Avro Schema for Transaction event",
+  "namespace": "melbourne.prism.orders",
+  "name": "Order",
+  "doc": "Avro Schema for order",
   "fields": [{
       "name": "subject",
       "type": "string",
@@ -36,11 +36,11 @@
     },
     {
       "name": "quantity",
-      "type": "float"
+      "type": "double"
     },
     {
       "name": "price",
-      "type": "float"
+      "type": "double"
     }
   ]
 }
