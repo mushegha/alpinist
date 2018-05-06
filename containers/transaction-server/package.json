@@ -5,11 +5,16 @@
     "test": "ava"
   },
   "devDependencies": {
-    "ava": "^0.25.0"
+    "ava": "^0.25.0",
+    "axios": "^0.18.0"
   },
   "dependencies": {
     "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.0",
     "koa-logger": "^3.2.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.7.0",
+    "ulid": "^2.3.0"
   }
 }

@@ -9,11 +9,6 @@
       "doc": "ULID for events' correlation"
     },
     {
-      "name": "time",
-      "type": "long",
-      "doc": "Timestamp of event"
-    },
-    {
       "name": "operation",
       "type": "enum",
       "symbols": ["buy", "sell"],
@@ -27,7 +22,7 @@
     {
       "name": "status",
       "type": "enum",
-      "symbols": ["new", "open", "close"],
+      "symbols": ["new", "open", "closed"],
       "doc": "Actual status at time of event"
     },
     {
@@ -46,17 +41,6 @@
     {
       "name": "price",
       "type": "float"
-    },
-    {
-      "name": "members",
-      "type": "array",
-      "items": "string",
-      "doc": "Corelation ULIDs for members"
-    },
-    {
-      "name": "token",
-      "type": "string",
-      "doc": "Token to access"
     }
   ]
 }
