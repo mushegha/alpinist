@@ -12,7 +12,7 @@ import {
   resolveP
 } from 'ramda-adjunct'
 
-import { create } from '../lib/routes'
+import { create } from '../lib/koa-routes'
 
 test.beforeEach(async t => {
   const client = mqtt.connect('mqtt://localhost')

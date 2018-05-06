@@ -3,7 +3,7 @@ const Koa = require('koa')
 const logger = require('koa-logger')
 const bodyParser = require('koa-bodyparser')
 
-const routes = require('./lib/routes')
+const routes = require('./lib/koa-routes')
 
 const app = new Koa()
 
