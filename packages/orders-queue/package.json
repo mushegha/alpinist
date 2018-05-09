@@ -1,6 +1,8 @@
 {
-  "description": "Broker system to manage orders on different exchange markets",
-  "main": "worker.js",
+  "name": "@alpinist/order-queue",
+  "version": "0.0.1",
+  "description": "Order processor on top of Bull queue",
+  "main": "lib/index.js",
   "scripts": {
     "test": "ava"
   },
@@ -10,10 +12,13 @@
   "dependencies": {
     "ajv": "^6.4.0",
     "bitfinex-api-node": "^2.0.0-beta",
+    "bull": "^3.4.1",
     "debug": "^3.1.0",
     "generic-pool": "^3.4.2",
     "getenv": "^0.7.0",
     "kue": "^0.11.6",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.7.0",
+    "ulid": "^2.3.0"
   }
 }
