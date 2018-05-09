@@ -1,10 +1,10 @@
-const debug = require('debug')('alp:broker')
+const debug = require('debug')('alpinist:orders-queue')
 
 const getenv = require('getenv')
 
-const kue = require('kue')
+const Bull = require('bull')
 
-const workers = require('./workers')
+const MockProcessor = require('./processors/mock')
 
 /**
  * Settings
@@ -23,17 +23,15 @@ const DEFAULT_CONFIG = {
  * Manual
  */
 
-const name = 'broker'
+module.exports = ({ process = false } = {}) => {
+  debug('Creating job queue for orders')
 
-debug('Creating job queue "%s" ...', name)
+  const queue = new Bull(DEFAULT_CONFIG)
 
-const queue = kue.createQueue(DEFAULT_CONFIG)
+  if (process) {
+    debug('Add mock processor')
+    queue.process('mock', MockProcessor())
+  }
 
-for (let key in workers) {
-  debug('Add worker for %s', key)
-  queue.process(key, workers[key])
+  return queue
 }
-
-module.exports = queue
-
-module.exports.app = kue.app
