@@ -1,4 +1,4 @@
-const debug = require('debug')('alp:broker:bitfinex')
+const debug = require('debug')('alpinist:order-queue:bitfinex')
 
 const { Order } = require('bitfinex-api-node/lib/models')
 

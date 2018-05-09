@@ -45,16 +45,19 @@ const toPlainSymbol = compose(drop(1), toLower)
 function convert (data) {
   const symbol = fromPlainSymbol(data.symbol)
 
-  const amount = data.side === 'SELL'
-    ? data.amount * -1
-    : data.amount
+  const price = data.price
+
+  const amount = data.side === 'sell'
+    ? data.quantity * -1
+    : data.quantity
 
   const type = 'EXCHANGE MARKET'
 
   return {
     symbol,
     amount,
-    type
+    type,
+    price
   }
 }
 
@@ -67,27 +70,23 @@ function convert (data) {
  */
 
 function recover (order) {
-  const id = order.id
-  const ts = order.mtsUpdate
+  const orderId = order.id
+  const orderTime = order.mtsUpdate
 
   const price = order.price
-  const value = order.getNotionalValue()
 
   const symbol = toPlainSymbol(order.symbol)
 
-  const amount = Math.abs(order.getLastFillAmount())
+  const quantity = Math.abs(order.amount)
 
   const side = order.amountOrig >= 0
-    ? 'BUY'
-    : 'SELL'
+    ? 'buy'
+    : 'sell'
 
   return {
-    id,
-    ts,
     symbol,
-    amount,
+    quantity,
     price,
-    value,
     side
   }
 }
