@@ -1,6 +1,11 @@
 import test from 'ava'
 
 import Queue from '../lib/queue'
+import Observable from '../lib/observable'
+
+import {
+  appendFlipped
+} from 'ramda-adjunct'
 
 const queue = new Queue()
 
@@ -25,9 +30,16 @@ test('constructor', async t => {
 })
 
 test('add', async t => {
-  const order = await queue.add(BUY_ORDER)
+  const observable = Observable
+    .fromQueue(queue)
+    .take(2)
+    .reduce(appendFlipped, [])
 
-  // console.log(order)
+  queue.add(BUY_ORDER)
+
+  await observable
+    .toPromise()
+    .then(console.log)
 
   t.is(1, 1)
 })

@@ -84,16 +84,8 @@ class OrderQueue {
       .then(orderFromJob)
   }
 
-  get (id) {
-    return this.queue
-      .getJob(id)
-      .then(orderFromJob)
-  }
-
-  getAll () {
-    return this.queue
-      .getJobs()
-      .then(map(orderFromJob))
+  observe (order) {
+    return this.observable
   }
 }
 
