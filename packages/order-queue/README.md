@@ -4,12 +4,6 @@ Broker system on top of [Bull][bull-repo] job queue to manage orders on various 
 
 [bull-repo]: https://github.com/OptimalBits/bull
 
-## Flow
-
-High-level diagram of interconnected parts.
-
-![diagram](assets/hl-diagram.png)
-
 ## Usage
 
 ```js
