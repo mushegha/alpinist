@@ -1,0 +1,166 @@
+FORMAT: 1A
+HOST: http://
+
+# Alpinist
+
+API for **unified** exchange platform
+
+### URI Format
+
+Resource URIs will generally follow a format similar to those shown below.
+
+- Resource Collection - `/{resource-name}`
+    Example - `/orders`
+- Specific Resource - `/{resource-name}/{id}`
+    Example - `/orders/01ARZ3NDEKTSV4RRFFQ69G5FAV`
+
+### Content type
+
+Content type is set to `application/json` for all API calls.
+
+### Response Codes
+
+**HTTP Codes**
+
+- `200` - OK status with JSON body
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Unprocessable Entity
+- `500` - Internal Server Error
+
+# Group Orders
+
+## Order Resource [/orders/{subject}]
+
++ Attributes (Order Base)
+    - Include Subject Field
+    - Include Time Field
+    - Include Status Field
+
+### Create [POST /orders/]
+
+Add a new order
+
++ Request
+
+    + Attributes (Order Base)
+
++ Response 200 (application/json)
+
+    + Attributes (Order Resource)
+
+### Read [GET /orders/{subject}]
+
+Get order by `subject`
+
++ Parameters
+    - subject (string, required)
+        - Sample: '01ARZ3NDEKTSV4RRFFQ69G5FAV'
+
++ Response 200 (application/json)
+
+    + Attributes (Order Resource)
+
+
+## Order Collection [/orders/]
+
++ Attributes (object)
+    + query (object)
+        - Include Status Field
+    + members (array[Order Resource], required)
+
+### List [GET /orders/{?status}]
+
+Get list of orders
+
++ Parameters
+
+    - status (enum[string], optional)
+        - Members
+            + `waiting`
+            + `active`
+            + `completed`
+            + `failed`
+
+
++ Response 200 (application/json)
+
+    + Attributes (Order Collection)
+
+    + Body
+
+            {
+              "query": {},
+              "members": [
+                {
+                  "broker": "bitfinex",
+                  "symbol": "ethusd",
+                  "side": "buy",
+                  "price": 500.5,
+                  "quantity": 0.25,
+                  "subject": "'01ARZ3NDEKTSV4RRFFQ69G5FAV'",
+                  "agent": "'01ARZ3NDEKTSV4RRFFQ69G5FXX'",
+                  "time": 1525871362000,
+                  "status": "completed"
+                },
+                {
+                  "broker": "bitfinex",
+                  "symbol": "ethusd",
+                  "side": "sell",
+                  "price": 505.5,
+                  "quantity": 0.25,
+                  "subject": "'01ARZ3NDEKTSV4RRFFQ69G5FAZ'",
+                  "agent": "'01ARZ3NDEKTSV4RRFFQ69G5FXX'",
+                  "time": 1525872886000,
+                  "status": "active"
+                }
+              ]
+            }
+
+# Data Structures
+
+## Subject Field (object)
+- subject (string)
+
+   Unique (sortable) identifier of order
+
+    - Sample: '01ARZ3NDEKTSV4RRFFQ69G5FAV'
+
+## Time Field (object)
+
+- time (number, required)
+
+    Epoch timestamp in milliseconds
+
+    - Sample: `1525871362000`
+
+## Status Field (object)
+
+- status (enum[string])
+
+    State of order
+
+    - Sample: `active`
+    - Members
+        + `waiting`
+        + `active`
+        + `completed`
+        + `failed`
+
+## Order Base (object)
+
+- broker (string, required)
+    - Sample: `bitfinex`
+- symbol (string, required)
+    - Sample: `ethusd`
+- side (enum[string], required)
+    - Sample: `buy`
+    - Members
+        + `buy`
+        + `sell`
+- price (number, required)
+    - Sample: `500.50`
+- quantity (number, required)
+    - Sample: `0.25`
