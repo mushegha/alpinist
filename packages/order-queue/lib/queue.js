@@ -32,65 +32,15 @@ const DEFAULT_CONFIG = {
   redis: REDIS_CONFIG
 }
 
-function createQueue (opts) {
+function Queue (opts) {
   const options = merge(DEFAULT_CONFIG, opts)
   const queue = new Bull('orders', options)
 
+  // setup processords
   debug('Add mock processor')
   queue.process('mock', MockProcessor())
 
   return queue
-}
-
-const orderFromJob = job => {
-  const convert = compose(
-    merge(job.data),
-    assoc('subject', job.id),
-    assoc('time', job.timestamp)
-  )
-
-  return convert({})
-}
-
-/**
- * Class OrderQueue
- */
-
-class OrderQueue {
-  constructor (opts) {
-    this.queue = createQueue(opts)
-  }
-
-  /**
-   * Add a new order
-   *
-   * @param {Object} order
-   * @param {string} order.broker
-   * @param {string} order.side
-   * @param {string} order.symbol
-   * @param {string} order.price
-   * @param {string} order.quantity
-   *
-   * @returns {Promise}
-   */
-
-  add (order) {
-    const { broker } = order
-
-    const jobId = ulid()
-
-    return this.queue
-      .add(broker, order, { jobId })
-      .then(orderFromJob)
-  }
-
-  observe (order) {
-    return this.observable
-  }
-}
-
-function Queue () {
-  return new OrderQueue()
 }
 
 module.exports = Queue

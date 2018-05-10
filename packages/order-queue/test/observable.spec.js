@@ -1,19 +1,19 @@
 import test from 'ava'
 
+import { appendFlipped } from 'ramda-adjunct'
+
+
 import Queue from '../lib/queue'
 import Observable from '../lib/observable'
 
-import {
-  appendFlipped
-} from 'ramda-adjunct'
+import { addOrderTo } from '../lib/fn'
 
-const queue = new Queue()
 
 const BUY_ORDER = {
   broker   : 'mock',
   symbol   : 'ethusd',
   side     : 'buy',
-  price    : 500,
+  price    : 501,
   quantity : 0.2
 }
 
@@ -21,25 +21,32 @@ const SELL_ORDER = {
   broker   : 'mock',
   symbol   : 'ethusd',
   side     : 'sell',
-  price    : 500,
+  price    : 499,
   quantity : 0.2
 }
 
-test('constructor', async t => {
-  t.is(typeof Queue, 'function')
+test.beforeEach(async t => {
+  const queue = Queue()
+
+  await queue.empty()
+
+  t.context = queue
 })
 
-test('add', async t => {
+test('observe', async t => {
+  const add = addOrderTo(t.context)
+
   const observable = Observable
-    .fromQueue(queue)
-    .take(2)
+    .fromQueue(t.context)
+    .take(4)
     .reduce(appendFlipped, [])
 
-  queue.add(BUY_ORDER)
+  await add(BUY_ORDER)
+  await add(SELL_ORDER)
 
   await observable
     .toPromise()
-    .then(console.log)
-
-  t.is(1, 1)
+    .then(states => {
+      t.is(states.length, 4)
+    })
 })
