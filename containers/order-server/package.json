@@ -9,9 +9,9 @@
     "ava": "^0.25.0"
   },
   "dependencies": {
+    "@alpinist/order-queue": "0.0.1",
     "async-mqtt": "^1.0.1",
     "avsc": "^5.2.3",
-    "bull": "^3.4.1",
     "generic-pool": "^3.4.2",
     "getenv": "^0.7.0",
     "koa": "^2.5.1",
@@ -23,7 +23,6 @@
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.7.0",
     "rxjs": "^6.1.0",
-    "rxjs-compat": "^6.1.0",
-    "ulid": "^2.3.0"
+    "rxjs-compat": "^6.1.0"
   }
 }
