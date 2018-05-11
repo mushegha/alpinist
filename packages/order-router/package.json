@@ -1,0 +1,20 @@
+{
+  "name": "@alpinist/order-router",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "dependencies": {
+    "@alpinist/order-store": "*",
+    "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.4.0",
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.7.0",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
+  }
+}
