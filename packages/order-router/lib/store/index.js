@@ -1,20 +1,8 @@
-const PouchDB = require('pouchdb')
-
-const findPlugin = require('pouchdb-find')
-
-const getenv = require('getenv')
-
-/**
- * Setup
- */
-
-PouchDB.plugin(findPlugin)
+const Store = require('@alpinist/order-store')
 
 /**
  * Settings
  */
-
-const COUCHDB_URL = getenv('COUCHDB_URL', 'http://localhost:5984')
 
 const index = {
   fields: [
@@ -24,12 +12,15 @@ const index = {
 }
 
 function createMiddleware () {
-  const url = `${COUCHDB_URL}/orders`
-  const store = new PouchDB(url)
+  const store = new Store()
 
-  store.createIndex(index)
+  const ready = Promise.all([
+    store.createIndex(index)
+  ])
 
   return async (ctx, next) => {
+    await ready
+
     ctx.store = store
 
     return next()
