@@ -2,8 +2,12 @@ const { Observable } = require('rxjs/Rx')
 
 const {
   prop,
-  merge
+  compose
 } = require('ramda')
+
+const {
+  renameKeys
+} = require('ramda-adjunct')
 
 const options = {
   live: true,
@@ -11,7 +15,13 @@ const options = {
   include_docs: true
 }
 
-const selector = prop('doc')
+const selector = compose(
+  renameKeys({
+    _id  : 'id',
+    _rev : 'rev'
+  }),
+  prop('doc')
+)
 
 function fromStore (store) {
   const changes = store.changes(options)

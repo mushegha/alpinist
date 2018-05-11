@@ -2,15 +2,15 @@ import test from 'ava'
 
 import { Observable } from 'rxjs/Rx'
 
-import Store from '../lib/store'
+import { appendFlipped } from 'ramda-adjunct'
 
-import { putIntoStore } from '../lib/fn'
+import Store from '..'
 
 import { fromStore } from '../lib/observable'
 
 const ORDERS = [
   {
-    _id  : 's1',
+    id  : 's1',
     status   : 'new',
     broker   : 'mock',
     symbol   : 'ethusd',
@@ -18,7 +18,7 @@ const ORDERS = [
     price    : 501,
     quantity : 0.2
   }, {
-    _id  : 's1',
+    id  : 's1',
     status   : 'active'
   }
 ]
@@ -28,24 +28,17 @@ test('fromStore', async t => {
 
   let log = []
 
-  fromStore(store)
-    .subscribe(order => log.push(order))
+  const p = fromStore(store)
+    .map(order => log.push(order))
+    .toPromise()
 
   for (let i in ORDERS) {
-    await putIntoStore(store, ORDERS[i])
+    await store.putOrder(ORDERS[i])
   }
 
-  t.pass()
-})
-
-test('intoStore', async t => {
-  const store = new Store()
-
-  const observable = Observable
-    .from(ORDERS)
-    .subscribe(putIntoStore(store))
+  await store.close()
 
   await new Promise(r => setTimeout(r, 100))
 
-  t.pass()
+  t.is(log.length, 2)
 })
