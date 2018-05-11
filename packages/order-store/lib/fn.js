@@ -1,24 +1,23 @@
 const {
   curry,
-  assoc,
-  merge
+  merge,
+  flip
 } = require('ramda')
 
-function getFromStore (store, subject) {
-  return store.get(subject)
+const mergeFlipped = flip(merge)
+
+function getFromStore (store, _id) {
+  return store.get(_id)
 }
 
 function putIntoStore (store, state) {
-  const { subject } = state
+  const { _id } = state
 
   const resolve = _ =>
-    getFromStore(store, subject)
-
-  const diffFunc = doc =>
-    merge(doc, state)
+    getFromStore(store, _id)
 
   return store
-    .upsert(subject, diffFunc)
+    .upsert(_id, mergeFlipped(state))
     .then(resolve)
 }
 

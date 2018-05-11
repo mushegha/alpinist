@@ -11,7 +11,7 @@ const store = new Store()
 
 test.serial('getFromStore', async  t => {
   const state = {
-    subject: 'a',
+    _id: 'a',
     status: 'active',
     broker: 'exo'
   }
@@ -26,13 +26,13 @@ test.serial('getFromStore', async  t => {
 
 test.serial('putIntoStore', async t => {
   const state1 = {
-    subject: 'a',
+    _id: 'a',
     status: 'active',
     broker: 'exo'
   }
 
   const state2 = {
-    subject: 'a',
+    _id: 'a',
     status: 'completed'
   }
 
@@ -41,6 +41,27 @@ test.serial('putIntoStore', async t => {
 
   await putIntoStore(store, state2)
     .then(console.log)
+
+  t.pass()
+})
+
+test.serial('getAllFromStore', async t => {
+  const state1 = {
+    _id: 'a',
+    status: 'active',
+    broker: 'exo'
+  }
+
+  const state2 = {
+    _id: 'b',
+    status: 'active',
+    broker: 'hopar'
+  }
+
+  await putIntoStore(store, state1)
+  await putIntoStore(store, state2)
+
+  // await getAllFromStore(store, query)
 
   t.pass()
 })
