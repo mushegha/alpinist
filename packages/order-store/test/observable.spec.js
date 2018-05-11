@@ -1,12 +1,12 @@
 import test from 'ava'
 
-import { Observable } from 'rxjs/Rx'
+// import { Observable } from 'rxjs/Rx'
 
 import { appendFlipped } from 'ramda-adjunct'
 
 import Store from '..'
 
-import { fromStore } from '../lib/observable'
+import StoreObservable from '../lib/observable'
 
 const ORDERS = [
   {
@@ -24,21 +24,22 @@ const ORDERS = [
 ]
 
 test('fromStore', async t => {
-  const store = new Store()
-
   let log = []
 
-  const p = fromStore(store)
+  const p = StoreObservable()
     .map(order => log.push(order))
+    .take(2)
     .toPromise()
+
+  const store = new Store()
 
   for (let i in ORDERS) {
     await store.putOrder(ORDERS[i])
   }
 
-  await store.close()
+  await p
 
-  await new Promise(r => setTimeout(r, 100))
+  console.log(log)
 
   t.is(log.length, 2)
 })

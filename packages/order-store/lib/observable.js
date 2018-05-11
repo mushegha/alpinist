@@ -1,33 +1,46 @@
 const { Observable } = require('rxjs/Rx')
 
-const {
-  prop,
-  compose
-} = require('ramda')
+const { prop } = require('ramda')
 
-const {
-  renameKeys
-} = require('ramda-adjunct')
+const { renameKeys } = require('ramda-adjunct')
 
-const options = {
-  live: true,
-  since: 'now',
-  include_docs: true
-}
+const Store = require('./store')
 
-const selector = compose(
-  renameKeys({
+/**
+ * Defaults
+ */
+
+function StoreObservable () {
+  const options = {
+    live: true,
+    since: 'now',
+    include_docs: true
+  }
+
+  const selector = prop('doc')
+
+  const recover = renameKeys({
     _id  : 'id',
     _rev : 'rev'
-  }),
-  prop('doc')
-)
+  })
 
-function fromStore (store) {
-  const changes = store.changes(options)
+  function watch (observer) {
+    const store = new Store()
 
-  return Observable
-    .fromEvent(changes, 'change', selector)
+    const emitter = store.changes(options)
+
+    Observable
+      .fromEvent(emitter, 'change', selector)
+      .map(recover)
+      .subscribe(observer)
+
+    return () => {
+      emitter.cancel()
+      return store.close()
+    }
+  }
+
+  return Observable.create(watch)
 }
 
-module.exports.fromStore = fromStore
+module.exports = StoreObservable
