@@ -10,7 +10,7 @@ function createRouter () {
     .get('/', Actions.findAll)
     .get('/:id', Actions.read)
 
-  return router
+  return router.routes()
 }
 
 module.exports = createRouter
