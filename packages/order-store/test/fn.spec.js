@@ -1,13 +1,22 @@
 import test from 'ava'
 
+import delay from 'delay'
+
 import Store from '../lib/store'
 
 import {
   getFromStore,
-  putIntoStore
+  putIntoStore,
+  findAllFromStore
 } from '../lib/fn'
 
-const store = new Store()
+test.beforeEach(async t => {
+  const db = new Store()
+
+  await db.destroy()
+
+  t.context = new Store()
+})
 
 test.serial('getFromStore', async  t => {
   const state = {
@@ -16,9 +25,9 @@ test.serial('getFromStore', async  t => {
     broker: 'exo'
   }
 
-  await putIntoStore(store, state)
+  await putIntoStore(t.context, state)
 
-  await getFromStore(store, 'a')
+  await getFromStore(t.context, 'a')
     .then(console.log)
 
   t.pass()
@@ -36,32 +45,52 @@ test.serial('putIntoStore', async t => {
     status: 'completed'
   }
 
-  await putIntoStore(store, state1)
+  await putIntoStore(t.context, state1)
     .then(console.log)
 
-  await putIntoStore(store, state2)
+  await putIntoStore(t.context, state2)
     .then(console.log)
 
   t.pass()
 })
 
-test.serial('getAllFromStore', async t => {
-  const state1 = {
+test.serial('findAllFromStore', async t => {
+  const A = {
     _id: 'a',
     status: 'active',
     broker: 'exo'
   }
 
-  const state2 = {
+  const B = {
     _id: 'b',
-    status: 'active',
+    status: 'completed',
     broker: 'hopar'
   }
 
-  await putIntoStore(store, state1)
-  await putIntoStore(store, state2)
+  const C = {
+    _id: 'c',
+    status: 'active',
+    broker: 'venus'
+  }
 
-  // await getAllFromStore(store, query)
+  const put = putIntoStore(t.context)
+  const findAll = findAllFromStore(t.context)
+
+  await put(A)
+
+  const time = Date.now()
+  await delay(1)
+
+  await put(B)
+  await put(C)
+
+  const query = {
+    status: 'active',
+    timestamp: { $gt: time }
+  }
+
+  await findAll(query)
+    .then(members => t.is(members.length, 1))
 
   t.pass()
 })

@@ -1,12 +1,11 @@
 const PouchDB = require('pouchdb')
 
 const upsertPlugin = require('pouchdb-upsert')
+const findPlugin = require('pouchdb-find')
 
 const getenv = require('getenv')
 
 const { merge } = require('ramda')
-
-PouchDB.plugin(upsertPlugin)
 
 const COUCHDB_CONFIG = getenv.multi({
   host : ['COUCHDB_HOST', 'localhost'],
@@ -18,9 +17,21 @@ const urlFrom = (opts = {}) => {
   return `http://${host}:${port}/orders`
 }
 
+PouchDB.plugin(upsertPlugin)
+PouchDB.plugin(findPlugin)
+
 function Store (opts) {
   const url = urlFrom(opts)
   const db = new PouchDB(url)
+
+  db.createIndex({
+    index: {
+      fields: [
+        'status',
+        'timestamp'
+      ]
+    }
+  })
 
   return db
 }
