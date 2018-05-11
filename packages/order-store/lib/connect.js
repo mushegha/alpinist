@@ -4,13 +4,7 @@ const { prop } = require('ramda')
 
 const { renameKeys } = require('ramda-adjunct')
 
-const Store = require('./store')
-
-/**
- * Defaults
- */
-
-function StoreObservable () {
+function source () {
   const options = {
     live: true,
     since: 'now',
@@ -24,23 +18,32 @@ function StoreObservable () {
     _rev : 'rev'
   })
 
-  function watch (observer) {
-    const store = new Store()
-
-    const emitter = store.changes(options)
+  const watch = observer => {
+    const emitter = this.changes(options)
 
     Observable
       .fromEvent(emitter, 'change', selector)
       .map(recover)
       .subscribe(observer)
 
-    return () => {
-      emitter.cancel()
-      return store.close()
-    }
+    return () => emitter.cancel()
   }
 
   return Observable.create(watch)
 }
 
-module.exports = StoreObservable
+function sink () {
+  const next = doc => {
+    // console.log(doc)
+    return this
+      .putOrder(doc)
+      .then(console.log)
+  }
+
+  return { next }
+}
+
+module.exports = {
+  source,
+  sink
+}
