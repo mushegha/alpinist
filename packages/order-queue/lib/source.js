@@ -6,7 +6,7 @@ const {
   prop
 } = require('ramda')
 
-const { getOrderFrom } = require('./fn')
+const Queue = require('./queue')
 
 /**
  * Constants
@@ -22,23 +22,20 @@ const EVENTS = [
  * Observables
  */
 
-function fromQueue (queue) {
-  const getOrder = getOrderFrom(queue)
+function QueueSource () {
+  const queue = new Queue()
 
   const fromQueueEvent = status => {
-    const populate = subject => {
-      const time = Date.now()
-
-      const p = getOrder(subject)
+    const getOrder = id =>
+      queue
+        .getJob(id)
+        .then(prop('data'))
         .then(assoc('status', status))
-        .then(assoc('time', time))
-
-      return Observable.fromPromise(p)
-    }
 
     return Observable
       .fromEvent(queue, `global:${status}`, identity)
-      .flatMap(populate)
+      .map(getOrder)
+      .flatMap(Observable.fromPromise)
   }
 
   return Observable
@@ -50,4 +47,4 @@ function fromQueue (queue) {
  * Expose
  */
 
-module.exports.fromQueue = fromQueue
+module.exports = QueueSource
