@@ -1,0 +1,22 @@
+{
+  "name": "@alpinist/order-store",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "delay": "^2.0.0"
+  },
+  "dependencies": {
+    "pouchdb": "^6.4.3",
+    "pouchdb-find": "^6.4.3",
+    "pouchdb-upsert": "^2.2.0",
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.7.0",
+    "rxjs": "^6.1.0",
+    "rxjs-compat": "^6.1.0",
+    "ulid": "^2.3.0"
+  }
+}
