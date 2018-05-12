@@ -1,8 +1,10 @@
 import test from 'ava'
 
-import create from '../lib/router/create'
-import read from '../lib/router/read'
-import findAll from '../lib/router/find-all'
+import {
+  create,
+  read,
+  findAll
+} from '../lib/actions'
 
 import Store from '@alpinist/order-store'
 

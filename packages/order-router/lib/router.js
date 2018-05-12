@@ -1,8 +1,10 @@
 const Router = require('koa-router')
 
-const create  = require('./create')
-const read    = require('./read')
-const findAll = require('./find-all')
+const {
+  create,
+  read,
+  findAll
+} = require('./actions')
 
 module.exports = () => {
   const router = new Router()
