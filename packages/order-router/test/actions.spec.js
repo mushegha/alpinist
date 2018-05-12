@@ -1,12 +1,10 @@
 import test from 'ava'
 
-import {
-  create,
-  read,
-  findAll
-} from '../lib/actions'
+import create from '../lib/router/create'
+import read from '../lib/router/read'
+import findAll from '../lib/router/find-all'
 
-import Store from '@alpinist/order-store/lib/store'
+import Store from '@alpinist/order-store'
 
 test.beforeEach(async t => {
   await new Store().destroy()
@@ -14,13 +12,10 @@ test.beforeEach(async t => {
   const store = new Store()
 
   await store
-    .put({ _id: 'x1', status: 'new' })
-
-  // await store
-  //   .put({ _id: 'x2', status: 'new' })
+    .putOrder({ id: 'x1', status: 'new' })
 
   await store
-    .put({ _id: 'x2', status: 'completed' })
+    .putOrder({ id: 'x2', status: 'completed' })
 
   t.context = { store }
 })
@@ -40,7 +35,10 @@ test.serial('create', async t => {
 
       t.is(status, 201)
 
+      t.is(body.status, 'new')
+
       t.not(body.id, undefined)
+      t.not(body.timestamp, undefined)
     })
 
   t.pass()
@@ -62,7 +60,7 @@ test.serial('read', async t => {
     })
 })
 
-test.serial('read', async t => {
+test.serial('find', async t => {
   const { context } = t
 
   context.request = {

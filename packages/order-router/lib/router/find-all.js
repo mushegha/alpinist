@@ -1,17 +1,12 @@
 const {
   map,
   prop,
-  compose,
-  assoc
+  compose
 } = require('ramda')
 
 const {
   renameKeys
 } = require('ramda-adjunct')
-
-const {
-  ulid
-} = require('ulid')
 
 /**
  * Helpers
