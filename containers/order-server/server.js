@@ -1,19 +1,23 @@
 const Koa = require('koa')
 
+const mount = require('koa-mount')
+
 const logger = require('koa-logger')
-const bodyParser = require('koa-bodyparser')
 
-const Queue = require('@alpinist/order-queue')
+const Store = require('@alpinist/order-store')
 
-const routes = require('./lib/koa-routes')
+const Router = require('@alpinist/order-router')
 
 const app = new Koa()
 
-app.context.queue = new Queue()
+const router = new Router()
+
+const store = new Store()
+
+app.context.store = store
 
 app.use(logger())
-app.use(bodyParser())
 
-app.use(routes())
+app.use(mount(router))
 
 app.listen(30080)
