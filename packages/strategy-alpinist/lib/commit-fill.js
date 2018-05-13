@@ -18,7 +18,7 @@ const Z = require('./helpers')
  * @param {number} price
  * @param {Array}  slots
  *
- * @returm {Maybe} - Next volume
+ * @returm {Maybe} - Next quantity
  */
 
 function commit (opts, price, slots = []) {
@@ -31,11 +31,11 @@ function commit (opts, price, slots = []) {
     weight_down_k
   } = opts
 
-  const weightOf = ({ price, volume }) => price * volume
+  const weightOf = ({ price, quantity }) => price * quantity
 
   const fromWeight = weight => ({
     price,
-    volume: weight / price
+    quantity: weight / price
   })
 
   const push = weight => Z.add(fromWeight(weight), slots)

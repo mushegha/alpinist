@@ -2,10 +2,10 @@ import test from 'ava'
 
 import commit from '../lib/commit'
 
-const A = { id: 'a', price: 100, volume: 1 }
-const B = { id: 'b', price: 105, volume: 2 }
-const C = { id: 'c', price: 95, volume: 2 }
-const D = { id: 'd', price: 115, volume: 2 }
+const A = { id: 'a', price: 100, quantity: 1 }
+const B = { id: 'b', price: 105, quantity: 2 }
+const C = { id: 'c', price: 95, quantity: 2 }
+const D = { id: 'd', price: 115, quantity: 2 }
 
 test('full', t => {
   const options = {
