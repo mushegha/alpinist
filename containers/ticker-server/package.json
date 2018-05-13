@@ -1,0 +1,11 @@
+{
+  "name": "@alpinist/ticker-server",
+  "version": "0.0.1",
+  "dependencies": {
+    "@alpinist/ticker-source-bitfinex": "*",
+    "@alpinist/ticker-source-cexio": "*",
+    "kafka-node": "^2.6.1",
+    "rxjs": "^6.1.0",
+    "rxjs-compat": "^6.1.0"
+  }
+}
