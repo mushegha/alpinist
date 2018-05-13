@@ -2,7 +2,8 @@
   "lerna": "2.11.0",
   "packages": [
     "packages/*",
-    "containers/order-server"
+    "containers/order-server",
+    "containers/ticker-server"
   ],
   "version": "independent"
 }
