@@ -8,15 +8,20 @@ const {
   recover
 } = require('./helpers')
 
-function SourceBitfinex (symbols) {
+const symbols = [
+  'btcusd',
+  'ethusd',
+  'neousd'
+]
+
+function SourceBitfinex () {
   const bfx = new BFX()
 
   const subscribe = observer => {
     const ws = bfx.ws(2, { transform: true })
 
-    const next = ticker => {
-      observer.next(recover(ticker))
-    }
+    const next = ticker =>
+      observer.next(ticker)
 
     ws.on('open', () => {
       symbols
@@ -32,7 +37,9 @@ function SourceBitfinex (symbols) {
     return _ => ws.close()
   }
 
-  return Observable.create(subscribe)
+  return Observable
+    .create(subscribe)
+    .map(recover)
 }
 
 module.exports = SourceBitfinex
