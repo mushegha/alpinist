@@ -3,15 +3,10 @@ import test from 'ava'
 import Source from '..'
 
 test.cb(t => {
-  const symbols = [
-    'ethusd',
-    'btcusd'
-  ]
-
-  const ticker$ = new Source(symbols)
+  const ticker$ = new Source()
 
   ticker$
-    .take(1)
+    .take(20)
     .subscribe(
       console.log,
       console.error,
