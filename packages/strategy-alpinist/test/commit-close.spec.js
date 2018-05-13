@@ -3,11 +3,11 @@ import test from 'ava'
 import commitDrop from '../lib/commit-drop'
 
 const SLOTS = [
-  { _id: 'a', price: 100 },
-  { _id: 'b', price: 105 },
-  { _id: 'c', price: 110 },
-  { _id: 'd', price: 115 },
-  { _id: 'e', price: 120 },
+  { id: 'a', price: 100 },
+  { id: 'b', price: 105 },
+  { id: 'c', price: 110 },
+  { id: 'd', price: 115 },
+  { id: 'e', price: 120 },
 ]
 
 const commit = commitDrop({
@@ -25,8 +25,8 @@ test('some', t => {
   const newSlots = commit(116, SLOTS)
 
   t.deepEqual(newSlots, [
-    { _id: 'c', price: 110 },
-    { _id: 'd', price: 115 },
-    { _id: 'e', price: 120 },
+    { id: 'c', price: 110 },
+    { id: 'd', price: 115 },
+    { id: 'e', price: 120 },
   ])
 })

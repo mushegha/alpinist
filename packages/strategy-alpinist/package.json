@@ -1,5 +1,5 @@
 {
-  "name": "@accord/strategy-alpinist",
+  "name": "@alpinist/agent-stream",
   "version": "0.0.1",
   "description": "Alpinist strategy implementation",
   "main": "lib/index.js",
