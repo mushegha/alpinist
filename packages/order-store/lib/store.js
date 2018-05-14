@@ -1,7 +1,5 @@
 const PouchDB = require('pouchdb')
 
-const getenv = require('getenv')
-
 const { merge } = require('ramda')
 
 const upsertPlugin = require('pouchdb-upsert')
