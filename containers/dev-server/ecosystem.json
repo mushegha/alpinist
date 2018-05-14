@@ -1,0 +1,19 @@
+{
+  "apps" : [
+    {
+      "name"   : "ticker",
+      "script" : "./ticker-server.js",
+      "watch"  : true
+    },
+    {
+      "name"   : "agent",
+      "script" : "./agent-server.js",
+      "watch"  : true
+    },
+    {
+      "name"   : "order",
+      "script" : "./order-server.js",
+      "watch"  : true
+    }
+  ]
+}
