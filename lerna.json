@@ -3,7 +3,8 @@
   "packages": [
     "packages/*",
     "containers/order-server",
-    "containers/ticker-server"
+    "containers/ticker-server",
+    "containers/dev-server"
   ],
   "version": "independent"
 }
