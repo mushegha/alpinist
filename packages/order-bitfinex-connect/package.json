@@ -1,0 +1,17 @@
+{
+  "name": "@alpinist/order-bitfinex-connect",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "dependencies": {
+    "bitfinex-api-node": "^2.0.0-beta.1",
+    "debug": "^3.1.0",
+    "generic-pool": "^3.4.2",
+    "getenv": "^0.7.0",
+    "ramda": "^0.25.0",
+    "rxjs": "^6.1.0",
+    "rxjs-compat": "^6.1.0"
+  }
+}
