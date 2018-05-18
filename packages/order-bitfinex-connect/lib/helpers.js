@@ -43,17 +43,20 @@ const toPlainSymbol = compose(drop(1), toLower)
  */
 
 function convert (data) {
+  const cid = data.id
+
   const symbol = fromPlainSymbol(data.symbol)
 
   const price = data.price
 
   const amount = data.side === 'sell'
-    ? data.quantity * -1
-    : data.quantity
+    ? data.quantity
+    : data.quantity * -1
 
   const type = 'EXCHANGE MARKET'
 
   return {
+    cid,
     symbol,
     amount,
     type,
@@ -70,24 +73,35 @@ function convert (data) {
  */
 
 function recover (order) {
-  const orderId = order.id
-  const orderTime = order.mtsUpdate
+  const id = order.cid
+  const remoteId = order.id
+  const time = order.mtsUpdate
 
   const price = order.price
 
   const symbol = toPlainSymbol(order.symbol)
 
-  const quantity = Math.abs(order.amount)
+  const status = order.status
 
   const side = order.amountOrig >= 0
-    ? 'buy'
-    : 'sell'
+    ? 'sell'
+    : 'buy'
+
+  const quantity = Math.abs(order.amountOrig)
+
+  const type = 'market'
+
+  const broker = 'bitfinex'
 
   return {
+    id,
+    remoteId,
     symbol,
     quantity,
     price,
-    side
+    side,
+    broker,
+    status
   }
 }
 

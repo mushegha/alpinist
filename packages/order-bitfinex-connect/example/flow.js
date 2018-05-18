@@ -16,10 +16,11 @@ const options = getenv.multi({
 const through = Connect(options)
 
 const params = {
-  cid: 1234,
-  amount: -0.02,
-  symbol: 'tETHEUR',
-  type: 'EXCHANGE MARKET'
+  id: 1234,
+  quantity: 0.02,
+  symbol: 'etheur',
+  type: 'market',
+  side: 'sell'
 }
 
 through(params)
