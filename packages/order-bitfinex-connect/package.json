@@ -11,6 +11,7 @@
     "generic-pool": "^3.4.2",
     "getenv": "^0.7.0",
     "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.8.0",
     "rxjs": "^6.1.0",
     "rxjs-compat": "^6.1.0"
   }
