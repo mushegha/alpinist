@@ -1,6 +1,11 @@
 const { ulid } = require('ulid')
 
 const {
+  curry,
+  tap,
+  when,
+  propSatisfies,
+  isNil,
   reverse,
   map,
   mapObjIndexed,
@@ -31,29 +36,30 @@ const recover = renameKeys({
 const timestamp = obj =>
   assoc('time', Date.now(), obj)
 
+const isNew = propSatisfies(isNil, 'id')
+
+const snapshotOf = curry((id, rev) => ({ id, rev }))
+
 /**
  * Methods
  */
 
 function putOrder (order) {
+  const id = order.id || ulid()
+
+  const init = compose(
+    assoc('id', id),
+    assoc('status', 'new')
+  )
+
   const diffFunc = compose(
+    when(isNew, init),
     timestamp,
     mergeFlipped(order)
   )
 
   return this
-    .upsert(order.id, diffFunc)
-}
-
-function addOrder (order) {
-  const init = compose(
-    assoc('id', ulid()),
-    assoc('gid', ulid()),
-    assoc('status', 'new')
-  )
-
-  return this
-    .putOrder(init(order))
+    .upsert(id, diffFunc)
 }
 
 function getOrder (order) {
@@ -67,14 +73,19 @@ function getOrder (order) {
 function getOrderRevs (order) {
   const id = order.id || order
 
-  const fromRev = rev =>
-    assoc('rev', rev, { id })
+  const parseRevs = revs =>
+    revs
+      .map((id, i) => `${++i}-${id}`)
+      .map(snapshotOf(id))
+
+  const getRevIds = compose(
+    reverse,
+    path(['_revisions', 'ids'])
+  )
 
   const parseIds = compose(
-    map(fromRev),
-    revs => revs.map((id, i) => `${i+1}-${id}`),
-    reverse,
-    path(['_revisions', 'ids']), // parse ids
+    parseRevs,
+    getRevIds
   )
 
   const fetchAll = docs => {
@@ -99,7 +110,6 @@ function getOrderRevs (order) {
 }
 
 module.exports = {
-  addOrder,
   getOrder,
   getOrderRevs,
   putOrder,
