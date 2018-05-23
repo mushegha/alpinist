@@ -8,9 +8,18 @@ const store = new Store()
  * Hooks
  */
 
-test.before(_ => {
-  return store.put({
+test.before(async _ => {
+  const { rev } = await store.put({
     _id: 'a',
+    gid: 'g',
+    status: 'pre',
+    broker: 'x'
+  })
+
+  await store.put({
+    _id: 'a',
+    gid: 'g',
+    _rev: rev,
     status: 'new',
     broker: 'x'
   })
@@ -24,7 +33,7 @@ test.after.always(_ => {
  * Tests
  */
 
-test.serial('getOrder', async t => {
+test.serial('get order', async t => {
   await store
     .getOrder('a')
     .then(order => {
@@ -38,9 +47,27 @@ test.serial('getOrder', async t => {
     })
 })
 
-test.serial('putOrder', async  t => {
-  const store = new Store()
+test.serial('get order revisions', async t => {
+  await store
+    .getOrderRevs('a')
+    .then(revs => {
+      t.is(revs.length, 2)
+    })
+})
 
+test.serial('create order', async  t => {
+  await store
+    .putOrder({
+      gid: 'g'
+    })
+    .then(res => store.get(res.id))
+    .then(res => {
+      t.not(res.id, undefined)
+      t.is(res.status, 'new')
+    })
+})
+
+test.serial('update order', async  t => {
   const initial = await store.get('a')
 
   const final = await store
@@ -52,20 +79,7 @@ test.serial('putOrder', async  t => {
 
   t.is(initial._id, final._id)
 
-  t.not(initial.timestamp, final.timestamp)
+  t.not(initial.time, final.time)
   t.not(initial.status, final.status)
 })
 
-test.serial('addOrder', async  t => {
-  const store = new Store()
-
-  const res1 = await store
-    .addOrder({
-      status: 'new'
-    })
-    .then(res => {
-      t.not(res.id, undefined)
-    })
-
-  t.pass()
-})
