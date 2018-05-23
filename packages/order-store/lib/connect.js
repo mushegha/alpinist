@@ -1,6 +1,9 @@
 const { Observable } = require('rxjs/Rx')
 
-const { prop } = require('ramda')
+const {
+  prop,
+  compose
+} = require('ramda')
 
 const { renameKeys } = require('ramda-adjunct')
 
@@ -11,19 +14,19 @@ function source () {
     include_docs: true
   }
 
-  const selector = prop('doc')
-
-  const recover = renameKeys({
-    _id  : 'id',
-    _rev : 'rev'
-  })
+  const selector = compose(
+    renameKeys({
+      _id  : 'id',
+      _rev : 'rev'
+    }),
+    prop('doc')
+  )
 
   const watch = observer => {
     const emitter = this.changes(options)
 
     Observable
       .fromEvent(emitter, 'change', selector)
-      .map(recover)
       .subscribe(observer)
 
     return () => emitter.cancel()
@@ -33,14 +36,9 @@ function source () {
 }
 
 function sink () {
-  const next = doc => {
-    // console.log(doc)
-    return this
-      .putOrder(doc)
-      .then(console.log)
+  return {
+    next: doc => this.putOrder(doc)
   }
-
-  return { next }
 }
 
 module.exports = {
