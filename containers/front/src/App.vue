@@ -1,12 +1,10 @@
-<template>
-  <el-container id="app">
-    <el-header>Header</el-header>
-    <el-main>
-      <img src="./assets/logo.png">
-      <router-view/>
-    </el-main>
-    <el-footer>Footer</el-footer>
-  </el-container>
+<template lang="pug">
+  el-container
+    el-header Header
+    el-main
+      img(src="./assets/logo.png")
+      router-view
+    el-footer Footer
 </template>
 
 <script>
