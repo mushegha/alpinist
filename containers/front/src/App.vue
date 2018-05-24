@@ -1,15 +1,19 @@
 <template lang="pug">
   el-container
-    el-header Header
+    el-header
+      app-navbar
     el-main
-      img(src="./assets/logo.png")
       router-view
-    el-footer Footer
 </template>
 
 <script>
+import AppNavbar from './components/app-navbar'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    AppNavbar
+  }
 }
 </script>
 
