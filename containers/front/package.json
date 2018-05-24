@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "element-ui": "^2.3.9",
+    "pouchdb": "^6.4.3",
+    "pouchdb-find": "^6.4.3",
     "pug": "^2.0.3",
     "ramda": "^0.25.0",
     "vue": "^2.5.2",
