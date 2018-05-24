@@ -1,19 +1,25 @@
+import {
+  mapState,
+  mapActions
+} from 'vuex'
+
 import AgentTable from '@/components/agent-table'
 
-function data () {
-  const agents = [
-    {
-      id: 'a1',
-      broker: 'bitfinex',
-      symbol: 'ethusd'
-    }, {
-      id: 'a2',
-      broker: 'cexio',
-      symbol: 'btcusd'
-    }
-  ]
+const state = mapState([
+  'agents'
+])
 
-  return { agents }
+const methods = mapActions([
+  'fetchAgents'
+])
+
+const computed = {
+  ...state
+}
+
+function mounted () {
+  return this
+    .fetchAgents()
 }
 
 export default {
@@ -21,5 +27,8 @@ export default {
   components: {
     AgentTable
   },
-  data
+  computed,
+  methods,
+  // hooks
+  mounted
 }
