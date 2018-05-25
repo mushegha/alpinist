@@ -9,11 +9,12 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, { locale })
 
 /* eslint-disable no-new */
 new Vue({
