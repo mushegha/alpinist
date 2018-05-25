@@ -33,3 +33,20 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     extra_hosts:
       - "moby:127.0.0.1"
+
+  web-client:
+    build: ./containers/web-client
+    volumes:
+      - www-volume:/usr/src/dist
+
+  nginx:
+    restart: always
+    build: ./containers/nginx
+    volumes:
+      - ./containers/nginx/conf.d:/etc/nginx/conf.d
+      - www-volume:/var/www
+    ports:
+      - "80:80"
+
+volumes:
+  www-volume: {}
