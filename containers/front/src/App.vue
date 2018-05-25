@@ -3,7 +3,7 @@
     el-header
       app-navbar
     el-main
-      router-view
+      router-view.wrapper
 </template>
 
 <script>
@@ -17,4 +17,9 @@ export default {
 }
 </script>
 
-<style> </style>
+<style>
+.wrapper {
+  width: 960px;
+  margin: 20px auto;
+}
+</style>

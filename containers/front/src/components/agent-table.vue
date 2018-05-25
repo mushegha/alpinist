@@ -13,21 +13,17 @@
       label="Id"
       prop="id")
       template(slot-scope="scope")
-        router-link(:to="`scope.row.id`")
-          | {{ scope.row.id }}
-
-    el-table-column(
-      label="Date Created"
-      prop="time")
+        router-link(:to="`/agents/${scope.row.id}`")
+          | {{ scope.row.id | truncate }}
 
     el-table-column(
       label="Broker"
-      prop="broker"
+      prop="target.broker"
       sortable)
 
     el-table-column(
       label="Symbol"
-      prop="symbol")
+      prop="target.symbol")
 </template>
 
 <script>
@@ -36,8 +32,17 @@ const props = {
   dataset: Array
 }
 
+const filters = {
+  truncate (str) {
+    return str.length > 16
+      ? str.slice(0, 8) + '…' + str.slice(-8)
+      : str
+  }
+}
+
 export default {
   name: 'agent-table',
-  props
+  props,
+  filters
 }
 </script>

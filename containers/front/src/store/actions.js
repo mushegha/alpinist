@@ -17,10 +17,15 @@ function fetchAgents ({ commit }) {
     .then(tap(setAgents))
 }
 
+function createAgent ({ commit }, payload) {
+  return Agents.create(payload)
+}
+
 /**
  * Expose
  */
 
 export {
-  fetchAgents
+  fetchAgents,
+  createAgent
 }

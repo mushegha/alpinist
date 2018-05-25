@@ -1,45 +1,59 @@
 <template lang="pug">
-  el-form-item(label="Target symbol")
-    el-cascader(
-      :options="options"
-      v-model="selected"
-      @change="handleChange"
-      placeholder="Broker / symbol")
+  el-cascader(
+    :options="options"
+    v-model="selected"
+    @change="handleChange"
+    placeholder="Broker / symbol")
 </template>
 
 <script>
+import {
+  groupBy,
+  prop,
+  map,
+  compose,
+  toPairs,
+  applySpec,
+  identity,
+  head,
+  last
+} from 'ramda'
 
 const props = {
+  targets: Array,
   value: Object
 }
 
+const computed = {
+  options () {
+    const symbolsByBrokers = compose(
+      map(map(prop('symbol'))),
+      groupBy(prop('broker'))
+    )
+
+    const childFromSymbol = applySpec({
+      value: identity,
+      label: identity
+    })
+
+    const optionFromPair = applySpec({
+      value: head,
+      label: head,
+      children: compose(map(childFromSymbol), last)
+    })
+
+    const compile = compose(
+      map(optionFromPair),
+      toPairs,
+      symbolsByBrokers
+    )
+
+    return compile(this.targets)
+  }
+}
+
 function data () {
-  const options = [
-    {
-      value: 'bitfinex',
-      label: 'Bitfinex',
-      children: [
-        {
-          value: 'ethusd',
-          label: 'ETHUSD'
-        }, {
-          value: 'btcusd',
-          label: 'BTCUSD'
-        }
-      ]
-    }, {
-      value: 'cexio',
-      label: 'CEX.io',
-      children: [
-        {
-          value: 'ethusd',
-          label: 'ETHUSD'
-        }
-      ]
-    }
-  ]
   return {
-    options,
     selected: []
   }
 }
@@ -55,6 +69,7 @@ export default {
   name: 'target-cascader',
   props,
   data,
-  methods
+  methods,
+  computed
 }
 </script>

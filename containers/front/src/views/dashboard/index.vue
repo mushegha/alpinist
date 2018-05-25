@@ -13,13 +13,6 @@
 </template>
 
 <style scoped>
-
-#dashboard {
-  width: 960px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .navbar {
   display: flex;
   padding: 5px 5px 15px;
