@@ -10,8 +10,9 @@
     "delay": "^2.0.0"
   },
   "dependencies": {
-    "@alpinist/pouchdb-connect": "*",
     "@alpinist/pouchdb-agent-methods": "*",
+    "@alpinist/pouchdb-connect": "*",
+    "detect-node": "^2.0.3",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",
     "pouchdb-upsert": "^2.2.0",
