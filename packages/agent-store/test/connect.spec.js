@@ -10,24 +10,67 @@ import {
 
 const AGENTS = require('./seed.json')
 
-test.beforeEach(_ => Store().destroy())
+test.before(_ => Store().destroy())
 
-test.serial('source', async t => {
-  let log = []
+test.beforeEach(t => {
+  t.context.store = new Store()
+})
 
-  const store = new Store()
+test.serial.cb('live', t => {
+  const { store } = t.context
 
-  const p = store
+  store
     .source()
-    .map(x => log.push(x))
-    .take(AGENTS.length)
-    .toPromise()
+    .take(3)
+    .subscribe(
+      console.log,
+      console.error,
+      _ => t.end()
+    )
 
-  for (let i in AGENTS) {
-    await store.putAgent(AGENTS[i])
-  }
+  AGENTS.forEach(x => store.putAgent(x))
 
-  await p
+  store.putAgent({
+    id: 'a2',
+    isActive: false
+  })
 
-  t.is(log.length, 2)
+  t.pass()
+})
+
+test.serial.cb('history', t => {
+  const { store } = t.context
+
+  store
+    .source({
+      since: 0,
+      live: false
+    })
+    .subscribe(
+      console.log,
+      console.error,
+      _ => t.end()
+    )
+
+  t.pass()
+})
+
+test.serial.cb('history + live', t => {
+  const { store } = t.context
+
+  store
+    .source({ since: 0 })
+    .take(3)
+    .subscribe(
+      console.log,
+      console.error,
+      _ => t.end()
+    )
+
+  store.putAgent({
+    id: 'a2',
+    isActive: false
+  })
+
+  t.pass()
 })

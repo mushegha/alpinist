@@ -2,31 +2,52 @@ const { Observable } = require('rxjs/Rx')
 
 const {
   prop,
-  compose
+  compose,
+  merge,
+  identity
 } = require('ramda')
 
 const { renameKeys } = require('ramda-adjunct')
 
-function source () {
-  const options = {
-    live: true,
-    since: 'now',
-    include_docs: true
-  }
+/**
+ * Settings
+ */
 
-  const selector = compose(
-    renameKeys({
-      _id  : 'id',
-      _rev : 'rev'
-    }),
-    prop('doc')
-  )
+const DEFAULT_OPTIONS = {
+  live: true,
+  since: 'now',
+  include_docs: true
+}
+
+/**
+ * Helpers
+ */
+
+const recover = renameKeys({
+  _id: 'id',
+  _rev: 'rev'
+})
+
+const selector = compose(recover, prop('doc'))
+
+/**
+ *
+ */
+
+function source (opts = {}) {
+  const options = merge(DEFAULT_OPTIONS, opts)
+
+  const emitter = this.changes(options)
+
+  const change$ = Observable
+    .fromEvent(emitter, 'change', selector)
+
+  const end$ = Observable
+    .fromEvent(emitter, 'complete')
 
   const watch = observer => {
-    const emitter = this.changes(options)
-
-    Observable
-      .fromEvent(emitter, 'change', selector)
+    change$
+      .takeUntil(end$)
       .subscribe(observer)
 
     return () => emitter.cancel()
