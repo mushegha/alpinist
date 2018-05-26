@@ -1,0 +1,22 @@
+{
+  "name": "@alpinist/pouchdb-agent-methods",
+  "version": "0.0.1",
+  "description": "PouchDB plugin for Alpinist Agent ops",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "dependencies": {
+    "pouchdb-find": "^6.4.3",
+    "pouchdb-upsert": "^2.2.0",
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.8.0",
+    "rxjs": "^6.2.0",
+    "rxjs-compat": "^6.2.0",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "pouchdb": "^6.4.3"
+  }
+}
