@@ -17,10 +17,10 @@ test('connect', async t => {
       t.is(res.host, 'http://localhost:5984/agents-x/')
     })
 
-  await new AgentStore({ baseURL: null })
+  await new AgentStore({ baseURL: null, dbName: 'db-agents' })
     .info()
     .then(res => {
-      t.is(res.db_name, 'agents', 'AgentStore({ baseURL: null })')
+      t.is(res.db_name, 'db-agents', 'AgentStore({ baseURL: null })')
       t.is(res.host, undefined, 'is local')
     })
 
