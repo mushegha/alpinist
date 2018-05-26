@@ -1,0 +1,19 @@
+{
+  "name": "@alpinist/pouchdb-connect",
+  "version": "0.0.1",
+  "description": "RxJS source and sink for PouchDB",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "dependencies": {
+    "ava": "^0.25.0",
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.8.0",
+    "rxjs": "^6.2.0",
+    "rxjs-compat": "^6.2.0"
+  },
+  "devDependencies": {
+    "pouchdb": "^6.4.3"
+  }
+}
