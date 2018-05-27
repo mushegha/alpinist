@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import AgentsAll from '@/views/agents-all'
+import AgentsOne from '@/views/agents-one'
 import AgentsNew from '@/views/agents-new'
 
 Vue.use(Router)
@@ -19,6 +20,11 @@ export default new Router({
       path: '/agents/new',
       name: 'agents-new',
       component: AgentsNew
+    }, {
+      path: '/agents/:id',
+      name: 'agents-one',
+      component: AgentsOne,
+      props: true
     }
   ]
 })
