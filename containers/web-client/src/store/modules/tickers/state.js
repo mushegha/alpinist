@@ -1,9 +1,7 @@
-const targets = [
+const state = [
   { symbol: 'btcusd', broker: 'bitfinex' },
   { symbol: 'ethusd', broker: 'bitfinex' },
   { symbol: 'ethusd', broker: 'cexio' }
 ]
 
-export {
-  targets
-}
+export default state

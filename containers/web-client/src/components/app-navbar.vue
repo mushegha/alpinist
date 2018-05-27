@@ -1,7 +1,16 @@
 <template lang="pug">
-  el-menu(mode="horizontal")
-    el-menu-item(index="1")
-      | Dashboard
+  el-menu(
+    mode="horizontal"
+    :router="true")
+
+    el-menu-item(index="/agents")
+      | Agents
+
+    el-menu-item(index="/tickers")
+      | Tickers
+
+    el-menu-item(index="/orders")
+      | Orders
 </template>
 
 <script>

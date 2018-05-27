@@ -18,12 +18,12 @@
 
     el-table-column(
       label="Broker"
-      prop="target.broker"
+      prop="ticker.broker"
       sortable)
 
     el-table-column(
       label="Symbol"
-      prop="target.symbol")
+      prop="ticker.symbol")
 </template>
 
 <script>

@@ -1,7 +1,7 @@
-import env from './env'
+import tickers from './tickers'
 import agents from './agents'
 
 export {
-  env,
+  tickers,
   agents
 }

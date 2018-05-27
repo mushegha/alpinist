@@ -3,17 +3,15 @@
     :model="form"
     label-position="top")
 
-    el-form-item(label="Target")
-      target-cascader(
-        :targets="targets"
-        v-model="form.target")
+    el-form-item(label="Target ticker")
+      ticker-cascader(v-model="form.ticker")
 
     el-form-item
 
-      el-button(@click="onSubmit")
+      el-button(@click="submit")
         | Create
 
-      el-button
+      el-button(@click="redirectBack")
         | Cancel
 
 </template>

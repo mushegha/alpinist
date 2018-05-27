@@ -1,13 +1,11 @@
 <template lang="pug">
-  div#dashboard
+  div
     .navbar
       .details
         | Exo
       .actions
-        el-button(
-          type="primary"
-          icon="el-icon-plus"
-          circle)
+        router-link(:to="{ name: 'agents-new' }")
+          | Create
     div(style="padding-top: 20px;")
       agent-table(:dataset="agents")
 </template>
