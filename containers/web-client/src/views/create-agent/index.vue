@@ -4,9 +4,9 @@
     label-position="top")
 
     el-form-item(label="Target")
-      target-cascader(
-        :targets="targets"
-        v-model="form.target")
+      ticker-cascader(
+        :tickers="tickers"
+        v-model="form.ticker")
 
     el-form-item
 

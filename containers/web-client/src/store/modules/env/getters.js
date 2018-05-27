@@ -8,7 +8,7 @@ import {
 const symbolsByBrokers = compose(
   map(map(prop('symbol'))),
   groupBy(prop('broker')),
-  prop('targets')
+  prop('tickers')
 )
 
 export {

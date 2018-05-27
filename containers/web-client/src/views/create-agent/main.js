@@ -3,9 +3,9 @@ import {
   mapActions
 } from 'vuex'
 
-import TargetCascader from '@/components/agent-target-cascader'
+import TickerCascader from '@/components/ticker-cascader'
 
-const state = mapState('env', [ 'targets' ])
+const state = mapState('env', [ 'tickers' ])
 
 const computed = {
   ...state
@@ -13,7 +13,7 @@ const computed = {
 
 const data = () => {
   const form = {
-    target: null
+    ticker: null
   }
 
   return {
@@ -41,7 +41,7 @@ const methods = {
 export default {
   name: 'view-create-form',
   components: {
-    TargetCascader
+    TickerCascader
   },
   computed,
   data,

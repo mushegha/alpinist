@@ -20,7 +20,7 @@ import {
 } from 'ramda'
 
 const props = {
-  targets: Array,
+  tickers: Array,
   value: Object
 }
 
@@ -48,7 +48,7 @@ const computed = {
       symbolsByBrokers
     )
 
-    return compile(this.targets)
+    return compile(this.tickers)
   }
 }
 
@@ -66,7 +66,7 @@ const methods = {
 }
 
 export default {
-  name: 'target-cascader',
+  name: 'ticker-cascader',
   props,
   data,
   methods,
