@@ -1,5 +1,5 @@
 {
-  "name": "alpinist-front",
+  "name": "@alpinist/web-client",
   "version": "1.0.0",
   "description": "Front-end for Alpinist",
   "author": "Mushegh Antaranyan <mushegh.antaranyan@gmail.com>",
@@ -13,9 +13,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@alpinist/pouchdb-connect": "*",
+    "@alpinist/pouchdb-agent-methods": "*",
     "element-ui": "^2.3.9",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",
+    "pouchdb-upsert": "^2.2.0",
     "pug": "^2.0.3",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.8.0",
