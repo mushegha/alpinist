@@ -8,10 +8,10 @@
 
     el-form-item
 
-      el-button(@click="onSubmit")
+      el-button(@click="submit")
         | Create
 
-      el-button
+      el-button(@click="redirectBack")
         | Cancel
 
 </template>

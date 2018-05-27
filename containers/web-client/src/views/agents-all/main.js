@@ -11,7 +11,7 @@ const computed = {
 }
 
 export default {
-  name: 'view-dashboard',
+  name: 'agents-all',
   components: {
     AgentTable
   },

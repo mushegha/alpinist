@@ -17,20 +17,20 @@ const actions = mapActions({
 })
 
 const methods = {
-  onSubmit (x) {
-    const redirect = _ =>
-      this.$router
-        .push('/')
-
+  redirectBack () {
+    const name = 'agents-all'
+    this.$router.push({ name })
+  },
+  submit () {
     return this
       .create(this.form)
-      .then(redirect)
+      .then(_ => this.redirectBack())
   },
   ...actions
 }
 
 export default {
-  name: 'view-create-form',
+  name: 'agents-new',
   components: {
     TickerCascader
   },

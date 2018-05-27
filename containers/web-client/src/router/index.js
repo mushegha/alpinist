@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import ViewDashboard from '@/views/dashboard'
-import ViewCreateAgent from '@/views/create-agent'
+import AgentsAll from '@/views/agents-all'
+import AgentsNew from '@/views/agents-new'
 
 Vue.use(Router)
 
@@ -10,12 +10,15 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'dashboard',
-      component: ViewDashboard
+      redirect: { name: 'agents-all' }
     }, {
-      path: '/create-agent',
-      name: 'create-agent',
-      component: ViewCreateAgent
+      path: '/agents',
+      name: 'agents-all',
+      component: AgentsAll
+    }, {
+      path: '/agents/new',
+      name: 'agents-new',
+      component: AgentsNew
     }
   ]
 })
