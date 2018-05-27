@@ -9,13 +9,11 @@ function Source () {
   SourceCexio().subscribe(ticker$)
   SourceBitfinex().subscribe(ticker$)
 
-  const topic = 'alpinist_tickers'
-
   return ticker$
-    .map(JSON.stringify)
-    .bufferTime(5)
-    .filter(arr => arr.length)
-    .map(messages => [{ topic, messages }])
+    // .map(JSON.stringify)
+    // .bufferTime(5)
+    // .filter(arr => arr.length)
+    // .map(messages => [{ topic, messages }])
 }
 
 module.exports = Source

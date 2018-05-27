@@ -5,16 +5,28 @@ const {
 
 const Source = require('./lib/source')
 
-const client = new Client('127.0.0.1:2181')
+const Store = require('./lib/store')
 
-const producer = new Producer(client)
+const store = Store()
 
-producer.on('ready', _ => {
-  const send = payloads =>
-    producer.send(payloads, (err, data) => {})
+Source()
+  .subscribe(ticker => {
+    const { broker, symbol } = ticker
+    const id = `${broker}-${symbol}`
 
-  Source()
-    .subscribe(send)
-})
+    store.upsert(id, _ => ticker)
+  })
 
-
+// const client = new Client('127.0.0.1:2181')
+//
+// const producer = new Producer(client)
+//
+// producer.on('ready', _ => {
+//   const send = payloads =>
+//     producer.send(payloads, (err, data) => {})
+//
+//   Source()
+//     .subscribe(send)
+// })
+//
+//

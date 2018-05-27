@@ -5,6 +5,8 @@
     "@alpinist/ticker-source-bitfinex": "*",
     "@alpinist/ticker-source-cexio": "*",
     "kafka-node": "^2.6.1",
+    "pouchdb": "^6.4.3",
+    "pouchdb-upsert": "^2.2.0",
     "rxjs": "^6.1.0",
     "rxjs-compat": "^6.1.0"
   }
