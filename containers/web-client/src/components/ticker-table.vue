@@ -1,7 +1,7 @@
 <template lang="pug">
   el-table(
-    v-if="tickers"
-    :data="tickers"
+    v-if="dataset"
+    :data="dataset"
     stripe)
 
     el-table-column(type="expand")
@@ -28,21 +28,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+
+import { mapGetters } from 'vuex'
 
 const computed = {
-  ...mapState([
-    'tickers'
-  ])
-}
-
-const props = {
-  dataset: Array
+  ...mapGetters({
+    dataset: 'tickers/asArray'
+  })
 }
 
 export default {
   name: 'ticker-table',
-  props,
   computed
 }
 </script>

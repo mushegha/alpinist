@@ -1,10 +1,16 @@
 import {
   groupBy,
-  prop
+  prop,
+  values,
+  compose
 } from 'ramda'
 
-const byBroker = groupBy(prop('broker'))
+const byBrokers = compose(
+  groupBy(prop('broker')),
+  values
+)
 
 export {
-  byBroker
+  byBrokers,
+  values as asArray
 }

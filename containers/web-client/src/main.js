@@ -26,3 +26,4 @@ new Vue({
 })
 
 store.dispatch('agents/sync')
+store.dispatch('tickers/sync')

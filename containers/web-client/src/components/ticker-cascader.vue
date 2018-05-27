@@ -25,7 +25,7 @@ const props = {
 }
 
 const getters = mapGetters({
-  hierarchy: 'tickers/byBroker'
+  hierarchy: 'tickers/byBrokers'
 })
 
 const computed = {

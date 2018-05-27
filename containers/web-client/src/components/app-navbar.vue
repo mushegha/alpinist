@@ -1,7 +1,7 @@
 <template lang="pug">
   el-menu(
     mode="horizontal"
-    router="true")
+    :router="true")
 
     el-menu-item(index="/agents")
       | Agents
