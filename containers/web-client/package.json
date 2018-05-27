@@ -23,8 +23,11 @@
     "pug": "^2.0.3",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.8.0",
+    "rxjs": "^6.2.0",
+    "rxjs-compat": "^6.2.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-rx": "^5.0.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

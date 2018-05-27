@@ -2,6 +2,9 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 
+import VueRx from 'vue-rx'
+import { Observable } from 'rxjs/Rx'
+
 import ElementUI from 'element-ui'
 
 import App from './App'
@@ -15,6 +18,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI, { locale })
+
+Vue.use(VueRx, { Observable })
 
 /* eslint-disable no-new */
 new Vue({

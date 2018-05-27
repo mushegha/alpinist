@@ -52,9 +52,10 @@
 
     el-table-column(
       label="Updated"
-      align="right"
-      prop="time"
-      :formatter="dateFormatter")
+      align="right")
+
+      template(slot-scope="scope")
+        time {{ scope.row.time | since(time) }}
 </template>
 
 <style>
@@ -64,10 +65,12 @@
 </style>
 
 <script>
+import { Observable } from 'rxjs/Rx'
+
 import { mapGetters } from 'vuex'
 
 import {
-  distanceInWords,
+  distanceInWordsStrict,
   format as formatDate
 } from 'date-fns'
 
@@ -79,6 +82,12 @@ import {
   uniq,
   identity
 } from 'ramda'
+
+const subscriptions = {
+  time: Observable
+    .timer(0, 1000)
+    .map(_ => Date.now())
+}
 
 const computed = {
   filtersFor () {
@@ -102,15 +111,15 @@ const computed = {
   })
 }
 
-const methods = {
-  dateFormatter (row, col) {
-    const time = row.time
-    const now = Date.now()
-
+const filters = {
+  since (time, now) {
     return now - time > 5 * 60 * 1e3
       ? formatDate(time, 'HH:mm:ss')
-      : distanceInWords(time, now, { includeSeconds: true })
-  },
+      : distanceInWordsStrict(time, now, { includeSeconds: true })
+  }
+}
+
+const methods = {
   filterHandler (val, row, col) {
     const { property } = col
     return row[property] === val
@@ -120,6 +129,8 @@ const methods = {
 export default {
   name: 'ticker-table',
   computed,
-  methods
+  methods,
+  subscriptions,
+  filters
 }
 </script>
