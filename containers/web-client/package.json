@@ -13,8 +13,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@alpinist/pouchdb-connect": "*",
     "@alpinist/pouchdb-agent-methods": "*",
+    "@alpinist/pouchdb-connect": "*",
+    "date-fns": "^1.29.0",
     "element-ui": "^2.3.9",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",
