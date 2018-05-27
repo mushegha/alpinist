@@ -2,6 +2,8 @@ version: '3'
 
 services:
 
+  # Server
+
   redis:
     build: ./containers/redis
     ports:
@@ -12,27 +14,26 @@ services:
     ports:
       - "5984:5984"
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    network_mode: host
+  lenses:
+    image: landoop/kafka-lenses-dev
+    ports:
+      - "3030:3030"
+      - "9092:9092"
+      - "2181:2181"
+      - "8081:8081"
+      - "9581:9581"
+      - "9582:9582"
+      - "9584:9584"
+      - "9585:9585"
     environment:
-      ZOOKEEPER_CLIENT_PORT: 32181
-      ZOOKEEPER_TICK_TIME: 2000
-    extra_hosts:
-      - "moby:127.0.0.1"
+      - ADV_HOST=192.168.0.103
+      - SAMPLEDATA=0
+      - DISABLE=azure-documentdb,coap,druid,ftp,hazelcast,hbase,influxdb,jms,kudu,rethink,voltdb,yahoo,hdfs,jdbc,twitter
+    volumes:
+      - ./containers/lenses/license.json:/license.json
+    network_mode: host
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    network_mode: host
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: localhost:32181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    extra_hosts:
-      - "moby:127.0.0.1"
+  # Client
 
   web-client:
     build: ./containers/web-client
