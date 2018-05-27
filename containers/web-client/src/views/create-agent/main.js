@@ -21,20 +21,18 @@ const data = () => {
   }
 }
 
-const actions = mapActions([
-  'createAgent'
-])
+const actions = mapActions({
+  create: 'agents/create'
+})
 
 const methods = {
   onSubmit (x) {
-    const { form } = this
-
     const redirect = _ =>
       this.$router
         .push('/')
 
     return this
-      .createAgent(form)
+      .create(this.form)
       .then(redirect)
   },
   ...actions

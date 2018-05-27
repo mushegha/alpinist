@@ -1,25 +1,13 @@
-import {
-  mapState,
-  mapActions
-} from 'vuex'
+import { mapGetters } from 'vuex'
 
 import AgentTable from '@/components/agent-table'
 
-const state = mapState([
-  'agents'
-])
-
-const methods = mapActions([
-  'fetchAgents'
-])
+const state = mapGetters({
+  'agents': 'agents/asArray'
+})
 
 const computed = {
   ...state
-}
-
-function mounted () {
-  return this
-    .fetchAgents()
 }
 
 export default {
@@ -27,8 +15,5 @@ export default {
   components: {
     AgentTable
   },
-  computed,
-  methods,
-  // hooks
-  mounted
+  computed
 }
