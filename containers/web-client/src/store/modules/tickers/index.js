@@ -1,4 +1,4 @@
-import * as state from './state'
+import state from './state'
 import * as getters from './getters'
 
 export default {
