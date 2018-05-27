@@ -1,15 +1,6 @@
-import {
-  mapState,
-  mapActions
-} from 'vuex'
+import { mapActions } from 'vuex'
 
 import TickerCascader from '@/components/ticker-cascader'
-
-const state = mapState('env', [ 'tickers' ])
-
-const computed = {
-  ...state
-}
 
 const data = () => {
   const form = {
@@ -43,7 +34,6 @@ export default {
   components: {
     TickerCascader
   },
-  computed,
   data,
   methods
 }

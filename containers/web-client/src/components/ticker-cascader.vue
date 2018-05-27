@@ -7,48 +7,50 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import {
-  groupBy,
   prop,
   map,
   compose,
   toPairs,
+  toUpper,
   applySpec,
-  identity,
   head,
   last
 } from 'ramda'
 
 const props = {
-  tickers: Array,
   value: Object
 }
 
-const computed = {
-  options () {
-    const symbolsByBrokers = compose(
-      map(map(prop('symbol'))),
-      groupBy(prop('broker'))
-    )
+const getters = mapGetters({
+  hierarchy: 'tickers/byBroker'
+})
 
-    const childFromSymbol = applySpec({
-      value: identity,
-      label: identity
+const computed = {
+  ...getters,
+  options () {
+    const childFromTicker = applySpec({
+      value: prop('symbol'),
+      label: compose(toUpper, prop('symbol'))
     })
 
     const optionFromPair = applySpec({
       value: head,
       label: head,
-      children: compose(map(childFromSymbol), last)
+      children: compose(
+        map(childFromTicker),
+        last
+      )
     })
 
     const compile = compose(
       map(optionFromPair),
-      toPairs,
-      symbolsByBrokers
+      toPairs
     )
 
-    return compile(this.tickers)
+    return compile(this.hierarchy)
   }
 }
 

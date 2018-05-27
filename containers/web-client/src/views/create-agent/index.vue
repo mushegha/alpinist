@@ -3,10 +3,8 @@
     :model="form"
     label-position="top")
 
-    el-form-item(label="Target")
-      ticker-cascader(
-        :tickers="tickers"
-        v-model="form.ticker")
+    el-form-item(label="Target ticker")
+      ticker-cascader(v-model="form.ticker")
 
     el-form-item
 
