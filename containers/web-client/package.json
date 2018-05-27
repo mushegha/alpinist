@@ -13,6 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@alpinist/pouchdb-connect": "*",
     "@alpinist/pouchdb-agent-methods": "*",
     "element-ui": "^2.3.9",
     "pouchdb": "^6.4.3",
