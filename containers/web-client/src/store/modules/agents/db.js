@@ -12,4 +12,4 @@ PouchDB
   .plugin(connectPlugin)
   .plugin(agentMethods)
 
-export default new PouchDB('http://localhost:5984/agents')
+export default new PouchDB('agents')

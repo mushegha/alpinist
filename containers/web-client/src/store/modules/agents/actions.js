@@ -5,11 +5,27 @@ import db from './db'
  */
 
 function sync ({ commit }, opts = {}) {
-  const { since = 0, live = true } = opts
+  const options = {
+    since: 0,
+    live: true,
+    retry: true
+  }
+
+  const url = 'http://localhost:5984/agents'
+
+  const sync = _ => {
+    db.sync(url, options)
+  }
+
+  const subscribe = _ => {
+    db.source(options)
+      .subscribe(x => commit('PUT', x))
+  }
 
   return db
-    .source({ since, live })
-    .subscribe(x => commit('SET_AGENT', x))
+    .replicate.from(url)
+    .then(sync)
+    .then(subscribe)
 }
 
 function create ({ commit }, payload) {

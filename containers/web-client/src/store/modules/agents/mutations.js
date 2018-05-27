@@ -1,9 +1,13 @@
 import Vue from 'vue'
 
-function SET_AGENT (state, agent) {
-  return Vue.set(state, agent.id, agent)
+function PUT (state, agent) {
+  const { id } = agent
+
+  return agent._deleted
+    ? Vue.delete(state, id)
+    : Vue.set(state, id, agent)
 }
 
 export {
-  SET_AGENT
+  PUT
 }
