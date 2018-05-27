@@ -10,7 +10,6 @@ const Store = require('./lib/store')
 const store = Store()
 
 Source()
-  .map(x => Object.assign(x, { time: Date.now() }))
   .subscribe(ticker => {
     const { broker, symbol } = ticker
     const id = `${broker}-${symbol}`

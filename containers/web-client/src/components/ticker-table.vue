@@ -27,13 +27,13 @@
       el-table-column(
         label="Price"
         align="center"
-        prop="bidPrice"
+        prop="bid_price"
         :sortable="true")
 
       el-table-column(
         label="Volume"
         align="center"
-        prop="bidVolume")
+        prop="bid_quantity")
 
     el-table-column(
       label="Ask"
@@ -42,13 +42,13 @@
       el-table-column(
         label="Price"
         align="center"
-        prop="askPrice"
+        prop="ask_price"
         :sortable="true")
 
       el-table-column(
         label="Volume"
         align="center"
-        prop="askVolume")
+        prop="ask_quantity")
 
     el-table-column(
       label="Updated"

@@ -60,7 +60,7 @@ function recover (data) {
   const ask_price = data.ask
   const ask_quantity = data.volume
 
-  const timestamp = Number(data.timestamp)
+  const time = Date.now()
 
   return {
     broker,
@@ -68,7 +68,7 @@ function recover (data) {
     bid_price,
     ask_price,
     ask_quantity,
-    timestamp
+    time
   }
 }
 
