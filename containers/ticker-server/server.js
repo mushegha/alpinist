@@ -17,7 +17,6 @@ Source()
     store.upsert(id, _ => ticker)
   })
 
-
 // const client = new Client('127.0.0.1:2181')
 //
 // const producer = new Producer(client)

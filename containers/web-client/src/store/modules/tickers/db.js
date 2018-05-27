@@ -10,4 +10,9 @@ PouchDB
   .plugin(upsertPlugin)
   .plugin(connectPlugin)
 
-export default new PouchDB('tickers')
+const options = {
+  auto_compaction: true,
+  revs_limit: 5
+}
+
+export default new PouchDB('tickers', options)
