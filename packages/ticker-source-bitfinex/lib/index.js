@@ -3,43 +3,46 @@ const BFX = require('bitfinex-api-node')
 const { Observable } = require('rxjs/Rx')
 
 const {
+  map,
+  filter,
+  endsWith
+} = require('ramda')
+
+const {
   fromPlainSymbol,
   toPlainSymbol,
   recover
 } = require('./helpers')
 
-const symbols = [
-  'btcusd',
-  'ethusd',
-  'neousd'
-]
+const bfx = new BFX()
+
+const rest = bfx.rest(2, { transform: true })
 
 function SourceBitfinex () {
-  const bfx = new BFX()
+  const pSymbols = rest
+    .symbols()
+    .then(filter(endsWith('usd')))
+    .then(map(fromPlainSymbol))
 
-  const subscribe = observer => {
-    const ws = bfx.ws(2, { transform: true })
+  const poll = symbols => {
+    const promise = rest
+      .tickers(symbols)
 
-    const next = ticker =>
-      observer.next(ticker)
+    return Observable
+      .fromPromise(promise)
+      .flatMap(Observable.from)
+      .map(recover)
+  }
 
-    ws.on('open', () => {
-      symbols
-        .map(fromPlainSymbol)
-        .forEach(symbol => {
-          ws.subscribeTicker(symbol)
-          ws.onTicker({ symbol }, next)
-        })
-    })
-
-    ws.open()
-
-    return _ => ws.close()
+  const init = symbols => {
+    return Observable
+      .interval(6000)
+      .flatMap(_ => poll(symbols))
   }
 
   return Observable
-    .create(subscribe)
-    .map(recover)
+    .fromPromise(pSymbols)
+    .flatMap(init)
 }
 
 module.exports = SourceBitfinex
