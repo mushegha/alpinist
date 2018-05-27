@@ -13,7 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@alpinist/agent-store": "*",
+    "@alpinist/pouchdb-agent-methods": "*",
     "element-ui": "^2.3.9",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",

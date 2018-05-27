@@ -2,19 +2,7 @@ import {
   tap
 } from 'ramda'
 
-import PouchDB from 'pouchdb'
-
-import findPlugin from 'pouchdb-find'
-import upsertPlugin from 'pouchdb-upsert'
-
-import agentMethods from '@alpinist/agent-store/lib/methods'
-
-PouchDB
-  .plugin(findPlugin)
-  .plugin(upsertPlugin)
-  .plugin(agentMethods)
-
-const db = new PouchDB('http://localhost:5984/agents')
+import db from './db'
 
 /**
  * Actions
