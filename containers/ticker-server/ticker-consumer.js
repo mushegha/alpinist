@@ -1,25 +1,8 @@
-const {
-  Subject,
-  Observable
-} = require('rxjs/Rx')
+const TickerSource = require('@alpinist/ticker-source-kafka')
 
-const {
-  Consumer,
-  Client
-} = require('kafka-node')
+const host = '178.62.246.62:2181'
 
-const client = new Client('178.62.246.62:2181')
+const ticker$ = TickerSource({ host })
 
-const consumer = new Consumer(client, [
-  {
-    topic: 'alpinist_tickers',
-    offset: 0, //default 0
-    partition: 0 // default 0
-  }
-])
-
-Observable
-  .fromEvent(consumer, 'message', x => x)
-  .map(x => x.value)
-  .map(JSON.parse)
+ticker$
   .subscribe(console.log)

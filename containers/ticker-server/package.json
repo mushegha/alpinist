@@ -5,6 +5,7 @@
     "dev": "pm2-dev ecosystem.json"
   },
   "dependencies": {
+    "@alpinist/ticker-source-kafka": "*",
     "@alpinist/ticker-source-bitfinex": "*",
     "@alpinist/ticker-source-cexio": "*",
     "kafka-node": "^2.6.1",
