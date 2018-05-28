@@ -33,6 +33,27 @@ services:
       - ./containers/lenses/license.json:/license.json
     network_mode: host
 
+  elasticsearch:
+    build:
+      context: containers/elasticsearch/
+    volumes:
+      - ./containers/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+  kibana:
+    build:
+      context: containers/kibana/
+    volumes:
+      - ./containers/kibana/config/:/usr/share/kibana/config:ro
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
   # Client
 
   web-client:
