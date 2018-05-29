@@ -20,8 +20,6 @@ const {
 
 const { inRange } = require('ramda-adjunct')
 
-const { ulid } = require('ulid')
-
 /**
  * Helpers
  */
@@ -56,7 +54,6 @@ function add ({ price, quantity }, slots) {
   )
 
   const slot = {
-    id: ulid(),
     price,
     quantity
   }
