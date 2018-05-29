@@ -90,3 +90,30 @@ test.serial('get order revisions', async t => {
     .getOrderRevs('o2')
     .then(revs => t.is(revs.length, 2))
 })
+
+test.serial('get all orders by agent', async t => {
+  const assertLength = length => list =>
+    t.is(list.length, length)
+
+  await store
+    .getAllOrdersByAgent('a1')
+    .then(assertLength(2))
+
+  await store
+    .getAllOrdersByAgent('a2')
+    .then(assertLength(1))
+})
+
+test.serial('get buy orders by agent', async t => {
+  const assertLength = length => list =>
+    t.is(list.length, length)
+
+  await store
+    .getBuyOrdersByAgent('a1')
+    .then(assertLength(1))
+
+  await store
+    .getAllOrdersByAgent('a2')
+    .then(assertLength(1))
+})
+

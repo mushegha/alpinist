@@ -65,15 +65,41 @@ function getOrder (order) {
     .then(recover)
 }
 
+function getAllOrders (selector = {}) {
+  const recoverAllDocs = compose(
+    map(recover),
+    prop('docs')
+  )
+
+  return this
+    .find({ selector })
+    .then(recoverAllDocs)
+}
+
+function getAllOrdersByAgent (agent) {
+  const selector = {
+    agent: agent.id || agent
+  }
+
+  return getAllOrders.call(this, selector)
+}
+
+function getBuyOrdersByAgent (agent) {
+  const selector = {
+    agent: agent.id || agent,
+    side: 'buy'
+  }
+
+  return getAllOrders.call(this, selector)
+}
+
 function getOrderRevs (order) {
   const id = order.id || order
 
-  const snapshotOf = rev => ({ id, rev })
-
-  const parseRevs = revs =>
-    revs
-      .map((id, i) => `${++i}-${id}`)
-      .map(snapshotOf)
+  const parseRev = compose(
+    rev => ({ id, rev }),
+    (id, i) => `${++i}-${id}`
+  )
 
   const getRevIds = compose(
     reverse,
@@ -81,7 +107,7 @@ function getOrderRevs (order) {
   )
 
   const parseIds = compose(
-    parseRevs,
+    ids => ids.map(parseRev),
     getRevIds
   )
 
@@ -107,7 +133,10 @@ function getOrderRevs (order) {
 }
 
 module.exports = {
+  putOrder,
   getOrder,
   getOrderRevs,
-  putOrder,
+  getAllOrders,
+  getAllOrdersByAgent,
+  getBuyOrdersByAgent
 }
