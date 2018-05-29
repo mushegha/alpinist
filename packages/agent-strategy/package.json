@@ -1,5 +1,5 @@
 {
-  "name": "@accord/strategy-alpinist",
+  "name": "@alpinist/agent-strategy",
   "version": "0.0.1",
   "description": "Alpinist strategy implementation",
   "main": "lib/index.js",
@@ -10,7 +10,6 @@
     "ava": "^0.25.0"
   },
   "dependencies": {
-    "monet": "^0.8.10",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.7.0",
     "ulid": "^2.3.0"

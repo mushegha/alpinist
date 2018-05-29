@@ -36,29 +36,29 @@ const hasPriceInRange = curryN(3,
   (min, max, { price }) => inRange(min, max, price)
 )
 
-const diff = differenceWith(eqProps('_id'))
+const diff = differenceWith(eqProps('id'))
 
 /**
  * Add a slot to list
  *
  * @param {Object} slot
  * @param {number} slot.price - Price mark
- * @param {number} slot.volume - Quantity
+ * @param {number} slot.quantity - Quantity
  * @param {Array}  slots
  *
  * @returns {Array} - Slots
  */
 
-function add ({ price, volume }, slots) {
+function add ({ price, quantity }, slots) {
   const add = compose(
     sortByPrice,
     appendTo(slots)
   )
 
   const slot = {
-    _id: ulid(),
+    id: ulid(),
     price,
-    volume
+    quantity
   }
 
   return add(slot)
@@ -68,12 +68,12 @@ function add ({ price, volume }, slots) {
  *
  */
 
-function remove ({ _id }, slots) {
-  const isMatch = whereEq({ _id })
+function remove ({ id }, slots) {
+  const isMatch = whereEq({ id })
 
   const remove = compose(
     sortByPrice,
-    reject(whereEq({ _id }))
+    reject(whereEq({ id }))
   )
 
   return remove(slots)

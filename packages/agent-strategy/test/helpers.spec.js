@@ -2,9 +2,9 @@ import test from 'ava'
 
 import H from '../lib/helpers'
 
-const A = { _id: 'a', price: 100 }
-const B = { _id: 'b', price: 200 }
-const C = { _id: 'c', price: 300 }
+const A = { id: 'a', price: 100 }
+const B = { id: 'b', price: 200 }
+const C = { id: 'c', price: 300 }
 
 const SLOTS = [ B, A, C ]
 
