@@ -4,8 +4,18 @@ import PouchDB from 'pouchdb'
 
 import orderMethods from '..'
 
+const SEED = require('./seed.json')
+
+/**
+ * Setup
+ */
+
 PouchDB
   .plugin(orderMethods)
+
+/**
+ * Init
+ */
 
 const store = new PouchDB('tmp')
 
@@ -14,20 +24,7 @@ const store = new PouchDB('tmp')
  */
 
 test.before(async _ => {
-  const { rev } = await store.put({
-    _id: 'a',
-    gid: 'g',
-    status: 'pre',
-    broker: 'x'
-  })
-
-  await store.put({
-    _id: 'a',
-    gid: 'g',
-    _rev: rev,
-    status: 'new',
-    broker: 'x'
-  })
+  await store.bulkDocs(SEED)
 })
 
 test.after.always(_ => {
@@ -40,31 +37,24 @@ test.after.always(_ => {
 
 test.serial('get order', async t => {
   await store
-    .getOrder('a')
-    .then(order => {
-      t.is(order.status, 'new')
-    })
+    .getOrder('o1')
+    .then(order => t.is(order.id, 'o1'))
 
   await store
-    .getOrder({ id: 'a' })
-    .then(order => {
-      t.is(order.id, 'a')
-    })
-})
-
-test.serial('get order revisions', async t => {
-  await store
-    .getOrderRevs('a')
-    .then(revs => {
-      t.is(revs.length, 2)
-    })
+    .getOrder({ id: 'o2' })
+    .then(order => t.is(order.id, 'o2'))
 })
 
 test.serial('create order', async  t => {
+  const order = {
+    agent: 'a2',
+    broker: 'cexio',
+    symbol: 'btcusd',
+    quantity: 0.1
+  }
+
   await store
-    .putOrder({
-      gid: 'g'
-    })
+    .putOrder(order)
     .then(res => store.get(res.id))
     .then(res => {
       t.not(res.id, undefined)
@@ -73,14 +63,17 @@ test.serial('create order', async  t => {
 })
 
 test.serial('update order', async  t => {
-  const initial = await store.get('a')
+  const order = {
+    id: 'o2',
+    status: 'closed',
+    price: 475
+  }
+
+  const initial = await store.get('o2')
 
   const final = await store
-    .putOrder({
-      id: 'a',
-      status: 'completed'
-    })
-    .then(_ => store.get('a'))
+    .putOrder(order)
+    .then(_ => store.get('o2'))
 
   t.is(initial._id, final._id)
 
@@ -88,3 +81,12 @@ test.serial('update order', async  t => {
   t.not(initial.status, final.status)
 })
 
+test.serial('get order revisions', async t => {
+  await store
+    .getOrderRevs('o1')
+    .then(revs => t.is(revs.length, 1))
+
+  await store
+    .getOrderRevs('o2')
+    .then(revs => t.is(revs.length, 2))
+})
