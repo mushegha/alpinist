@@ -1,3 +1,9 @@
+const debug = require('debug')('alpinist:orders')
+
+const {
+  tap
+} = require('ramda')
+
 const KafkaObserver = require('@alpinist/kafka-observer')
 
 const OrderStore = require('./lib/order-store')
@@ -12,8 +18,14 @@ const toPayload = message =>
     messages: [ message ]
   }]
 
+
+function debugReceived (order) {
+  debug('Received a new order: %O', order)
+}
+
 store
   .source()
+  .map(tap(debugReceived))
   .map(JSON.stringify)
   .map(toPayload)
   .subscribe(kafkaObserver)
