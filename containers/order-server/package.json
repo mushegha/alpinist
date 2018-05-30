@@ -11,6 +11,7 @@
     "@alpinist/pouchdb-connect": "*",
     "@alpinist/pouchdb-order-methods": "*",
     "@alpinist/kafka-observer": "*",
+    "@alpinist/order-processor-bitfinex": "*",
     "generic-pool": "^3.4.2",
     "getenv": "^0.7.0",
     "pouchdb": "^6.4.3",

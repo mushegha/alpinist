@@ -1,5 +1,5 @@
 {
-  "name": "@alpinist/order-bitfinex-connect",
+  "name": "@alpinist/order-processor-bitfinex",
   "version": "0.0.1",
   "main": "lib/index.js",
   "scripts": {
