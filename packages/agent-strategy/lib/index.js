@@ -1,4 +1,5 @@
 const {
+  tap,
   unnest,
   assoc,
   map,
@@ -12,7 +13,6 @@ const commitFill = require('./commit-fill')
 const commitDrop = require('./commit-drop')
 
 const H = require('./helpers')
-
 
 function evaluate (agent, ticker, orders) {
   const updated = compose(
@@ -41,7 +41,15 @@ function evaluate (agent, ticker, orders) {
     )
   ])
 
+  const complete = compose(
+    assoc('agent', agent.id),
+    assoc('broker', ticker.broker),
+    assoc('symbol', ticker.symbol),
+    assoc('kind', 'market')
+  )
+
   const op = compose(
+    map(complete),
     unnest,
     compactDiff(orders),
     updated

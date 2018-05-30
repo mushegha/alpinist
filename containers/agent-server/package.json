@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@alpinist/ticker-source-kafka": "*",
+    "@alpinist/agent-strategy": "*",
     "@alpinist/pouchdb-agent-methods": "*",
     "@alpinist/pouchdb-order-methods": "*",
     "pm2": "^2.10.4",

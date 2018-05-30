@@ -39,6 +39,14 @@ const orders = [
 
 const evaluate = strategy(agent, ticker)
 
+test('empty', t => {
+  const [ A ] = evaluate([])
+
+  console.log(A)
+
+  t.pass()
+})
+
 test('full', t => {
   const [ A, C ] = evaluate(orders)
 
