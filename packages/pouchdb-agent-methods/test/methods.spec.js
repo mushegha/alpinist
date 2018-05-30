@@ -45,6 +45,35 @@ test.serial('get agent', async t => {
     })
 })
 
+test.serial('get all agents', async t => {
+  await db
+    .getAllAgents()
+    .then(agents => {
+      t.is(agents.length, 2)
+    })
+})
+
+test.serial('get active agents by ticker', async t => {
+  await db
+    .getActiveAgentsByTicker({
+      broker: 'bitfinex',
+      symbol: 'ethusd'
+    })
+    .then(agents => {
+      t.is(agents.length, 1)
+      t.true(agents[0].isActive)
+    })
+
+  await db
+    .getActiveAgentsByTicker({
+      broker: 'cexio',
+      symbol: 'btcusd'
+    })
+    .then(agents => {
+      t.is(agents.length, 0)
+    })
+})
+
 test.serial('create agent', async  t => {
   const ticker = {
     broker: 'cexio',

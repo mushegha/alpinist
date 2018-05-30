@@ -11,7 +11,7 @@ function sync ({ commit }, opts = {}) {
     retry: true
   }
 
-  const url = 'http://localhost:5984/agents'
+  const url = 'http://178.62.246.62:5984/agents'
 
   const sync = _ => {
     db.sync(url, options)

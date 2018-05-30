@@ -3,7 +3,8 @@
   "packages": [
     "packages/*",
     "containers/web-client",
-    "containers/ticker-server"
+    "containers/ticker-server",
+    "containers/agent-server"
   ],
   "version": "independent"
 }

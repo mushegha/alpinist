@@ -16,17 +16,17 @@ const Z = require('./helpers')
 
 function commitClose (opts, price, slots = []) {
   const {
-    limit_close,
-    limit_keep
+    sellLimit,
+    sellOffset
   } = opts
 
   const { length } = Z.rangeByPrice(-Infinity, price, slots)
 
-  if (length <= limit_close + limit_keep) {
+  if (length < sellLimit + sellOffset) {
     return slots
   }
 
-  return Z.range(limit_close, Infinity, slots)
+  return Z.range(sellLimit, Infinity, slots)
 }
 
 module.exports = curryN(3, commitClose)

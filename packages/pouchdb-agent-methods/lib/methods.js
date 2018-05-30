@@ -62,8 +62,19 @@ function getAllAgents (selector = {}) {
     .then(map(recover))
 }
 
+function getActiveAgentsByTicker (ticker) {
+  const selector = {
+    'ticker.broker': ticker.broker,
+    'ticker.symbol': ticker.symbol,
+    isActive: true
+  }
+
+  return getAllAgents.call(this, selector)
+}
+
 module.exports = {
   getAgent,
   putAgent,
-  getAllAgents
+  getAllAgents,
+  getActiveAgentsByTicker
 }
