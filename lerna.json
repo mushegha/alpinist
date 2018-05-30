@@ -4,7 +4,8 @@
     "packages/*",
     "containers/web-client",
     "containers/ticker-server",
-    "containers/agent-server"
+    "containers/agent-server",
+    "containers/order-server"
   ],
   "version": "independent"
 }
