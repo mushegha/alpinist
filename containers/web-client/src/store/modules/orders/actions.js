@@ -1,5 +1,7 @@
 import db from './db'
 
+const remoteUrl = 'http://178.62.246.62:5984/orders'
+
 /**
  * Actions
  */
@@ -11,10 +13,8 @@ function sync ({ commit }, opts = {}) {
     retry: true
   }
 
-  const url = 'http://178.62.246.62:5984/orders'
-
   const sync = _ => {
-    db.sync(url, options)
+    db.sync(remoteUrl, options)
   }
 
   const subscribe = _ => {
@@ -23,7 +23,7 @@ function sync ({ commit }, opts = {}) {
   }
 
   return db
-    .replicate.from(url)
+    .replicate.from(remoteUrl)
     .then(sync)
     .then(subscribe)
 }
@@ -32,11 +32,24 @@ function put ({ commit }, payload) {
   return db.putOrder(payload)
 }
 
+function sell ({ commit }, payload) {
+  const params = {
+    id: payload.id,
+    side: 'sell',
+    status: 'new',
+    time: Date.now()
+  }
+
+  return db
+    .putOrder(params)
+}
+
 /**
  * Expose
  */
 
 export {
   sync,
-  put
+  put,
+  sell
 }

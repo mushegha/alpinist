@@ -9,6 +9,14 @@
         pre
           code {{ props.row }}
 
+        div
+          el-button(
+            v-if="props.row.side === 'buy'"
+            type="primary"
+            @click="sell(props.row)")
+
+            | Sell
+
     el-table-column(
       label="Id"
       prop="id")
@@ -23,8 +31,8 @@
       prop="side")
 
     el-table-column(
-      label="Side"
-      prop="side")
+      label="Status"
+      prop="status")
 
     el-table-column(
       label="Updated"
@@ -35,6 +43,8 @@
 </template>
 
 <script>
+
+import { mapActions } from 'vuex'
 
 import { format as formatDate } from 'date-fns'
 
@@ -53,9 +63,14 @@ const filters = {
   }
 }
 
+const methods = mapActions({
+  sell: 'orders/sell'
+})
+
 export default {
   name: 'agent-table',
   props,
-  filters
+  filters,
+  methods
 }
 </script>
