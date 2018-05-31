@@ -14,10 +14,11 @@
   },
   "dependencies": {
     "@alpinist/pouchdb-agent-methods": "*",
-    "@alpinist/pouchdb-order-methods": "*",
     "@alpinist/pouchdb-connect": "*",
+    "@alpinist/pouchdb-order-methods": "*",
     "date-fns": "^1.29.0",
     "element-ui": "^2.3.9",
+    "mqtt": "^2.18.0",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",
     "pouchdb-upsert": "^2.2.0",

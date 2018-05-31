@@ -1,6 +1,5 @@
 <template lang="pug">
   div
-    | Tickers
     ticker-table
 </template>
 
