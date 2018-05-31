@@ -1,7 +1,8 @@
 <template lang="pug">
-  div
+  div(v-if="model")
     header
       h3 {{ id }}
+      ticker-monitor(:target="model.ticker")
 
     order-table(:dataset="orders")
 </template>

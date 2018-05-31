@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex'
 
 import OrderTable from '@/components/order-table'
+import TickerMonitor from '@/components/ticker-monitor'
 
 const props = {
   id: String
@@ -24,6 +25,7 @@ export default {
   props,
   computed,
   components: {
-    OrderTable
+    OrderTable,
+    TickerMonitor
   }
 }
