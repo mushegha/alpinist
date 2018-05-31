@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import AgentsAll from '@/views/agents-all'
-import AgentsOne from '@/views/agents-one'
 import AgentsNew from '@/views/agents-new'
+import AgentsOne from '@/views/agents-one'
+import AgentsOneEdit from '@/views/agents-one-edit'
 
 import TickersAll from '@/views/tickers-all'
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/agents/:id',
       name: 'agents-one',
       component: AgentsOne,
+      props: true
+    }, {
+      path: '/agents/:id/edit',
+      name: 'agents-one-edit',
+      component: AgentsOneEdit,
       props: true
     },
 

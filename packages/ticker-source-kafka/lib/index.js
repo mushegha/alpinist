@@ -4,15 +4,19 @@ const { Observable } = require('rxjs/Rx')
 
 const {
   prop,
-  merge
+  merge,
+  tap
 } = require('ramda')
 
 const DEFAULT_OPTIONS = {
   host: 'localhost:2181',
-  groupId: 'ticker-source'
+  groupId: 'node-ticker-source',
+  sessionTimeout: 15000
 }
 
 function SourceKafka (opts = {}) {
+  console.log('init kafka ticker source')
+
   const options = merge(DEFAULT_OPTIONS, opts)
 
   const consumer = new ConsumerGroup(options, 'alpinist_tickers')

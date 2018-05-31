@@ -1,5 +1,7 @@
 const debug = require('debug')('alpinist:orders')
 
+const getenv = require('getenv')
+
 const {
   tap
 } = require('ramda')
@@ -8,9 +10,24 @@ const KafkaObserver = require('@alpinist/kafka-observer')
 
 const OrderStore = require('./lib/order-store')
 
+/**
+ * Settings
+ */
+
+const ZOOKEEPER_SETTINGS = getenv.multi({
+  host: ['ZOOKEEPER_HOST', 'localhost'],
+  port: ['ZOOKEEPER_PORT', 2182, 'int']
+})
+
+const ZOOKEEPER_URL = `${ZOOKEEPER_SETTINGS.host}:${ZOOKEEPER_SETTINGS.port}`
+
+/**
+ * Init
+ */
+
 const store = new OrderStore()
 
-const kafkaObserver = new KafkaObserver('178.62.246.62:2181')
+const kafkaObserver = new KafkaObserver(ZOOKEEPER_URL)
 
 const toPayload = message =>
   [{
@@ -22,6 +39,10 @@ const toPayload = message =>
 function debugReceived (order) {
   debug('Received a new order: %O', order)
 }
+
+/**
+ * Run
+ */
 
 store
   .source()

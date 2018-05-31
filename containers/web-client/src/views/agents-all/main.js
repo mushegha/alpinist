@@ -10,10 +10,18 @@ const computed = {
   ...state
 }
 
+const methods = {
+  create () {
+    const name = 'agents-new'
+    this.$router.push({ name })
+  }
+}
+
 export default {
   name: 'agents-all',
   components: {
     AgentTable
   },
-  computed
+  computed,
+  methods
 }

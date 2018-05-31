@@ -8,12 +8,14 @@ const {
 
 const SourceBitfinex = require('@alpinist/ticker-source-bitfinex')
 const SourceCexio = require('@alpinist/ticker-source-cexio')
+const SourceYobit = require('@alpinist/ticker-source-yobit')
 
 function Source () {
   const ticker$ = new Subject()
 
   SourceCexio().subscribe(ticker$)
   SourceBitfinex().subscribe(ticker$)
+  SourceYobit().subscribe(ticker$)
 
   const topic = 'alpinist_tickers'
 
@@ -38,6 +40,8 @@ const client = new Client('178.62.246.62:2181')
 const producer = new Producer(client)
 
 producer.on('ready', _ => {
+  console.log('ready')
+
   const report = err => {
     if (err) console.error(err)
   }

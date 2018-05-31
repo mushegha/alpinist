@@ -1,18 +1,14 @@
 <template lang="pug">
   el-form(
-    :model="form"
+    v-if="model"
     label-position="top")
 
-    el-form-item(label="Target ticker")
-      ticker-cascader(v-model="form.ticker")
-
-    el-form-item(label="Settings")
-      settings-fieldset(v-model="form.settings")
+    settings-fieldset(v-model="settings")
 
     el-form-item
 
       el-button(@click="submit")
-        | Create
+        | Update
 
       el-button(@click="redirectBack")
         | Cancel
