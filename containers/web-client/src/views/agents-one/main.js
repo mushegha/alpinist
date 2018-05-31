@@ -8,17 +8,19 @@ const props = {
   id: String
 }
 
+const getters = mapGetters({
+  'byId': 'agents/byId',
+  'ofAgent': 'orders/ofAgent'
+})
+
 const computed = {
-  ...mapGetters({
-    'byId': 'agents/byId',
-    'ofAgent': 'orders/ofAgent'
-  }),
   model () {
     return this.byId(this.id)
   },
   orders () {
     return this.ofAgent(this.id)
-  }
+  },
+  ...getters
 }
 
 export default {

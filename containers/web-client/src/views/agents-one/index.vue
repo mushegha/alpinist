@@ -5,6 +5,10 @@
       agent-switch(:id="id")
       ticker-monitor(:target="model.ticker")
 
+    aside
+      router-link(:to="{name: 'agents-one-edit', params: { id }}")
+        | Edit
+
     order-table(:dataset="orders")
 </template>
 
