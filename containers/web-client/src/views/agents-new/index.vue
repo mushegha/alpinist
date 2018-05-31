@@ -6,6 +6,9 @@
     el-form-item(label="Target ticker")
       ticker-cascader(v-model="form.ticker")
 
+    el-form-item(label="Settings")
+      settings-fieldset(v-model="form.settings")
+
     el-form-item
 
       el-button(@click="submit")
