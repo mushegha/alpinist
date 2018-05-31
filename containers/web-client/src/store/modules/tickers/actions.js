@@ -1,36 +1,16 @@
-import db from './db'
+import * as MQTT from './mqtt'
 
 /**
  * Actions
  */
 
 function sync ({ commit }, opts = {}) {
-  const options = {
-    since: 0,
-    live: true,
-    retry: true
-  }
+  const update = x =>
+    commit('PUT', x)
 
-  const url = 'http://localhost:5984/tickers'
-
-  const sync = _ => {
-    db.sync(url, options)
-  }
-
-  const subscribe = _ => {
-    db.source(options)
-      .subscribe(x => commit('PUT', x))
-  }
-
-  return db
-    .replicate.from(url)
-    .then(sync)
-    .then(subscribe)
-}
-
-function create ({ commit }, payload) {
-  return db
-    .putAgent(payload)
+  return MQTT
+    .source()
+    .subscribe(update)
 }
 
 /**
@@ -38,6 +18,5 @@ function create ({ commit }, payload) {
  */
 
 export {
-  sync,
-  create
+  sync
 }

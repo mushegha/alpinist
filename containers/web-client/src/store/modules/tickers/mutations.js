@@ -5,9 +5,7 @@ function PUT (state, ticker) {
 
   const id = `${broker}-${symbol}`
 
-  return ticker._deleted
-    ? Vue.delete(state, id)
-    : Vue.set(state, id, ticker)
+  return Vue.set(state, id, ticker)
 }
 
 export {
