@@ -2,10 +2,13 @@
   div
     .navbar
       .details
-        | Exo
+
       .actions
-        router-link(:to="{ name: 'agents-new' }")
-          | Create
+        el-button(
+          type="primary"
+          icon="el-icon-plus"
+          @click="create")
+          | Create Agent
     div(style="padding-top: 20px;")
       agent-table(:dataset="agents")
 </template>
@@ -14,7 +17,6 @@
 .navbar {
   display: flex;
   padding: 5px 5px 15px;
-  border-bottom: 1px solid #e6e6e6;
 }
 
 .navbar .details {
@@ -22,9 +24,7 @@
   flex: 1;
 }
 
-.navbar .actions {
-
-}
+.navbar .actions { }
 </style>
 
 <script src="./main.js"></script>
