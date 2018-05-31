@@ -33,11 +33,16 @@ function create ({ commit }, payload) {
     .putAgent(payload)
 }
 
+function put ({ commit }, payload) {
+  return db.putAgent(payload)
+}
+
 /**
  * Expose
  */
 
 export {
   sync,
-  create
+  create,
+  put
 }

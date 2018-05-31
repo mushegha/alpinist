@@ -2,6 +2,7 @@ import { mapGetters } from 'vuex'
 
 import OrderTable from '@/components/order-table'
 import TickerMonitor from '@/components/ticker-monitor'
+import AgentSwitch from '@/components/agent-switch'
 
 const props = {
   id: String
@@ -26,6 +27,7 @@ export default {
   computed,
   components: {
     OrderTable,
-    TickerMonitor
+    TickerMonitor,
+    AgentSwitch
   }
 }

@@ -2,6 +2,7 @@
   div(v-if="model")
     header
       h3 {{ id }}
+      agent-switch(:id="id")
       ticker-monitor(:target="model.ticker")
 
     order-table(:dataset="orders")
