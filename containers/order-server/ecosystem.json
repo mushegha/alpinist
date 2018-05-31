@@ -1,0 +1,12 @@
+{
+  "apps" : [{
+    "name"        : "connect-source-store",
+    "script"      : "./connect-source-store.js",
+    "watch"       : true,
+    "env": { },
+    "env_development": {
+      "ZOOKEEPER_HOST": "178.62.246.62",
+      "ZOOKEEPER_PORT": "2181"
+    }
+  }]
+}
