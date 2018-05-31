@@ -3,11 +3,6 @@
     v-if="dataset"
     :data="dataset")
 
-    el-table-column(type="expand")
-      template(slot-scope="props")
-        pre
-          code {{ props.row }}
-
     el-table-column(
       label="Broker"
       prop="broker"
@@ -16,9 +11,7 @@
 
     el-table-column(
       label="Symbol"
-      prop="symbol"
-      :filters="filtersFor('symbol')"
-      :filter-method="filterHandler")
+      prop="symbol")
 
     el-table-column(
       label="Bid"
@@ -55,7 +48,7 @@
       align="right")
 
       template(slot-scope="scope")
-        time {{ scope.row.time | since(time) }}
+        time {{ scope.row.time | asNormalDate }}
 </template>
 
 <style>
@@ -112,10 +105,8 @@ const computed = {
 }
 
 const filters = {
-  since (time, now) {
-    return now - time > 5 * 60 * 1e3
-      ? formatDate(time, 'HH:mm:ss')
-      : distanceInWordsStrict(time, now, { includeSeconds: true })
+  asNormalDate (time) {
+    return formatDate(time, 'HH:mm:ss')
   }
 }
 
