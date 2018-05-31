@@ -2,7 +2,7 @@ const debug = require('debug')('alpinist:agents')
 
 const getenv = require('getenv')
 
-const TickerSource = require('@alpinist/ticker-source-kafka')
+const TickerMQTT = require('./lib/ticker-mqtt')
 
 const Strategy = require('@alpinist/agent-strategy')
 
@@ -24,15 +24,13 @@ const ZOOKEEPER_URL = `${ZOOKEEPER_SETTINGS.host}:${ZOOKEEPER_SETTINGS.port}`
  * Init
  */
 
-const ticker$ = TickerSource({ host: ZOOKEEPER_URL })
-
 const agentStore = AgentStore()
 const orderStore = OrderStore()
 
 const report = err =>
   debug('Error %s', err.message)
 
-function exec (ticker) {
+function evaluate (ticker) {
   debug('Processing ticker %s %s', ticker.broker, ticker.symbol)
 
   const execOne = agent => {
@@ -59,5 +57,6 @@ function exec (ticker) {
     .catch(report)
 }
 
-ticker$
-  .subscribe(exec)
+TickerMQTT
+  .source()
+  .subscribe(evaluate)

@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "scripts": {
     "start": "pm2 start ecosystem.json",
-    "dev": "pm2-dev ecosystem.json --env development",
+    "dev": "nodemon connect-source-store.js",
     "docker": "pm2-runtime ecosystem.json",
     "test": "ava"
   },
   "devDependencies": {
-    "ava": "^0.25.0"
+    "ava": "^0.25.0",
+    "nodemon": "^1.17.5"
   },
   "dependencies": {
     "@alpinist/kafka-observer": "*",

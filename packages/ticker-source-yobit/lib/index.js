@@ -51,7 +51,7 @@ function SourceYobit () {
   }
 
   return Observable
-    .interval(1500)
+    .interval(4500)
     .flatMap(poll)
 }
 

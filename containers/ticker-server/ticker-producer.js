@@ -40,6 +40,8 @@ const client = new Client('178.62.246.62:2181')
 const producer = new Producer(client)
 
 producer.on('ready', _ => {
+  console.log('ready')
+
   const report = err => {
     if (err) console.error(err)
   }

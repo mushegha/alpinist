@@ -9,8 +9,6 @@
     el-menu-item(index="/tickers")
       | Tickers
 
-    el-menu-item(index="/orders")
-      | Orders
 </template>
 
 <script>
