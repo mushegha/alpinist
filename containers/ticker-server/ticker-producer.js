@@ -8,12 +8,14 @@ const {
 
 const SourceBitfinex = require('@alpinist/ticker-source-bitfinex')
 const SourceCexio = require('@alpinist/ticker-source-cexio')
+const SourceYobit = require('@alpinist/ticker-source-yobit')
 
 function Source () {
   const ticker$ = new Subject()
 
   SourceCexio().subscribe(ticker$)
   SourceBitfinex().subscribe(ticker$)
+  SourceYobit().subscribe(ticker$)
 
   const topic = 'alpinist_tickers'
 
