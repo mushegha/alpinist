@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@alpinist/pouchdb-agent-methods": "*",
+    "@alpinist/pouchdb-order-methods": "*",
     "@alpinist/pouchdb-connect": "*",
     "date-fns": "^1.29.0",
     "element-ui": "^2.3.9",

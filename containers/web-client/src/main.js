@@ -31,4 +31,5 @@ new Vue({
 })
 
 store.dispatch('agents/sync')
-store.dispatch('tickers/sync')
+store.dispatch('orders/sync')
+// store.dispatch('tickers/sync')
