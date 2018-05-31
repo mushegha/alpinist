@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:orders')
+
 const TickerSource = require('@alpinist/ticker-source-kafka')
 
 const Strategy = require('@alpinist/agent-strategy')
@@ -14,13 +16,13 @@ const orderStore = OrderStore()
 
 function exec (ticker) {
   const execOne = agent => {
-    console.log('processing', agent.id)
+    debug('Processing orders for agent %s', agent.id)
 
     return orderStore
       .getBuyOrdersByAgent(agent)
       .then(Strategy(agent, ticker))
       .then(orders => {
-        console.log(orders)
+        debug('Update orders %O', orders)
         orders.forEach(order => orderStore.putOrder(order))
       })
   }
@@ -33,11 +35,6 @@ function exec (ticker) {
 
   return agentStore
     .getActiveAgentsByTicker(ticker)
-    .then(agents => {
-      if (agents.length)
-        console.log('active agents', agents.length)
-      return agents
-    })
     .then(agents => agents.forEach(execOne))
 }
 
