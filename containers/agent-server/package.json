@@ -5,10 +5,11 @@
     "dev": "pm2-dev ecosystem.json"
   },
   "dependencies": {
-    "@alpinist/ticker-source-kafka": "*",
     "@alpinist/agent-strategy": "*",
     "@alpinist/pouchdb-agent-methods": "*",
     "@alpinist/pouchdb-order-methods": "*",
+    "@alpinist/ticker-source-kafka": "*",
+    "debug": "^3.1.0",
     "pm2": "^2.10.4",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",

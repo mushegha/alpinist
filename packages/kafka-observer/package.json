@@ -1,0 +1,10 @@
+{
+  "name": "@alpinist/kafka-observer",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "dependencies": {
+    "kafka-node": "^2.6.1",
+    "ramda": "^0.25.0",
+    "ramda-adjunct": "^2.9.0"
+  }
+}
