@@ -2,7 +2,7 @@
   "name": "@alpinist/ticker-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "pm2-dev ecosystem.json"
+    "dev": "pm2-dev ecosystem.json --env development"
   },
   "dependencies": {
     "@alpinist/ticker-source-bitfinex": "*",

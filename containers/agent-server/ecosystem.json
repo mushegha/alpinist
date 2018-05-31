@@ -1,7 +1,7 @@
 {
   "apps" : [{
-    "name"        : "connect-source-store",
-    "script"      : "./connect-source-store.js",
+    "name"        : "agent-processor",
+    "script"      : "./agent-processor.js",
     "watch"       : true,
     "env": { },
     "env_development": {

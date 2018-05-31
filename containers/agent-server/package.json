@@ -2,7 +2,9 @@
   "name": "@alpinist/agent-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "pm2-dev ecosystem.json"
+    "start": "pm2 start ecosystem.json",
+    "dev": "pm2-dev ecosystem.json --env development",
+    "docker": "pm2-runtime ecosystem.json"
   },
   "dependencies": {
     "@alpinist/agent-strategy": "*",
@@ -10,6 +12,7 @@
     "@alpinist/pouchdb-order-methods": "*",
     "@alpinist/ticker-source-kafka": "*",
     "debug": "^3.1.0",
+    "getenv": "^0.7.0",
     "pm2": "^2.10.4",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",

@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  # Server
+  # Services
 
   redis:
     build: ./containers/redis
@@ -59,6 +59,11 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
+
+  # Servers
+
+  order-server:
+    build: ./containers/order-server
 
   # Client
 
