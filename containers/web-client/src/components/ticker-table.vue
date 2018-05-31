@@ -63,7 +63,6 @@ import { Observable } from 'rxjs/Rx'
 import { mapGetters } from 'vuex'
 
 import {
-  distanceInWordsStrict,
   format as formatDate
 } from 'date-fns'
 
