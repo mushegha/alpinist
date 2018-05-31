@@ -23,10 +23,19 @@ const computed = {
   ...getters
 }
 
+const methods = {
+  edit () {
+    const name = 'agents-one-edit'
+    const params = { id: this.id }
+    this.$router.push({ name, params })
+  }
+}
+
 export default {
   name: 'agents-one',
   props,
   computed,
+  methods,
   components: {
     OrderTable,
     TickerMonitor,

@@ -1,15 +1,34 @@
 <template lang="pug">
   div(v-if="model")
-    header
-      h3 {{ id }}
-      agent-switch(:id="id")
-      ticker-monitor(:target="model.ticker")
+    .navbar
+      .details
+        ticker-monitor(:target="model.ticker")
 
-    aside
-      router-link(:to="{name: 'agents-one-edit', params: { id }}")
-        | Edit
+      .status
+        agent-switch(:id="id")
+
+      .actions
+        el-button(@click="edit")
+          | Edit
 
     order-table(:dataset="orders")
 </template>
 
 <script src="./main.js"></script>
+
+<style scoped>
+.navbar {
+  display: flex;
+  padding: 5px 5px 15px;
+}
+
+.navbar .details {
+  display: flex;
+  flex: 1;
+}
+
+.navbar .status {
+  padding: 10px 20px;
+}
+.navbar .actions { }
+</style>
