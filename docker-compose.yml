@@ -64,6 +64,9 @@ services:
 
   ticker-server:
     build: ./containers/ticker-server
+    environment:
+      - DEBUG=alpinist:*
+    command: pm2-runtime ecosystem.json
 
   # Client
 
