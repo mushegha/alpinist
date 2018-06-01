@@ -79,6 +79,7 @@ const toPlainSymbol = compose(
 
 const recover = compose(
   timestamp,
+  assoc('broker', 'bitfinex'),
   evolve({ symbol: toPlainSymbol }),
   zipObj(FIELDS)
 )
