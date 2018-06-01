@@ -2,11 +2,13 @@
   "name": "@alpinist/ticker-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon producer.js"
+    "dev": "nodemon producer.js",
+    "start": "pm2 start ecosystem.json"
   },
   "dependencies": {
     "avsc": "^5.2.3",
     "axios": "^0.18.0",
+    "getenv": "^0.7.0",
     "mqtt": "^2.18.0",
     "pm2": "^2.10.4",
     "ramda": "^0.25.0",
