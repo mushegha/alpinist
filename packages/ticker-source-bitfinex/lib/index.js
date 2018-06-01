@@ -36,7 +36,7 @@ function SourceBitfinex () {
 
   const init = symbols => {
     return Observable
-      .interval(6000)
+      .interval(10000)
       .flatMap(_ => poll(symbols))
   }
 
