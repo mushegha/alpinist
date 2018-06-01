@@ -19,7 +19,8 @@ const request = Axios.create({
 const symbols = [
   'ltc_usd',
   'btc_usd',
-  'eth_usd'
+  'eth_usd',
+  'lsk_usd'
 ]
 
 function SourceYobit () {
