@@ -25,12 +25,11 @@ const DEFAULT_CURRENCIES = [
 
 function Monitor (opts = {}) {
   const {
-    delay = 1500,
+    delay = DEFAULT_DELAY,
     currencies = DEFAULT_CURRENCIES
   } = opts
 
-  const exec = () =>
-    fetchAll(currencies)
+  const exec = () => fetchAll(currencies)
 
   const poll = () =>
     Observable
@@ -38,7 +37,7 @@ function Monitor (opts = {}) {
       .flatMap(Observable.from)
 
   return Observable
-    .interval(1500)
+    .timer(0, delay)
     .flatMap(poll)
 }
 

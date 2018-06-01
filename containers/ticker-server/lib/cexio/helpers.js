@@ -1,8 +1,6 @@
 const {
   compose,
-  split,
-  splitAt,
-  join,
+  replace,
   toLower,
   toUpper
 } = require('ramda')
@@ -20,8 +18,7 @@ const {
  */
 
 const fromPlainSymbol = compose(
-  join(':'),
-  splitAt(-3),
+  replace('-', ':'),
   toUpper
 )
 
@@ -38,8 +35,7 @@ const fromPlainSymbol = compose(
  */
 
 const toPlainSymbol = compose(
-  join(''),
-  split(':'),
+  replace(':', '-'),
   toLower
 )
 
