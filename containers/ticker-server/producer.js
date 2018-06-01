@@ -1,16 +1,4 @@
-const { Subject } = require('rxjs/Rx')
+const Monitor = require('./lib/monitor')
 
-const MonitorCexio = require('./lib/cexio')
-
-function Source () {
-  const ticker$ = new Subject()
-
-  MonitorCexio().subscribe(ticker$)
-
-  const topic = 'tickers'
-
-  return ticker$
-}
-
-Source()
+Monitor()
   .subscribe(console.log)
