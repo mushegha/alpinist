@@ -2,14 +2,12 @@
   "name": "@alpinist/ticker-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon ticker-producer.js"
+    "dev": "nodemon producer.js"
   },
   "dependencies": {
-    "@alpinist/ticker-source-bitfinex": "*",
-    "@alpinist/ticker-source-cexio": "*",
-    "@alpinist/ticker-source-yobit": "*",
-    "kafka-node": "^2.6.1",
+    "axios": "^0.18.0",
     "pm2": "^2.10.4",
+    "ramda": "^0.25.0",
     "rxjs": "^6.1.0",
     "rxjs-compat": "^6.1.0"
   },
