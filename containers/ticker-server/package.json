@@ -5,6 +5,7 @@
     "dev": "nodemon producer.js"
   },
   "dependencies": {
+    "avsc": "^5.2.3",
     "axios": "^0.18.0",
     "mqtt": "^2.18.0",
     "pm2": "^2.10.4",

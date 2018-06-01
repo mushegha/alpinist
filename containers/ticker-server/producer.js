@@ -2,6 +2,8 @@ const mqtt = require('mqtt')
 
 const Monitor = require('./lib/monitor')
 
+//
+
 const client = mqtt.connect('mqtt://178.62.246.62:1883')
 
 const publish = tick => {

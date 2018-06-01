@@ -24,14 +24,6 @@ const FIELDS = [
   'ask_quantity'
 ]
 
-
-/**
- * Set `ts` field to current epoch time
- */
-
-const timestamp = obj =>
-  assoc('ts', Date.now(), obj)
-
 /**
  * To Bitfinex symbol notation
  *
@@ -78,7 +70,6 @@ const toPlainSymbol = compose(
  */
 
 const recover = compose(
-  timestamp,
   assoc('broker', 'bitfinex'),
   evolve({ symbol: toPlainSymbol }),
   zipObj(FIELDS)

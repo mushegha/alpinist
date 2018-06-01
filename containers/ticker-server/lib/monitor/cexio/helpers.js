@@ -51,21 +51,16 @@ function recover (data) {
   const broker = 'cexio'
   const symbol = toPlainSymbol(data.pair)
 
-  const bid_price = data.bid
+  const bid_price = Number(data.bid)
+  const ask_price = Number(data.ask)
 
-  const ask_price = data.ask
-  const ask_quantity = data.volume
-
-  const ts = Date.now()
-
-  return {
-    broker,
+  const x = {
     symbol,
     bid_price,
-    ask_price,
-    ask_quantity,
-    ts
+    ask_price
   }
+
+  return x
 }
 
 
