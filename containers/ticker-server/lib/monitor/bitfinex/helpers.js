@@ -1,4 +1,10 @@
 const {
+  replace,
+  splitAt,
+  join,
+  evolve,
+  assoc,
+  zipObj,
   compose,
   concat,
   drop,
@@ -7,18 +13,34 @@ const {
 } = require('ramda')
 
 /**
+ * Settings
+ */
+
+const FIELDS = [
+  'symbol',
+  'bid_price',
+  'bid_quantity',
+  'ask_price',
+  'ask_quantity'
+]
+
+/**
  * To Bitfinex symbol notation
  *
  * @param {string} symbol - Standard notation
  *
  * @example
  *    // > 'tBTCUSD'
- *    fromPlainSymbol('btcusd')
+ *    fromPlainSymbol('btc-usd')
  *
  * @returns {string} Bitfinex notation
  */
 
-const fromPlainSymbol = compose(concat('t'), toUpper)
+const fromPlainSymbol = compose(
+  concat('t'),
+  toUpper,
+  replace('-', '')
+)
 
 /**
  * To standard symbol notation
@@ -26,13 +48,18 @@ const fromPlainSymbol = compose(concat('t'), toUpper)
  * @param {string} symbol - Bitfinex notation
  *
  * @example
- *    // > 'btcusd'
+ *    // > 'btc-usd'
  *    fromPlainSymbol('tBTCUSD')
  *
  * @returns {string} Standard notation
  */
 
-const toPlainSymbol = compose(drop(1), toLower)
+const toPlainSymbol = compose(
+  join('-'),
+  splitAt(-3),
+  drop(1),
+  toLower
+)
 
 /**
  * Recover to standard ticker notation
@@ -42,29 +69,15 @@ const toPlainSymbol = compose(drop(1), toLower)
  * @returns {Object}
  */
 
-function recover (data) {
-  const broker = 'bitfinex'
-  const symbol = toPlainSymbol(data.symbol)
+const recover = compose(
+  assoc('broker', 'bitfinex'),
+  evolve({ symbol: toPlainSymbol }),
+  zipObj(FIELDS)
+)
 
-  const bid_price = data.bid
-  const bid_quantity = data.bidSize
-
-  const ask_price = data.ask
-  const ask_quantity = data.askSize
-
-  const time = Date.now()
-
-  return {
-    broker,
-    symbol,
-    bid_price,
-    bid_quantity,
-    ask_price,
-    ask_quantity,
-    time
-  }
-}
-
+/**
+ * Expose
+ */
 
 module.exports = {
   toPlainSymbol,

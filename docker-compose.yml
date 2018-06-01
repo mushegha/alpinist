@@ -62,8 +62,8 @@ services:
 
   # Servers
 
-  order-server:
-    build: ./containers/order-server
+  ticker-server:
+    build: ./containers/ticker-server
 
   # Client
 

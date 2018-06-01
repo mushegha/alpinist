@@ -1,11 +1,7 @@
 {
   "apps" : [{
     "name"        : "ticker-producer",
-    "script"      : "./ticker-producer.js",
-    "watch"       : true,
-    "env": {
-      "ZOOKEEPER_HOST": "178.62.246.62",
-      "ZOOKEEPER_PORT": "2181"
-    }
+    "script"      : "./producer.js",
+    "watch"       : true
   }]
 }

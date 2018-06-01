@@ -1,8 +1,6 @@
 const {
   compose,
-  split,
-  splitAt,
-  join,
+  replace,
   toLower,
   toUpper
 } = require('ramda')
@@ -20,8 +18,7 @@ const {
  */
 
 const fromPlainSymbol = compose(
-  join(':'),
-  splitAt(-3),
+  replace('-', ':'),
   toUpper
 )
 
@@ -38,8 +35,7 @@ const fromPlainSymbol = compose(
  */
 
 const toPlainSymbol = compose(
-  join(''),
-  split(':'),
+  replace(':', '-'),
   toLower
 )
 
@@ -55,21 +51,16 @@ function recover (data) {
   const broker = 'cexio'
   const symbol = toPlainSymbol(data.pair)
 
-  const bid_price = data.bid
+  const bid_price = Number(data.bid)
+  const ask_price = Number(data.ask)
 
-  const ask_price = data.ask
-  const ask_quantity = data.volume
-
-  const time = Date.now()
-
-  return {
-    broker,
+  const x = {
     symbol,
     bid_price,
-    ask_price,
-    ask_quantity,
-    time
+    ask_price
   }
+
+  return x
 }
 
 
