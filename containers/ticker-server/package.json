@@ -2,8 +2,8 @@
   "name": "@alpinist/ticker-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon producer.js | nodemon server.js",
-    "start": "node producer.js | node server.js"
+    "dev": "nodemon producer.js",
+    "start": "node producer.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
