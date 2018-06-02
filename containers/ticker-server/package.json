@@ -2,12 +2,15 @@
   "name": "@alpinist/ticker-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon producer.js",
-    "start": "node producer.js"
+    "dev": "nodemon producer.js | nodemon server.js",
+    "start": "node producer.js | node server.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "getenv": "^0.7.0",
+    "ioredis": "^3.2.2",
+    "koa": "^2.5.1",
+    "koa-logger": "^3.2.0",
     "mqtt": "^2.18.0",
     "ramda": "^0.25.0",
     "rxjs": "^6.1.0",
