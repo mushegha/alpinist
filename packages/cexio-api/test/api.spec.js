@@ -1,14 +1,6 @@
 import test from 'ava'
 
-import Axios from 'axios'
-
-import noncer from '../lib/noncer'
-
-import { placeOrder } from '..'
-
-test('nonce', t => {
-  t.true(noncer() < noncer())
-})
+import Client from '..'
 
 test('placeOrder', async t => {
 
@@ -27,7 +19,9 @@ test('placeOrder', async t => {
     price: 590
   }
 
-  const x = await placeOrder(opts, order)
+  const { submitOrder } = new Client(opts)
+
+  const x = await submitOrder(order)
 
   console.log(x)
 
