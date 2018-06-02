@@ -9,10 +9,7 @@ const { fetchAll } = require('./actions')
 const DEFAULT_DELAY = 1500
 
 const DEFAULT_CURRENCIES = [
-  'USD',
-  'EUR',
-  'GBP',
-  'RUB'
+  'USD'
 ]
 
 /**
