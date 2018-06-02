@@ -55,6 +55,7 @@ function recover (data) {
   const ask_price = Number(data.ask)
 
   const x = {
+    broker,
     symbol,
     bid_price,
     ask_price

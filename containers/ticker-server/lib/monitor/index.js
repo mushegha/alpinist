@@ -33,8 +33,8 @@ function Monitor (opts = {}) {
   Bitfinex().subscribe(ticker$)
 
   return ticker$
-    .map(timestamped)
     .map(toRelevant)
+    .map(timestamped)
 }
 
 module.exports = Monitor

@@ -34,19 +34,32 @@ debug('Connecting to MQTT server at %s', MQTT_URL)
 
 const client = mqtt.connect(MQTT_URL)
 
-const publish = tick => {
+const next = tick => {
   const topic = `tickers/${tick.broker}`
   const message = JSON.stringify(tick)
 
   return client.publish(topic, message)
 }
 
-client.on('error', err => {
-  debug('MQTT error: %s', err.message)
-})
+const error = err => {
+  debug('Error happened: %s', err.message)
+}
+
+const complete = _ => {
+  debug('Completed')
+  debug('Disconnecting MQTT client')
+
+  client.end(false, _ => debug('MQTT client disconnected'))
+}
+
+client.on('error', error)
 
 client.on('connect', _ => {
   debug('MQTT client connected')
 
-  ticker$.subscribe(publish)
+  ticker$.subscribe({
+    next,
+    error,
+    complete
+  })
 })

@@ -48,7 +48,7 @@
       align="right")
 
       template(slot-scope="scope")
-        time {{ scope.row.time | asNormalDate }}
+        time {{ scope.row.ts | asTime }}
 </template>
 
 <style>
@@ -104,7 +104,7 @@ const computed = {
 }
 
 const filters = {
-  asNormalDate (time) {
+  asTime (time) {
     return formatDate(time, 'HH:mm:ss')
   }
 }
