@@ -71,8 +71,6 @@ services:
     links:
       - mosquitto
       - redis
-    ports:
-      - "80:80"
     environment:
       - DEBUG=alpinist:*
       - MQTT_URL=mqtt://mosquitto:1883
