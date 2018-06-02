@@ -79,10 +79,10 @@ services:
 
   # Client
 
-  web-client:
-    build: ./containers/web-client
-    volumes:
-      - www-volume:/usr/src/dist
+  # web-client:
+  #   build: ./containers/web-client
+  #   volumes:
+  #     - www-volume:/usr/src/dist
 
   nginx:
     restart: always
