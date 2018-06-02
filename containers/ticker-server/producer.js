@@ -16,6 +16,20 @@ const MQTT_URL = getenv('MQTT_URL', 'mqtt://localhost:1883')
  * Connect
  */
 
+const ticker$ = Monitor()
+
+/**
+ * Debug
+ */
+
+ticker$
+  .bufferTime(1000)
+  .subscribe(tickers => debug('Produced %d items', tickers.length))
+
+/**
+ * Mqtt
+ */
+
 debug('Connecting to MQTT server at %s', MQTT_URL)
 
 const client = mqtt.connect(MQTT_URL)
@@ -34,5 +48,5 @@ client.on('error', err => {
 client.on('connect', _ => {
   debug('MQTT client connected')
 
-  Monitor().subscribe(publish)
+  ticker$.subscribe(publish)
 })
