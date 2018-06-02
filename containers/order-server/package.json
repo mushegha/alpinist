@@ -2,9 +2,7 @@
   "name": "@alpinist/order-server",
   "version": "0.0.1",
   "scripts": {
-    "start": "pm2 start ecosystem.json",
-    "dev": "nodemon connect-source-store.js",
-    "docker": "pm2-runtime ecosystem.json",
+    "dev": "nodemon processor.js",
     "test": "ava"
   },
   "devDependencies": {
@@ -12,17 +10,9 @@
     "nodemon": "^1.17.5"
   },
   "dependencies": {
-    "@alpinist/kafka-observer": "*",
-    "@alpinist/order-processor-bitfinex": "*",
-    "@alpinist/pouchdb-connect": "*",
-    "@alpinist/pouchdb-order-methods": "*",
     "debug": "^3.1.0",
     "generic-pool": "^3.4.2",
     "getenv": "^0.7.0",
-    "pm2": "^2.10.4",
-    "pouchdb": "^6.4.3",
-    "pouchdb-find": "^6.4.3",
-    "pouchdb-upsert": "^2.2.0",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.7.0",
     "rxjs": "^6.1.0",
