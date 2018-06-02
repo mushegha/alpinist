@@ -6,7 +6,7 @@ function source () {
   const client = mqtt.connect('mqtt://178.62.246.62:9001')
 
   client.on('connect', function () {
-    client.subscribe('tickers')
+    client.subscribe('tickers/+')
   })
 
   const selector = (_, buf) =>
