@@ -6,7 +6,7 @@ const { fetchAll } = require('./actions')
  * Defaul settings
  */
 
-const DEFAULT_DELAY = 6000
+const DEFAULT_DELAY = 7500
 
 const DEFAULT_SYMBOLS = require('./symbols.json')
 
