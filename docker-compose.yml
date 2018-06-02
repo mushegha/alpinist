@@ -30,12 +30,10 @@ services:
       - "9584:9584"
       - "9585:9585"
     environment:
-      - ADV_HOST=192.168.0.103
       - SAMPLEDATA=0
       - DISABLE=azure-documentdb,coap,druid,ftp,hazelcast,hbase,influxdb,jms,kudu,rethink,voltdb,yahoo,hdfs,jdbc,twitter
     volumes:
       - ./containers/lenses/license.json:/license.json
-    network_mode: host
 
   elasticsearch:
     build:
