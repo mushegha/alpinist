@@ -16,6 +16,10 @@ services:
 
   lenses:
     image: landoop/kafka-lenses-dev
+    links:
+      - mosquitto
+      - elasticsearch
+      - redis
     ports:
       - "3030:3030"
       - "9092:9092"
@@ -64,8 +68,15 @@ services:
 
   ticker-server:
     build: ./containers/ticker-server
+    links:
+      - mosquitto
+      - redis
+    ports:
+      - "80:80"
     environment:
       - DEBUG=alpinist:*
+      - MQTT_URL=mqtt://mosquitto:1883
+      - REDIS_URL=redis://redis:6379
     command: pm2-runtime ecosystem.json
 
   # Client
@@ -78,6 +89,8 @@ services:
   nginx:
     restart: always
     build: ./containers/nginx
+    links:
+      - ticker-server
     volumes:
       - ./containers/nginx/conf.d:/etc/nginx/conf.d
       - www-volume:/var/www
