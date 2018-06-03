@@ -75,6 +75,21 @@ services:
       - REDIS_URL=redis://redis:6379
     command: pm2-runtime ecosystem.json
 
+  order-server:
+    build: ./containers/order-server
+    links:
+      - mosquitto
+    environment:
+      - DEBUG=alpinist:*
+      - MQTT_URL=mqtt://mosquitto:1883
+      - CEXIO_USER_ID=up111849658
+      - CEXIO_API_KEY=UFCPRP2OCrz29iU3j2iKZXCt3M
+      - CEXIO_API_SECRET=UsYdCQ8GVZpVarFAbcnPe3ytPo
+      - BITFINEX_API_KEY=GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P
+      - BITFINEX_API_SECRET=vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2
+    command: pm2-runtime ecosystem.json
+
+
   # Client
 
   # web-client:
