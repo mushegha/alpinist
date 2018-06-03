@@ -2,30 +2,24 @@ const Channel = require('./lib/channel')
 
 const { Observable } = require('rxjs/Rx')
 
-const mock = _ => {
-  const ts = Date.now()
-  const id = String(ts)
+const { evolve, always } = require('ramda')
 
-  return {
-    id,
-    ts,
-    subject: 'sub-' + ts,
-    broker: 'cexio',
-    symbol: 'eth-usd',
-    status: 'new',
-    side: 'buy',
-    price: 580,
-    quantity: 0.05
-  }
+const mockProcessor = order => {
+  const updated = evolve({
+    status: always('closed'),
+    price: x => x + Math.random(),
+    ts: _ => Date.now()
+  })
+
+  return Observable
+    .of(updated(order))
 }
+
+const source = Channel.Observable('mock')
+  .filter(o => o.status === 'new')
 
 const sink = Channel.Observer()
 
-Observable
-  .timer(0, 1000)
-  .map(mock)
+source
+  .flatMap(mockProcessor)
   .subscribe(sink)
-
-const source = Channel.Observable('cexio')
-
-source.subscribe(console.log)
