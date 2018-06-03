@@ -25,3 +25,7 @@ Observable
   .timer(0, 1000)
   .map(mock)
   .subscribe(sink)
+
+const source = Channel.Observable('cexio')
+
+source.subscribe(console.log)
