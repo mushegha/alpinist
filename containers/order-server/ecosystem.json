@@ -1,13 +1,11 @@
 {
   "apps" : [{
-    "name"        : "connect-source-store",
-    "script"      : "./connect-source-store.js",
-    "watch"       : true,
-    "env": { },
-    "env_development": {
-      "DEBUG": "alpinist:*",
-      "ZOOKEEPER_HOST": "178.62.246.62",
-      "ZOOKEEPER_PORT": "2181"
-    }
+    "name"        : "Bitfinex processor",
+    "script"      : "./processor-bitfinex.js",
+    "exec_mode"   : "cluster"
+  }, {
+    "name"        : "Cexio processor",
+    "script"      : "./processor-cexio.js",
+    "exec_mode"   : "cluster"
   }]
 }

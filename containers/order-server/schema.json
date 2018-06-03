@@ -1,0 +1,43 @@
+{
+  "type": "record",
+  "name": "orders",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "ts",
+      "type": "long"
+    },
+    {
+      "name": "subject",
+      "type": "string"
+    },
+    {
+      "name": "broker",
+      "type": "string"
+    },
+    {
+      "name": "symbol",
+      "type": "string"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {
+      "name": "side",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": "double"
+    },
+    {
+      "name": "quantity",
+      "type": "double"
+    }
+  ],
+  "connect.name": "orders"
+}
