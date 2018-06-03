@@ -12,6 +12,8 @@ function OrdersChannelObserver () {
     const topic = `orders/${order.broker}`
     const message = JSON.stringify(order)
 
+    const options = { qos: 2 }
+
     return client.publish(topic, message)
   }
 
