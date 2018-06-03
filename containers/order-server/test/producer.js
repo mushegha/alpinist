@@ -4,9 +4,11 @@ import { Observable } from 'rxjs/Rx'
 
 import delay from 'delay'
 
+import { tap } from 'ramda'
+
 import * as Channel from '../lib/channel'
 
-test.skip('bitfinex', async t => {
+test('bitfinex', async t => {
 
   const will = {
     id: 'bitfinex-1',
@@ -14,23 +16,26 @@ test.skip('bitfinex', async t => {
     subject: 'subject-1',
     broker: 'bitfinex',
     symbol: 'eth-usd',
-    status: 'new',
     side: 'buy',
     price: 620,
-    quantity: 0.05
+    quantity: 0.05,
+    status: 'new'
   }
 
   const sink = Channel.Observer()
 
   const source = Channel.Observable()
 
+  await delay(1500)
+
   source.subscribe(console.log)
 
   Observable
     .of(will)
+    .map(tap(console.log))
     .subscribe(sink)
 
-  await delay(4000)
+  await delay(1500)
 
   t.pass()
 })
@@ -43,15 +48,17 @@ test('cexio', async t => {
     subject: 'subject-1',
     broker: 'cexio',
     symbol: 'eth-usd',
-    status: 'new',
     side: 'sell',
     price: 620,
-    quantity: 0.05
+    quantity: 0.05,
+    status: 'new'
   }
 
   const sink = Channel.Observer()
 
   const source = Channel.Observable()
+
+  await delay(1500)
 
   source.subscribe(console.log)
 
@@ -59,7 +66,7 @@ test('cexio', async t => {
     .of(will)
     .subscribe(sink)
 
-  await delay(4000)
+  await delay(1500)
 
   t.pass()
 })

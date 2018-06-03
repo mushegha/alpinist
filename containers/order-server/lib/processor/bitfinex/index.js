@@ -2,9 +2,12 @@ const { Observable } = require('rxjs/Rx')
 
 const { Order } = require('bitfinex-api-node/lib/models')
 
-const { merge } = require('ramda')
+const {
+  merge,
+  tap
+} = require('ramda')
 
-const Pool = require('./pool')
+const Client = require('./client')
 
 const { fromOrder } = require('./observable')
 
@@ -13,15 +16,17 @@ const {
   recover
 } = require('./helpers')
 
-function Connect (opts = {}) {
-  const pool = new Pool(opts)
+function Connect (creds = {}) {
+  const { create, destroy } = new Client(creds)
+
+  let clientP = create()
 
   const toOrder = params => {
-    const initP = pool
-      .acquire()
+    const submitP = clientP
       .then(ws => new Order(params, ws))
 
-    return Observable.fromPromise(initP)
+    return Observable
+      .fromPromise(submitP)
   }
 
   return order =>

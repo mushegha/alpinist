@@ -10,10 +10,10 @@ const Client = require('./client')
 
 const POOL_CONFIG = {
   min                       : 1,
-  max                       : 5,
+  max                       : 1,
   evictionRunIntervalMillis : 1e3,
   idleTimeoutMillis         : 300e3,
-  testOnBorrow              : true,
+  testOnBorrow              : true
 }
 
 

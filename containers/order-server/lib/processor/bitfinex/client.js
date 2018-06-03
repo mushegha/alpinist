@@ -2,6 +2,8 @@ const debug = require('debug')('alpinist:order:bitfinex')
 
 const { WSv2 } = require('bitfinex-api-node')
 
+const { merge } = require('ramda')
+
 /**
  * Client Actions
  */
@@ -91,14 +93,14 @@ function validate (ws) {
  * Client constructor
  */
 
-function Client (opts = {}) {
+function Client (creds = {}) {
   debug('Initializing a client')
 
-  opts.transform = true
+  const options = merge(creds, { transform: true })
 
   return {
     create () {
-      const ws = new WSv2(opts)
+      const ws = new WSv2(options)
 
       return open(ws)
         .then(authenticate)
