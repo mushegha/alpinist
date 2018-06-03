@@ -1,8 +1,11 @@
 const { Observable } = require('rxjs/Rx')
 
 const {
+  flip,
   merge
 } = require('ramda')
+
+const mergeFlipped = flip(merge)
 
 const submitOrder = require('./submit-order')
 

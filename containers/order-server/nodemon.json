@@ -4,8 +4,8 @@
     "NODE_ENV": "development",
     "DEBUG": "alpinist:*",
     "MQTT_URL": "mqtt://178.62.246.62:1883",
-    "CEXIO_USER_ID": "",
-    "CEXIO_API_KEY": "",
-    "CEXIO_API_SECRET": ""
+    "CEXIO_USER_ID": "up111849658",
+    "CEXIO_API_KEY": "UFCPRP2OCrz29iU3j2iKZXCt3M",
+    "CEXIO_API_SECRET": "UsYdCQ8GVZpVarFAbcnPe3ytPo"
   }
 }

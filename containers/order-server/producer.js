@@ -13,8 +13,8 @@ const mock = _ => {
     broker: 'cexio',
     symbol: 'eth-usd',
     status: 'new',
-    side: 'buy',
-    price: 580,
+    side: 'sell',
+    price: 620,
     quantity: 0.05
   }
 }

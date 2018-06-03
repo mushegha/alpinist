@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:orders:cexio')
+
 const Channel = require('./lib/channel')
 
 const Processor = require('./lib/processor/cexio')
@@ -5,7 +7,9 @@ const Processor = require('./lib/processor/cexio')
 const getenv = require('getenv')
 
 const {
-  dissoc
+  tap,
+  dissoc,
+  propEq
 } = require('ramda')
 
 const creds = getenv.multi({
@@ -19,7 +23,8 @@ const processor = Processor(creds)
 const sink = Channel.Observer()
 
 const source = Channel.Observable('cexio')
-  .filter(o => o.status === 'new')
+  .filter(propEq('status', 'new'))
   .flatMap(processor)
+  .map(tap(x => debug(x.info)))
   .map(dissoc('info'))
   .subscribe(sink)

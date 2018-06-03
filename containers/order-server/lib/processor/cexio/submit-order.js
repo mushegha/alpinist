@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:orders:cexio')
+
 const {
   merge,
   compose,
@@ -27,17 +29,20 @@ const submitOrder = (creds, order) => {
         const quantity = result[`a:${S1}:cds`]
         const worth = result[`a:${S2}:cds`]
 
-        return merge(order, {
+        return {
+          status: 'closed',
           quantity: Number(quantity),
           price: worth / quantity,
-          info: message,
-        })
+          info: message
+        }
       })
   }
 
   return request(uri, params)
     .then(result => {
       if (result.error) {
+        debug('Rejected with error %s', result.error)
+
         return {
           status: 'rejected',
           info: result.error
@@ -46,7 +51,6 @@ const submitOrder = (creds, order) => {
 
       return resolve(result)
     })
-    .then(assoc('subject', order.subject))
     .then(assoc('ts', Date.now()))
 }
 
