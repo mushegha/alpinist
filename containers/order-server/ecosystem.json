@@ -1,7 +1,11 @@
 {
   "apps" : [{
-    "name"        : "order-processor",
-    "script"      : "./processor.js",
+    "name"        : "Bitfinex processor",
+    "script"      : "./processor-bitfinex.js",
+    "exec_mode"   : "cluster"
+  }, {
+    "name"        : "Cexio processor",
+    "script"      : "./processor-cexio.js",
     "exec_mode"   : "cluster"
   }]
 }

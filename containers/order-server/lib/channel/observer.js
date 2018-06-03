@@ -6,6 +6,7 @@ function OrdersChannelObserver () {
   const client = connect()
 
   const next = order => {
+    // console.log(order)
     debug('Received new order. Publishing...')
 
     const topic = `orders/${order.broker}`

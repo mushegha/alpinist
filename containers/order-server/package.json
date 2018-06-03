@@ -2,11 +2,11 @@
   "name": "@alpinist/order-server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "nodemon processor.js",
     "test": "ava"
   },
   "devDependencies": {
     "ava": "^0.25.0",
+    "delay": "^3.0.0",
     "nodemon": "^1.17.5"
   },
   "dependencies": {
