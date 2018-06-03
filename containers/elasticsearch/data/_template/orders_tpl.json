@@ -1,0 +1,43 @@
+{
+  "index_patterns": ["orders-*"],
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "order": {
+      "_source": {
+        "enabled": true
+      },
+     "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "subject": {
+          "type": "keyword"
+        },
+        "side": {
+          "type": "keyword"
+        },
+        "broker": {
+          "type": "keyword"
+        },
+        "symbol": {
+          "type": "keyword"
+        },
+        "price": {
+          "type": "double"
+        },
+        "status": {
+          "type": "keyword"
+        },
+        "quantity": {
+          "type": "double"
+        },
+        "ts": {
+          "type":   "date",
+          "format": "epoch_millis"
+        }
+      }
+    }
+  }
+}
