@@ -10,10 +10,10 @@ const mock = _ => {
     id,
     ts,
     subject: 'sub-' + ts,
-    broker: 'cexio',
+    broker: 'bitfinex',
     symbol: 'eth-usd',
     status: 'new',
-    side: 'sell',
+    side: 'buy',
     price: 620,
     quantity: 0.05
   }
