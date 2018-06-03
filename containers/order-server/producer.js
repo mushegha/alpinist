@@ -10,7 +10,7 @@ const mock = _ => {
     id,
     ts,
     subject: 'sub-' + ts,
-    broker: 'mock',
+    broker: 'cexio',
     symbol: 'eth-usd',
     status: 'new',
     side: 'buy',
@@ -23,6 +23,7 @@ const sink = Channel.Observer()
 
 Observable
   .timer(0, 1000)
+  .take(1)
   .map(mock)
   .subscribe(sink)
 
