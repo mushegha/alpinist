@@ -79,9 +79,11 @@ services:
     build: ./containers/order-server
     links:
       - mosquitto
+      - couchdb
     environment:
       - DEBUG=alpinist:*
       - MQTT_URL=mqtt://mosquitto:1883
+      - COUCHDB_URL=http://couchdb:5984
       - CEXIO_USER_ID=up111849658
       - CEXIO_API_KEY=UFCPRP2OCrz29iU3j2iKZXCt3M
       - CEXIO_API_SECRET=UsYdCQ8GVZpVarFAbcnPe3ytPo
