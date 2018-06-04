@@ -32,7 +32,7 @@ const submitOrder = (creds, order) => {
         return {
           status: 'closed',
           quantity: Number(quantity),
-          price: worth / quantity,
+          price: order.price,
           info: message
         }
       })

@@ -34,7 +34,8 @@ function fromOrder (order) {
   )
 
   const reject = compose(
-    err => subject.error(err)
+    res => subject.next(res),
+    assoc('status', 'rejected')
   )
 
   order.on('close', close)
