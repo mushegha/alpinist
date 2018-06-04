@@ -2,6 +2,7 @@
   el-table(
     v-if="dataset"
     :data="dataset"
+    :row-style="rowStyle"
     stripe)
 
     el-table-column(type="expand")
@@ -24,6 +25,18 @@
       prop="price"
       align="center"
       :sortable="true")
+
+      template(slot-scope="scope")
+        var {{ scope.row.price | toFixed }}
+
+    el-table-column(
+      label="Quantity"
+      prop="quantity"
+      align="center"
+      :sortable="true")
+
+      template(slot-scope="scope")
+        var {{ scope.row.quantity | toFixed }}
 
     el-table-column(
       label="Side"
@@ -79,9 +92,12 @@ const filters = {
   asStandardTime (time) {
     return formatDate(time, 'HH:mm:ss')
   },
+  toFixed (x) {
+    return Number(x).toFixed(2)
+  },
   truncate (str) {
-    return str.length > 16
-      ? str.slice(0, 8) + '…' + str.slice(-8)
+    return str.length > 12
+      ? str.slice(0, 6) + '…' + str.slice(-6)
       : str
   }
 }
@@ -101,6 +117,23 @@ const computed = {
       )
 
       return compile(this.dataset)
+    }
+  },
+  rowStyle () {
+    return x => {
+      const { status, side } = x.row
+
+      if (status === 'new') {
+        return 'background-color: rgba(230, 162, 60, 0.09);'
+      } else if (status === 'rejected') {
+        return 'background-color: rgba(245, 108, 108, 0.09);'
+      }
+
+      if (side === 'buy') {
+        return 'background-color: rgba(64, 158, 255, 0.09);'
+      }
+
+      return ''
     }
   }
 }
@@ -123,3 +156,13 @@ export default {
   methods
 }
 </script>
+
+<style>
+.bg-status-new {
+  background-color: #E6A23C;
+}
+
+.bg-status-rejected {
+  background-color: #FF0044;
+}
+</style>
