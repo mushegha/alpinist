@@ -8,6 +8,7 @@ const {
 } = require('bitfinex-api-node/lib/models')
 
 const {
+  merge,
   assoc,
   compose
 } = require('ramda')
@@ -15,6 +16,8 @@ const {
 const {
   renameKeys
 } = require('ramda-adjunct')
+
+const timestamp = x => assoc('ts', Date.now(), x)
 
 function fromOrder (order) {
   const subject = new Subject()
@@ -34,7 +37,10 @@ function fromOrder (order) {
   )
 
   const reject = compose(
-    err => subject.error(err)
+    res => subject.next(res),
+    assoc('status', 'rejected'),
+    timestamp,
+    merge(order)
   )
 
   order.on('close', close)

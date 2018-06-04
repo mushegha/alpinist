@@ -5,7 +5,9 @@ const PouchDB = require('pouchdb')
 const findPlugin = require('pouchdb-find')
 const upsertPlugin = require('pouchdb-upsert')
 
-const agentMethods = require('@alpinist/pouchdb-agent-methods')
+const connectPlugin = require('@alpinist/pouchdb-connect')
+
+const orderMethods = require('@alpinist/pouchdb-order-methods')
 
 const getenv = require('getenv')
 
@@ -22,14 +24,15 @@ const POUCHDB_URL = getenv('COUCHDB_URL', 'http://localhost:5984')
 PouchDB
   .plugin(findPlugin)
   .plugin(upsertPlugin)
-  .plugin(agentMethods)
+  .plugin(connectPlugin)
+  .plugin(orderMethods)
 
 /**
  * Store Constructor
  */
 
 function Store () {
-  const url = `${POUCHDB_URL}/agents`
+  const url = `${POUCHDB_URL}/orders`
 
   debug('Connecting to CouchDB at %s', url)
 

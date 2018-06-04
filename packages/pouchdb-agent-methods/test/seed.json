@@ -4,7 +4,7 @@
     "isActive": true,
     "ticker": {
       "broker": "bitfinex",
-      "symbol": "ethusd"
+      "symbol": "eth-usd"
     },
     "settings": {
       "priceThreshold": 5,
@@ -15,7 +15,7 @@
     "isActive": false,
     "ticker": {
       "broker": "cexio",
-      "symbol": "btcusd"
+      "symbol": "btc-usd"
     },
     "settings": {
       "priceThreshold": 20,

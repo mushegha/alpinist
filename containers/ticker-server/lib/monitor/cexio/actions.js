@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:tickers:cexio')
+
 const Axios = require('axios')
 
 const { recover } = require('./helpers')
@@ -24,6 +26,9 @@ const request = Axios.create({ baseURL })
  * Helpers
  */
 
+const report = err =>
+  debug('Error %s', err.message)
+
 const allFromRaw = compose(
   map(recover),
   prop('data')
@@ -40,6 +45,7 @@ function fetchAll (currencies = []) {
   return request(xPath)
     .then(res => res.data)
     .then(allFromRaw)
+    .catch(report)
 }
 
 /**
