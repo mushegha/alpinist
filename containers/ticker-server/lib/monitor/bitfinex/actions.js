@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:tickers:bitfinex')
+
 const Axios = require('axios')
 
 const {
@@ -30,6 +32,9 @@ const request = Axios.create({ baseURL })
  * Helpers
  */
 
+const report = err =>
+  debug('Error %s', err.message)
+
 const compileTarget = applySpec({
   url: always('/'),
   params: {
@@ -52,6 +57,7 @@ function fetchAll (symbols) {
   return request(target)
     .then(res => res.data)
     .then(map(recover))
+    .catch(report)
 }
 
 /**
