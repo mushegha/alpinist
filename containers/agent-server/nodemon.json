@@ -8,8 +8,8 @@
   "env": {
     "NODE_ENV": "development",
     "DEBUG": "alpinist:*",
-    "ZOOKEEPER_HOST": "178.62.246.62",
-    "ZOOKEEPER_PORT": "2181"
+    "MQTT_URL": "mqtt://178.62.246.62:1883",
+    "COUCHDB_URL": "http://178.62.246.62:5984"
   },
   "ext": "js,json"
 }

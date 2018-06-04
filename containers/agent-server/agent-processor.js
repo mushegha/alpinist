@@ -10,17 +10,6 @@ const AgentStore = require('./lib/agent-store')
 const OrderStore = require('./lib/order-store')
 
 /**
- * Settings
- */
-
-const ZOOKEEPER_SETTINGS = getenv.multi({
-  host: ['ZOOKEEPER_HOST', 'localhost'],
-  port: ['ZOOKEEPER_PORT', 2182, 'int']
-})
-
-const ZOOKEEPER_URL = `${ZOOKEEPER_SETTINGS.host}:${ZOOKEEPER_SETTINGS.port}`
-
-/**
  * Init
  */
 
