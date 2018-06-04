@@ -17,7 +17,7 @@ const Store = require('./lib/store')
 
 const isNew = propEq('status', 'new')
 
-const isProcessed = complement(isNew)
+const isClosed = propEq('status', 'closed')
 
 /**
  *
@@ -34,13 +34,13 @@ const store = new Store()
  */
 
 source
-  .filter(isProcessed)
+  .filter(isClosed)
   .subscribe(order => {
-    debug('Status update for %s', order.id)
+    // debug('Status update for %s', order.id)
 
     store
       .putOrder(order)
-      .then(_ => debug('Updated %s to %s', order.id, order.status))
+      // .then(_ => debug('Updated %s to %s', order.id, order.status))
   })
 
 /**
@@ -50,5 +50,15 @@ source
 store
   .source()
   .filter(isNew)
-  .map(tap(x => debug('Received %s', x.id)))
+  // .map(tap(x => debug('Received %s', x.id)))
   .subscribe(sink)
+
+/**
+ *
+ */
+
+store
+  .source()
+  .subscribe(order => {
+    debug('Order snapshot received: %s %s', order.side, order.status)
+  })
