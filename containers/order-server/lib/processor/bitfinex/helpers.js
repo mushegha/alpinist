@@ -59,8 +59,8 @@ function convert (data) {
   const price = data.price
 
   const amount = data.side === 'sell'
-    ? data.quantity
-    : data.quantity * -1
+    ? data.quantity * -1
+    : data.quantity
 
   const type = 'EXCHANGE MARKET'
 
