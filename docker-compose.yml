@@ -2,166 +2,113 @@ version: '3'
 
 services:
 
-  # Front
-
-  dashboard:
-    build: ./containers/dashboard
-    volumes:
-      - ./containers/dashboard/src:/usr/src/app/src
-    ports:
-      - '3000:3000'
-    links:
-      - nginx
-    command: npm run dev
-
-
-  # Reverse proxy
-
-  nginx:
-    restart: always
-    build: ./containers/nginx
-    volumes:
-      - ./containers/nginx/www:/var/www
-      - ./containers/nginx/conf.d:/etc/nginx/conf.d
-      - ./containers/nginx/.htpasswd:/etc/nginx/.htpasswd
-    ports:
-      - '80:80'
-    links:
-      - auth
-      - tickers
-      - traders
-      - records
-      - wallets
-
-  # API
-
-  auth:
-    build: ./containers/auth
-    volumes:
-      - ./containers/auth/lib:/usr/src/app/lib
-    links:
-      - redis
-    dns:
-      - 192.168.0.1
-      - 8.8.8.8
-    environment:
-      JWT_SECRET: 'nexus'
-      AUTH_PASSPHRASE: 'nalpinist'
-      NODE_PORT: 80
-      DEBUG: 'alp:*'
-      DEBUG_COLORS: 'true'
-      DEBUG_HIDE_DATE: 'false'
-    command: npm run dev
-
-  tickers:
-    build: ./containers/ticker
-    volumes:
-      - ./containers/ticker/lib:/usr/src/app/lib
-    links:
-      - redis
-    dns:
-      - 192.168.0.1
-      - 8.8.8.8
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
-      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
-      NODE_PORT: 80
-      TICKER_SYMBOLS: 'btcusd,ethusd,neousd,xrpusd,bchusd,etcusd,ltcusd'
-      TICKER_SLEEP: 6000
-      DEBUG: 'alp:*'
-      DEBUG_COLORS: 'true'
-      DEBUG_HIDE_DATE: 'false'
-    command: npm run dev
-
-  tickers:
-    build: ./containers/ticker
-    volumes:
-      - ./containers/ticker/lib:/usr/src/app/lib
-    links:
-      - redis
-    dns:
-      - 192.168.0.1
-      - 8.8.8.8
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
-      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
-      NODE_PORT: 80
-      TICKER_SYMBOLS: 'btcusd,ethusd,neousd,xrpusd,bchusd,etcusd,ltcusd'
-      TICKER_SLEEP: 6000
-      DEBUG: 'alp:*'
-      DEBUG_COLORS: 'true'
-      DEBUG_HIDE_DATE: 'false'
-    command: npm run dev
-
-  traders:
-    build: ./containers/trader
-    volumes:
-      - ./containers/trader/lib:/usr/src/app/lib
-    links:
-      - redis
-      - mongodb
-      - records
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      NODE_PORT: 80
-      DEBUG: 'alp:*'
-      DEBUG_COLORS: 'true'
-      DEBUG_HIDE_DATE: 'false'
-    command: npm run dev
-
-  records:
-    build: ./containers/record
-    volumes:
-      - ./containers/record/lib:/usr/src/app/lib
-    links:
-      - mongodb
-    dns:
-      - 192.168.0.1
-      - 8.8.8.8
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
-      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
-      NODE_PORT: 80
-      DEBUG: 'alp:*'
-      DEBUG_COLORS: 'true'
-      DEBUG_HIDE_DATE: 'false'
-    command: npm run dev
-
-  wallets:
-    build: ./containers/wallet
-    volumes:
-      - ./containers/wallet/lib:/usr/src/app/lib
-    dns:
-      - 192.168.0.1
-      - 8.8.8.8
-    environment:
-      BITFINEX_KEY: 'GSzq5kVQY1rOvQoMb3ASADhgvX23JI6Q6x0JW2KTC6P'
-      BITFINEX_SECRET: 'vLgU1HuVbxF10qhkHhaheKc1e1G3ccLEn0IWig089e2'
-      NODE_PORT: 80
-      DEBUG: 'alp:*'
-      DEBUG_COLORS: 'true'
-      DEBUG_HIDE_DATE: 'false'
-    command: npm run dev
-
-  # Data
-
-  mongodb:
-    image: mongo:jessie
-    ports:
-      - '27017:27017'
+  # Services
 
   redis:
-    build: ./containers/redis
+    image: redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
+
+  couchdb:
+    image: "apache/couchdb"
+    ports:
+      - "5984:5984"
+
+  lenses:
+    image: landoop/kafka-lenses-dev
+    links:
+      - mosquitto
+      - elasticsearch
+      - redis
+    ports:
+      - "3030:3030"
+      - "9092:9092"
+      - "2181:2181"
+      - "8081:8081"
+      - "9581:9581"
+      - "9582:9582"
+      - "9584:9584"
+      - "9585:9585"
+    environment:
+      - SAMPLEDATA=0
+      - DISABLE=azure-documentdb,coap,druid,ftp,hazelcast,hbase,influxdb,jms,kudu,rethink,voltdb,yahoo,hdfs,jdbc,twitter
+    volumes:
+      - ./containers/lenses/license.json:/license.json
+
+  elasticsearch:
+    build:
+      context: containers/elasticsearch/
+    volumes:
+      - ./containers/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+  kibana:
+    build:
+      context: containers/kibana/
+    volumes:
+      - ./containers/kibana/config/:/usr/share/kibana/config:ro
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  mosquitto:
+    image: toke/mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+  # Servers
+
+  ticker-server:
+    build: ./containers/ticker-server
+    links:
+      - mosquitto
+      - redis
+    environment:
+      - DEBUG=alpinist:*
+      - MQTT_URL=mqtt://mosquitto:1883
+      - REDIS_URL=redis://redis:6379
+    command: pm2-runtime ecosystem.json
+
+  order-server:
+    build: ./containers/order-server
+    links:
+      - mosquitto
+      - couchdb
+    environment:
+      - DEBUG=alpinist:*
+      - MQTT_URL=mqtt://mosquitto:1883
+      - COUCHDB_URL=http://couchdb:5984
+      - CEXIO_USER_ID=up111849658
+      - CEXIO_API_KEY=UFCPRP2OCrz29iU3j2iKZXCt3M
+      - CEXIO_API_SECRET=UsYdCQ8GVZpVarFAbcnPe3ytPo
+      - BITFINEX_API_KEY=rzX7qTepd0xsWAPYZti77k31UKEUaSHo88K6a8kn80L
+      - BITFINEX_API_SECRET=i6wMBI8sWZB1FOTtTk8KIVnddbkNNSBqudmMEOAK1ve
+    command: pm2-runtime ecosystem.json
+
+
+  # Client
+
+  # web-client:
+  #   build: ./containers/web-client
+  #   volumes:
+  #     - www-volume:/usr/src/dist
+
+  # nginx:
+  #   restart: always
+  #   build: ./containers/nginx
+  #   links:
+  #     - ticker-server
+  #   volumes:
+  #     - ./containers/nginx/conf.d:/etc/nginx/conf.d
+  #     - www-volume:/var/www
+  #   ports:
+  #     - "80:80"
+
+volumes:
+  www-volume: {}

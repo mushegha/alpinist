@@ -1,0 +1,23 @@
+[
+  {
+    "_id"      : "o1",
+    "agent"    : "a1",
+    "broker"   : "bitfinex",
+    "symbol"   : "ethusd",
+    "kind"     : "market",
+    "status"   : "closed",
+    "side"     : "sell",
+    "price"    : 500,
+    "quantity" : 0.25
+  }, {
+    "_id"      : "o2",
+    "agent"    : "a1",
+    "broker"   : "bitfinex",
+    "symbol"   : "ethusd",
+    "kind"     : "market",
+    "status"   : "new",
+    "side"     : "buy",
+    "price"    : 480,
+    "quantity" : 0.25
+  }
+]

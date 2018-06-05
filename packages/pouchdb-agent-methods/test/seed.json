@@ -1,0 +1,25 @@
+[
+  {
+    "id": "a1",
+    "isActive": true,
+    "ticker": {
+      "broker": "bitfinex",
+      "symbol": "eth-usd"
+    },
+    "settings": {
+      "priceThreshold": 5,
+      "buyIn": 100
+    }
+  }, {
+    "id": "a2",
+    "isActive": false,
+    "ticker": {
+      "broker": "cexio",
+      "symbol": "btc-usd"
+    },
+    "settings": {
+      "priceThreshold": 20,
+      "buyIn": 1000
+    }
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "verbose": true,
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "alpinist:*",
+    "MQTT_URL": "mqtt://178.62.246.62:1883",
+    "COUCHDB_URL": "http://178.62.246.62:5984",
+    "CEXIO_USER_ID": "up111849658",
+    "CEXIO_API_KEY": "UFCPRP2OCrz29iU3j2iKZXCt3M",
+    "CEXIO_API_SECRET": "UsYdCQ8GVZpVarFAbcnPe3ytPo",
+    "BITFINEX_API_KEY": "rzX7qTepd0xsWAPYZti77k31UKEUaSHo88K6a8kn80L",
+    "BITFINEX_API_SECRET": "i6wMBI8sWZB1FOTtTk8KIVnddbkNNSBqudmMEOAK1ve"
+  }
+}

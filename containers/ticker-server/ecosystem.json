@@ -1,0 +1,7 @@
+{
+  "apps" : [{
+    "name"        : "ticker-producer",
+    "script"      : "./producer.js",
+    "exec_mode"   : "cluster"
+  }]
+}

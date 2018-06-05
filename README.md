@@ -16,4 +16,10 @@ Run from root directory
 docker-compose up
 ```
 
-NOTE: You should create a MongoDB database `alpinist` manually
+### Development
+
+Prerequisites
+
+- Node.js
+
+Run each service from their container directory

@@ -1,0 +1,49 @@
+{
+  "type": "record",
+  "name": "tick",
+  "namespace": "com.alpinist",
+  "doc": "Schema for ticker events",
+  "fields": [
+    {
+      "name": "broker",
+      "type": "string",
+      "doc": "Broker identifier"
+    },
+    {
+      "name": "symbol",
+      "type": "string",
+      "doc": "Identifier for currency pair"
+    },
+    {
+      "name": "bid_price",
+      "type": "double",
+      "doc": "Best (highest) buying price"
+    },
+    {
+      "name": "bid_quantity",
+      "type": [
+        "null",
+        "double"
+      ],
+      "default": null
+    },
+    {
+      "name": "ask_price",
+      "type": "double",
+      "doc": "Best (highest) buying price"
+    },
+    {
+      "name": "ask_quantity",
+      "type": [
+        "null",
+        "double"
+      ],
+      "default": null
+    },
+    {
+      "name": "ts",
+      "type": "long",
+      "doc": "Epoch time"
+    }
+  ]
+}

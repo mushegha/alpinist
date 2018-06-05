@@ -1,7 +1,11 @@
 {
-  "lerna": "2.9.0",
+  "lerna": "2.11.0",
   "packages": [
-    "packages/*"
+    "packages/*",
+    "containers/web-client",
+    "containers/ticker-server",
+    "containers/agent-server",
+    "containers/order-server"
   ],
   "version": "independent"
 }
