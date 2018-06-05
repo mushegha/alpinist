@@ -27,7 +27,7 @@
       :sortable="true")
 
       template(slot-scope="scope")
-        var {{ scope.row.price | toFixed }}
+        var {{ scope.row.price | asPrice }}
 
     el-table-column(
       label="Quantity"
@@ -36,7 +36,7 @@
       :sortable="true")
 
       template(slot-scope="scope")
-        var {{ scope.row.quantity | toFixed }}
+        var {{ scope.row.quantity | asQuantity }}
 
     el-table-column(
       label="Side"
@@ -92,8 +92,11 @@ const filters = {
   asStandardTime (time) {
     return formatDate(time, 'HH:mm:ss')
   },
-  toFixed (x) {
+  asPrice (x) {
     return Number(x).toFixed(2)
+  },
+  asQuantity (x) {
+    return Number(x).toFixed(4)
   },
   truncate (str) {
     return str.length > 12
