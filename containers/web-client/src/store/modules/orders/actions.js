@@ -1,6 +1,6 @@
 import db from './db'
 
-const remoteUrl = 'http://178.62.246.62:5984/orders'
+const url = 'http://ec2-13-59-155-218.us-east-2.compute.amazonaws.com:5984/orders'
 
 /**
  * Actions
@@ -14,7 +14,7 @@ function sync ({ commit }, opts = {}) {
   }
 
   const sync = _ => {
-    db.sync(remoteUrl, options)
+    db.sync(url, options)
   }
 
   const subscribe = _ => {
@@ -23,7 +23,7 @@ function sync ({ commit }, opts = {}) {
   }
 
   return db
-    .replicate.from(remoteUrl)
+    .replicate.from(url)
     .then(sync)
     .then(subscribe)
 }

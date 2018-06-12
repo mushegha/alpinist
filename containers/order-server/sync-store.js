@@ -40,7 +40,7 @@ source
 
     store
       .putOrder(order)
-      // .then(_ => debug('Updated %s to %s', order.id, order.status))
+      .then(_ => debug('Updated %s to %s', order.id, order.status))
   })
 
 /**
