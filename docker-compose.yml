@@ -94,21 +94,21 @@ services:
 
   # Client
 
-  # web-client:
-  #   build: ./containers/web-client
-  #   volumes:
-  #     - www-volume:/usr/src/dist
+  web-client:
+    build: ./containers/web-client
+    volumes:
+      - www-volume:/usr/src/dist
 
-  # nginx:
-  #   restart: always
-  #   build: ./containers/nginx
-  #   links:
-  #     - ticker-server
-  #   volumes:
-  #     - ./containers/nginx/conf.d:/etc/nginx/conf.d
-  #     - www-volume:/var/www
-  #   ports:
-  #     - "80:80"
+  nginx:
+    restart: always
+    build: ./containers/nginx
+    links:
+      - ticker-server
+    volumes:
+      - ./containers/nginx/conf.d:/etc/nginx/conf.d
+      - www-volume:/var/www
+    ports:
+      - "80:80"
 
 volumes:
   www-volume: {}
