@@ -17,16 +17,20 @@ const H = require('./helpers')
 function evaluate (agent, ticker, orders) {
   const updated = compose(
     commitDrop(agent.settings, ticker.bid_price),
-    commitFill(agent.settings, ticker.ask_price),
+    commitFill(agent.settings, ticker.ask_price)
   )
 
   const toSell = compose(
     assoc('sell_price', ticker.bid_price),
+    assoc('sell_status', 'new'),
+    x => assoc('sell_time', Date.now(), x),
     assoc('side', 'sell')
   )
 
   const toBuy = compose(
     assoc('buy_price', ticker.ask_price),
+    assoc('buy_status', 'new'),
+    x => assoc('buy_time', Date.now(), x),
     assoc('side', 'buy')
   )
 
