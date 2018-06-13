@@ -33,7 +33,7 @@ function put ({ commit }, payload) {
 }
 
 function sell (ctx, payload) {
-  let price
+  let sell_price
 
   try {
     const { tickers } = ctx.rootState
@@ -41,17 +41,17 @@ function sell (ctx, payload) {
 
     const tick = tickers[`${broker}-${symbol}`]
 
-    price = tick.bid_price
+    sell_price = tick.bid_price
   } catch (err) {
-    price = payload.price
+    sell_price = payload.sell_price
   }
 
   const params = {
     id: payload.id,
-    price,
     side: 'sell',
-    status: 'new',
-    time: Date.now()
+    sell_price,
+    sell_status: 'new',
+    sell_time: Date.now()
   }
 
   return db

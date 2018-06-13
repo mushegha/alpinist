@@ -21,15 +21,6 @@
           var {{ scope.row.id | truncate }}
 
     el-table-column(
-      label="Price"
-      prop="price"
-      align="center"
-      :sortable="true")
-
-      template(slot-scope="scope")
-        var {{ scope.row.price | asPrice }}
-
-    el-table-column(
       label="Quantity"
       prop="quantity"
       align="center"
@@ -37,6 +28,25 @@
 
       template(slot-scope="scope")
         var {{ scope.row.quantity | asQuantity }}
+
+    el-table-column(
+      label="Buy Price"
+      prop="buy_price"
+      align="center"
+      :sortable="true")
+
+      template(slot-scope="scope")
+        var {{ scope.row.buy_price | asPrice }}
+
+    el-table-column(
+      label="Sell Price"
+      prop="sell_price"
+      align="center"
+      :sortable="true")
+
+      template(slot-scope="scope")
+        var(v-if="scope.row.sell_price")
+          | {{ scope.row.sell_price | asPrice }}
 
     el-table-column(
       label="Side"
@@ -152,7 +162,7 @@ const methods = {
 }
 
 export default {
-  name: 'agent-table',
+  name: 'slot-table',
   props,
   computed,
   filters,
