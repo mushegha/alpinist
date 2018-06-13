@@ -2,22 +2,22 @@ import test from 'ava'
 
 import H from '../lib/helpers'
 
-const A = { id: 'a', price: 100 }
-const B = { id: 'b', price: 200 }
-const C = { id: 'c', price: 300 }
+const A = { id: 'a', buy_price: 100 }
+const B = { id: 'b', buy_price: 200 }
+const C = { id: 'c', buy_price: 300 }
 
 const SLOTS = [ B, A, C ]
 
 test('add', t => {
   const { add } = H
 
-  const slots1 = add({ price: 200 }, [])
-  const slots2 = add({ price: 100 }, slots1)
-  const slots3 = add({ price: 300 }, slots2)
+  const slots1 = add({ buy_price: 200 }, [])
+  const slots2 = add({ buy_price: 100 }, slots1)
+  const slots3 = add({ buy_price: 300 }, slots2)
 
   const [ A, B, C ] = slots3
 
-  t.is(A.price, 100)
+  t.is(A.buy_price, 100)
 })
 
 test('remove', t => {

@@ -21,12 +21,12 @@ function evaluate (agent, ticker, orders) {
   )
 
   const toSell = compose(
-    assoc('price', ticker.bid_price),
+    assoc('sell_price', ticker.bid_price),
     assoc('side', 'sell')
   )
 
   const toBuy = compose(
-    assoc('price', ticker.ask_price),
+    assoc('buy_price', ticker.ask_price),
     assoc('side', 'buy')
   )
 

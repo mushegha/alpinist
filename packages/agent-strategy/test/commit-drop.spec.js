@@ -3,9 +3,9 @@ import test from 'ava'
 import commitDrop from '../lib/commit-drop'
 
 const SLOTS = [
-  { id: 'a', price: 99 },
-  { id: 'b', price: 105 },
-  { id: 'c', price: 110 },
+  { id: 'a', buy_price: 99 },
+  { id: 'b', buy_price: 105 },
+  { id: 'c', buy_price: 110 },
 ]
 
 const commit = commitDrop({

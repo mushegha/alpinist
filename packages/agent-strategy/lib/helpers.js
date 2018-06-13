@@ -26,12 +26,12 @@ const { inRange } = require('ramda-adjunct')
 
 const appendTo = flip(append)
 
-const propPrice = prop('price')
+const propPrice = prop('buy_price')
 
 const sortByPrice = sortBy(propPrice)
 
 const hasPriceInRange = curryN(3,
-  (min, max, { price }) => inRange(min, max, price)
+  (min, max, { buy_price }) => inRange(min, max, buy_price)
 )
 
 const diff = differenceWith(eqProps('id'))
@@ -40,21 +40,21 @@ const diff = differenceWith(eqProps('id'))
  * Add a slot to list
  *
  * @param {Object} slot
- * @param {number} slot.price - Price mark
+ * @param {number} slot.buy_price - Price mark
  * @param {number} slot.quantity - Quantity
  * @param {Array}  slots
  *
  * @returns {Array} - Slots
  */
 
-function add ({ price, quantity }, slots) {
+function add ({ buy_price, quantity }, slots) {
   const add = compose(
     sortByPrice,
     appendTo(slots)
   )
 
   const slot = {
-    price,
+    buy_price,
     quantity
   }
 
@@ -109,7 +109,7 @@ function rangeByPrice (min, max, slots) {
  */
 
 function minByPrice (slots) {
-  return reduce(minBy(propPrice), { price: Infinity }, slots)
+  return reduce(minBy(propPrice), { buy_price: Infinity }, slots)
 }
 
 /**
@@ -117,7 +117,7 @@ function minByPrice (slots) {
  */
 
 function maxByPrice (slots) {
-  return reduce(maxBy(propPrice), { price: 0 }, slots)
+  return reduce(maxBy(propPrice), { buy_price: 0 }, slots)
 }
 
 /**

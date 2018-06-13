@@ -28,11 +28,11 @@ const ticker = {
 const orders = [
   {
     id: 'o1',
-    price: 100,
+    buy_price: 100,
     quantity: 1
   }, {
     id: 'o2',
-    price: 105,
+    buy_price: 105,
     quantity: 1
   }
 ]
@@ -42,9 +42,7 @@ const evaluate = strategy(agent, ticker)
 test('empty', t => {
   const [ A ] = evaluate([])
 
-  console.log(A)
-
-  t.pass()
+  t.is(A.buy_price, 112.5)
 })
 
 test('full', t => {
@@ -52,8 +50,8 @@ test('full', t => {
 
   t.is(A.id, 'o1')
   t.is(A.side, 'sell')
-  t.is(A.price, ticker.bid_price)
+  t.is(A.sell_price, ticker.bid_price)
 
   t.is(C.side, 'buy')
-  t.is(C.price, ticker.ask_price)
+  t.is(C.buy_price, ticker.ask_price)
 })
