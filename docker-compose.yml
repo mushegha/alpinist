@@ -14,53 +14,54 @@ services:
     ports:
       - "5984:5984"
 
-  lenses:
-    image: landoop/kafka-lenses-dev
-    links:
-      - mosquitto
-      - elasticsearch
-      - redis
-    ports:
-      - "3030:3030"
-      - "9092:9092"
-      - "2181:2181"
-      - "8081:8081"
-      - "9581:9581"
-      - "9582:9582"
-      - "9584:9584"
-      - "9585:9585"
-    environment:
-      - SAMPLEDATA=0
-      - DISABLE=azure-documentdb,coap,druid,ftp,hazelcast,hbase,influxdb,jms,kudu,rethink,voltdb,yahoo,hdfs,jdbc,twitter
-    volumes:
-      - ./containers/lenses/license.json:/license.json
-
-  elasticsearch:
-    build:
-      context: containers/elasticsearch/
-    volumes:
-      - ./containers/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-
-  kibana:
-    build:
-      context: containers/kibana/
-    volumes:
-      - ./containers/kibana/config/:/usr/share/kibana/config:ro
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
+  # lenses:
+  #   image: landoop/kafka-lenses-dev
+  #   links:
+  #     - mosquitto
+  #     - elasticsearch
+  #     - redis
+  #   ports:
+  #     - "3030:3030"
+  #     - "9092:9092"
+  #     - "2181:2181"
+  #     - "8081:8081"
+  #     - "9581:9581"
+  #     - "9582:9582"
+  #     - "9584:9584"
+  #     - "9585:9585"
+  #   environment:
+  #     - SAMPLEDATA=0
+  #     - DISABLE=azure-documentdb,coap,druid,ftp,hazelcast,hbase,influxdb,jms,kudu,rethink,voltdb,yahoo,hdfs,jdbc,twitter
+  #   volumes:
+  #     - ./containers/lenses/license.json:/license.json
+  #
+  # elasticsearch:
+  #   build:
+  #     context: containers/elasticsearch/
+  #   volumes:
+  #     - ./containers/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
+  #   environment:
+  #     ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+  #
+  # kibana:
+  #   build:
+  #     context: containers/kibana/
+  #   volumes:
+  #     - ./containers/kibana/config/:/usr/share/kibana/config:ro
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
 
   mosquitto:
     image: toke/mosquitto
     ports:
       - "1883:1883"
       - "9001:9001"
+      - "8080:9001"
 
   # Servers
 
@@ -94,21 +95,21 @@ services:
 
   # Client
 
-  # web-client:
-  #   build: ./containers/web-client
-  #   volumes:
-  #     - www-volume:/usr/src/dist
+  web-client:
+    build: ./containers/web-client
+    volumes:
+      - www-volume:/usr/src/dist
 
-  # nginx:
-  #   restart: always
-  #   build: ./containers/nginx
-  #   links:
-  #     - ticker-server
-  #   volumes:
-  #     - ./containers/nginx/conf.d:/etc/nginx/conf.d
-  #     - www-volume:/var/www
-  #   ports:
-  #     - "80:80"
+  nginx:
+    restart: always
+    build: ./containers/nginx
+    links:
+      - ticker-server
+    volumes:
+      - ./containers/nginx/conf.d:/etc/nginx/conf.d
+      - www-volume:/var/www
+    ports:
+      - "80:80"
 
 volumes:
   www-volume: {}

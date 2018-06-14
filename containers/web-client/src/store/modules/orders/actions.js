@@ -1,6 +1,6 @@
 import db from './db'
 
-const remoteUrl = 'http://178.62.246.62:5984/orders'
+const url = 'http://ec2-13-59-155-218.us-east-2.compute.amazonaws.com:5984/orders'
 
 /**
  * Actions
@@ -14,7 +14,7 @@ function sync ({ commit }, opts = {}) {
   }
 
   const sync = _ => {
-    db.sync(remoteUrl, options)
+    db.sync(url, options)
   }
 
   const subscribe = _ => {
@@ -23,7 +23,7 @@ function sync ({ commit }, opts = {}) {
   }
 
   return db
-    .replicate.from(remoteUrl)
+    .replicate.from(url)
     .then(sync)
     .then(subscribe)
 }
@@ -33,7 +33,7 @@ function put ({ commit }, payload) {
 }
 
 function sell (ctx, payload) {
-  let price
+  let sell_price
 
   try {
     const { tickers } = ctx.rootState
@@ -41,17 +41,17 @@ function sell (ctx, payload) {
 
     const tick = tickers[`${broker}-${symbol}`]
 
-    price = tick.bid_price
+    sell_price = tick.bid_price
   } catch (err) {
-    price = payload.price
+    sell_price = payload.sell_price
   }
 
   const params = {
     id: payload.id,
-    price,
     side: 'sell',
-    status: 'new',
-    time: Date.now()
+    sell_price,
+    sell_status: 'new',
+    sell_time: Date.now()
   }
 
   return db

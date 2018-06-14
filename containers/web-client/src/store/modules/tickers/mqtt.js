@@ -3,7 +3,7 @@ import mqtt from 'mqtt'
 import { Observable } from 'rxjs/Rx'
 
 function source () {
-  const client = mqtt.connect('mqtt://178.62.246.62:9001')
+  const client = mqtt.connect('mqtt://ec2-13-59-155-218.us-east-2.compute.amazonaws.com:8080')
 
   client.on('connect', function () {
     client.subscribe('tickers/+')

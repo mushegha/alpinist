@@ -23,7 +23,7 @@ const Z = require('./helpers')
  * @returm {Maybe} - Next quantity
  */
 
-function commit (opts, price, slots = []) {
+function commit (opts, buy_price, slots = []) {
   const {
     priceThreshold,
     buyIn,
@@ -31,11 +31,11 @@ function commit (opts, price, slots = []) {
     buyInNextDown: { k: downK, b: downB }
   } = opts
 
-  const worthOf = ({ price, quantity }) => price * quantity
+  const worthOf = ({ buy_price, quantity }) => buy_price * quantity
 
   const fromWorth = worth => ({
-    price,
-    quantity: worth / price
+    buy_price,
+    quantity: worth / buy_price
   })
 
   const push = worth => Z.add(fromWorth(worth), slots)
@@ -49,13 +49,13 @@ function commit (opts, price, slots = []) {
   }
 
   // when goes up
-  if (price >= header.price + priceThreshold) {
+  if (buy_price >= header.buy_price + priceThreshold) {
     const worth = worthOf(header) * upK + upB
     return push(worth)
   }
 
   // when goes down
-  if (price <= footer.price - priceThreshold) {
+  if (buy_price <= footer.buy_price - priceThreshold) {
     const worth = worthOf(footer) * downK + downB
     return push(worth)
   }

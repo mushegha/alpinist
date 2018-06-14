@@ -21,15 +21,6 @@
           var {{ scope.row.id | truncate }}
 
     el-table-column(
-      label="Price"
-      prop="price"
-      align="center"
-      :sortable="true")
-
-      template(slot-scope="scope")
-        var {{ scope.row.price | asPrice }}
-
-    el-table-column(
       label="Quantity"
       prop="quantity"
       align="center"
@@ -39,14 +30,33 @@
         var {{ scope.row.quantity | asQuantity }}
 
     el-table-column(
+      label="Buy Price"
+      prop="buy_price"
+      align="center"
+      :sortable="true")
+
+      template(slot-scope="scope")
+        var {{ scope.row.buy_price | asPrice }}
+
+    el-table-column(
+      label="Sell Price"
+      prop="sell_price"
+      align="center"
+      :sortable="true")
+
+      template(slot-scope="scope")
+        var(v-if="scope.row.sell_price")
+          | {{ scope.row.sell_price | asPrice }}
+
+    el-table-column(
       label="Side"
       prop="side"
       :filters="filtersFor('side')"
       :filter-method="filterHandler")
 
-    el-table-column(
-      label="Status"
-      prop="status")
+    el-table-column(label="Profit")
+      template(slot-scope="scope")
+        | {{ profitOf(scope.row) }}
 
     el-table-column(
       label="Operations"
@@ -126,17 +136,34 @@ const computed = {
     return x => {
       const { status, side } = x.row
 
+      /**
       if (status === 'new') {
         return 'background-color: rgba(230, 162, 60, 0.09);'
       } else if (status === 'rejected') {
         return 'background-color: rgba(245, 108, 108, 0.09);'
       }
+      */
 
       if (side === 'buy') {
         return 'background-color: rgba(64, 158, 255, 0.09);'
       }
 
       return ''
+    }
+  },
+  profitOf () {
+    return x => {
+      if (x.side === 'buy') return ''
+
+      const {
+        quantity,
+        buy_price,
+        sell_price
+      } = x
+
+      const profit = quantity * (sell_price - buy_price)
+
+      return profit.toFixed(2)
     }
   }
 }
@@ -152,7 +179,7 @@ const methods = {
 }
 
 export default {
-  name: 'agent-table',
+  name: 'slot-table',
   props,
   computed,
   filters,
