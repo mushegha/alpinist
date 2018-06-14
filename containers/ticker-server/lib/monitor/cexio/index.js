@@ -1,5 +1,7 @@
 const { Observable } = require('rxjs/Rx')
 
+const { isNotNil } = require('ramda-adjunct')
+
 const { fetchAll } = require('./actions')
 
 /**
@@ -31,6 +33,7 @@ function Monitor (opts = {}) {
   const poll = () =>
     Observable
       .fromPromise(exec())
+      .filter(isNotNil)
       .flatMap(Observable.from)
 
   return Observable

@@ -26,8 +26,9 @@ const request = Axios.create({ baseURL })
  * Helpers
  */
 
-const report = err =>
+const report = err => {
   debug('Error %s', err.message)
+}
 
 const allFromRaw = compose(
   map(recover),

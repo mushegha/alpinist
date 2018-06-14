@@ -32,8 +32,10 @@ const request = Axios.create({ baseURL })
  * Helpers
  */
 
-const report = err =>
+const report = err => {
   debug('Error %s', err.message)
+  debug('Error stack %O', err.stack)
+}
 
 const compileTarget = applySpec({
   url: always('/'),
