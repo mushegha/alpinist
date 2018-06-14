@@ -54,9 +54,9 @@
       :filters="filtersFor('side')"
       :filter-method="filterHandler")
 
-    el-table-column(
-      label="Status"
-      prop="status")
+    el-table-column(label="Profit")
+      template(slot-scope="scope")
+        | {{ profitOf(scope.row) }}
 
     el-table-column(
       label="Operations"
@@ -136,17 +136,34 @@ const computed = {
     return x => {
       const { status, side } = x.row
 
+      /**
       if (status === 'new') {
         return 'background-color: rgba(230, 162, 60, 0.09);'
       } else if (status === 'rejected') {
         return 'background-color: rgba(245, 108, 108, 0.09);'
       }
+      */
 
       if (side === 'buy') {
         return 'background-color: rgba(64, 158, 255, 0.09);'
       }
 
       return ''
+    }
+  },
+  profitOf () {
+    return x => {
+      if (x.side === 'buy') return ''
+
+      const {
+        quantity,
+        buy_price,
+        sell_price
+      } = x
+
+      const profit = quantity * (sell_price - buy_price)
+
+      return profit.toFixed(2)
     }
   }
 }
