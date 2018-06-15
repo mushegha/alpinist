@@ -93,6 +93,18 @@ services:
     command: pm2-runtime ecosystem.json
 
 
+  agent-server:
+    build: ./containers/agent-server
+    links:
+      - mosquitto
+      - couchdb
+    environment:
+      - DEBUG=alpinist:*
+      - MQTT_URL=mqtt://mosquitto:1883
+      - COUCHDB_URL=http://couchdb:5984
+    command: pm2-runtime ecosystem.json
+
+
   # Client
 
   web-client:
