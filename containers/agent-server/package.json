@@ -6,6 +6,7 @@
     "dev": "nodemon agent-processor.js"
   },
   "dependencies": {
+    "@alpinist/pouchdb-connect": "*",
     "@alpinist/pouchdb-agent-methods": "*",
     "@alpinist/pouchdb-order-methods": "*",
     "debug": "^3.1.0",

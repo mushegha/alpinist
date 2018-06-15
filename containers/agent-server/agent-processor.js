@@ -2,19 +2,18 @@ const debug = require('debug')('alpinist:agents')
 
 const getenv = require('getenv')
 
-const { TickersObservable } = require('./lib/channel')
-
 const Strategy = require('./lib/strategy')
 
-const AgentStore = require('./lib/agent-store')
-const OrderStore = require('./lib/order-store')
+const { TickersObservable } = require('./lib/channel')
+
+const { Agents, Orders } = require('./lib/store')
 
 /**
  * Init
  */
 
-const agentStore = AgentStore()
-const orderStore = OrderStore()
+const agentStore = Agents()
+const orderStore = Orders()
 
 const report = err =>
   debug('Error %s', err.message)
