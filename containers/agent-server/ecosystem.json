@@ -1,8 +1,12 @@
 {
   "apps" : [
     {
-      "name"        : "Agent processor",
-      "script"      : "./agent-processor.js",
+      "name"        : "Processor",
+      "script"      : "./processor.js",
+      "exec_mode"   : "cluster"
+    }, {
+      "name"        : "Connect",
+      "script"      : "./connect.js",
       "exec_mode"   : "cluster"
     }
   ]
