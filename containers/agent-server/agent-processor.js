@@ -4,7 +4,7 @@ const getenv = require('getenv')
 
 const TickerMQTT = require('./lib/ticker-mqtt')
 
-const Strategy = require('@alpinist/agent-strategy')
+const Strategy = require('./lib/strategy')
 
 const AgentStore = require('./lib/agent-store')
 const OrderStore = require('./lib/order-store')
