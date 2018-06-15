@@ -2,7 +2,7 @@ const debug = require('debug')('alpinist:agents')
 
 const getenv = require('getenv')
 
-const TickerMQTT = require('./lib/ticker-mqtt')
+const { TickersObservable } = require('./lib/channel')
 
 const Strategy = require('./lib/strategy')
 
@@ -46,6 +46,5 @@ function evaluate (ticker) {
     .catch(report)
 }
 
-TickerMQTT
-  .source()
+TickersObservable()
   .subscribe(evaluate)
