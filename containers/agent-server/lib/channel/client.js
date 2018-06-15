@@ -1,4 +1,4 @@
-const debug = require('debug')('alpinist:agent:mqtt')
+const debug = require('debug')('alpinist:mqtt')
 
 const mqtt = require('mqtt')
 
