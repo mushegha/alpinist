@@ -8,10 +8,6 @@
       "name"        : "Cexio processor",
       "script"      : "./processor-cexio.js",
       "exec_mode"   : "cluster"
-    }, {
-      "name"        : "Store sync",
-      "script"      : "./sync-store.js",
-      "exec_mode"   : "cluster"
     }
   ]
 }
