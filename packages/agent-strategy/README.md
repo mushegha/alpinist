@@ -1,3 +1,0 @@
-# Alpinist
-
-## WIP

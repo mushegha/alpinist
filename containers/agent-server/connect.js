@@ -11,9 +11,12 @@ const {
   complement
 } = require('ramda')
 
-const Channel = require('./lib/channel')
+const {
+  OrdersObservable,
+  OrdersObserver
+} = require('./lib/channel')
 
-const Store = require('./lib/store')
+const { Orders } = require('./lib/store')
 
 /**
  * Helpers
@@ -49,11 +52,11 @@ const orderFrom = slot => {
  *
  */
 
-const source = Channel.Observable()
+const source = new OrdersObservable()
 
-const sink = Channel.Observer()
+const sink = new OrdersObserver()
 
-const store = new Store()
+const store = new Orders()
 
 /**
  *
@@ -64,7 +67,12 @@ source
   .subscribe(order => {
     debug('Order details: %O', order)
 
-    const { id, side, price, status } = order
+    const {
+      id,
+      side,
+      price,
+      status
+    } = order
 
     const slotProps = {
       id,
@@ -92,9 +100,7 @@ store
   .source()
   .filter(isNew)
   .map(orderFrom)
-  // .map(tap(x => debug('Received %s', x.id)))
   .subscribe(sink)
-  // .subscribe(console.log)
 
 /**
  *
@@ -103,5 +109,5 @@ store
 store
   .source()
   .subscribe(order => {
-    debug('Order snapshot received: %s', order.side, order.status)
+    debug('Order snapshot received: %s %s', order.side, order.status)
   })

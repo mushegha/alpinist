@@ -1,11 +1,13 @@
 {
-  "apps" : [{
-    "name"        : "agent-processor",
-    "script"      : "./agent-processor.js",
-    "watch"       : true,
-    "env": { },
-    "env_development": {
-      "DEBUG": "alpinist:*"
+  "apps" : [
+    {
+      "name"        : "Processor",
+      "script"      : "./processor.js",
+      "exec_mode"   : "cluster"
+    }, {
+      "name"        : "Connect",
+      "script"      : "./connect.js",
+      "exec_mode"   : "cluster"
     }
-  }]
+  ]
 }

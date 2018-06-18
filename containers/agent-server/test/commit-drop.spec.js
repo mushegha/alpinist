@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import commitDrop from '../lib/commit-drop'
+import commitDrop from '../lib/strategy/commit-drop'
 
 const SLOTS = [
   { id: 'a', buy_price: 99 },

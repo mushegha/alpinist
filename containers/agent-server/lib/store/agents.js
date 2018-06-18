@@ -1,13 +1,13 @@
 const debug = require('debug')('alpinist:agents')
 
+const getenv = require('getenv')
+
 const PouchDB = require('pouchdb')
 
 const findPlugin = require('pouchdb-find')
 const upsertPlugin = require('pouchdb-upsert')
 
 const agentMethods = require('@alpinist/pouchdb-agent-methods')
-
-const getenv = require('getenv')
 
 /**
  * Settings
@@ -28,7 +28,7 @@ PouchDB
  * Store Constructor
  */
 
-function Store () {
+function Agents () {
   const url = `${POUCHDB_URL}/agents`
 
   debug('Connecting to CouchDB at %s', url)
@@ -40,4 +40,4 @@ function Store () {
  * Expose
  */
 
-module.exports = Store
+module.exports = Agents

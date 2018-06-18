@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import commitFill from '../lib/commit-fill'
+import commitFill from '../lib/strategy/commit-fill'
 
 const commit = commitFill({
   priceThreshold: 5,

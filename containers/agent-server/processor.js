@@ -2,19 +2,18 @@ const debug = require('debug')('alpinist:agents')
 
 const getenv = require('getenv')
 
-const TickerMQTT = require('./lib/ticker-mqtt')
+const Strategy = require('./lib/strategy')
 
-const Strategy = require('@alpinist/agent-strategy')
+const { TickersObservable } = require('./lib/channel')
 
-const AgentStore = require('./lib/agent-store')
-const OrderStore = require('./lib/order-store')
+const { Agents, Orders } = require('./lib/store')
 
 /**
  * Init
  */
 
-const agentStore = AgentStore()
-const orderStore = OrderStore()
+const agentStore = Agents()
+const orderStore = Orders()
 
 const report = err =>
   debug('Error %s', err.message)
@@ -46,6 +45,5 @@ function evaluate (ticker) {
     .catch(report)
 }
 
-TickerMQTT
-  .source()
+TickersObservable()
   .subscribe(evaluate)

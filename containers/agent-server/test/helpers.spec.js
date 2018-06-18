@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import H from '../lib/helpers'
+import H from '../lib/strategy/helpers'
 
 const A = { id: 'a', buy_price: 100 }
 const B = { id: 'b', buy_price: 200 }

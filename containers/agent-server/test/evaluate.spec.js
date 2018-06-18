@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import strategy from '..'
+import strategy from '../lib/strategy'
 
 const agent = {
   id: 'a1',
