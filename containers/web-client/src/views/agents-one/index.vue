@@ -11,7 +11,7 @@
         el-button(@click="edit")
           | Edit
 
-    order-table(:dataset="orders")
+    order-table(:dataset="orders" :ticker="tickerData")
 </template>
 
 <script src="./main.js"></script>

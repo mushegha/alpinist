@@ -1,3 +1,5 @@
+const debug = require('debug')('alpinist:orders:bitfinex')
+
 const { Observable } = require('rxjs/Rx')
 
 const { Order } = require('bitfinex-api-node/lib/models')
@@ -16,6 +18,14 @@ const {
   recover
 } = require('./helpers')
 
+/**
+ *
+ */
+
+/**
+ *
+ */
+
 function Connect (creds = {}) {
   const { create, destroy } = new Client(creds)
 
@@ -33,9 +43,11 @@ function Connect (creds = {}) {
     Observable
       .of(order)
       .map(convert)
+      .map(tap(o => debug('Received order: %O', o)))
       .flatMap(toOrder)
       .flatMap(fromOrder)
       .map(recover)
+      .map(tap(o => debug('Processed order: %O', o)))
       .map(merge(order))
 }
 

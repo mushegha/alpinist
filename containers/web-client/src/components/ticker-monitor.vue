@@ -28,18 +28,21 @@
 </style>
 
 <script>
+import { mapGetters } from 'vuex'
+
 const props = {
   target: Object
 }
 
+const getters = mapGetters({
+  'tickerOf': 'tickers/fromTarget'
+})
+
 const computed = {
   model () {
-    const { broker, symbol } = this.target
-    const id = `${broker}-${symbol}`
-
-    return this.$store.state
-      .tickers[id]
-  }
+    return this.tickerOf(this.target)
+  },
+  ...getters
 }
 
 export default {

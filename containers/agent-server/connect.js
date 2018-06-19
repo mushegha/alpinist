@@ -30,7 +30,6 @@ const isNewBuy = both(
   isBuyOrder,
   propEq('buy_status', 'new')
 )
-
 const isNewSell = both(
   isSellOrder,
   propEq('sell_status', 'new')
@@ -38,7 +37,8 @@ const isNewSell = both(
 
 const isNew = either(isNewBuy, isNewSell)
 
-const isClosed = propEq('status', 'closed')
+const isNotNew = complement(propEq('status', 'new'))
+
 
 const orderFrom = slot => {
   const price = isBuyOrder(slot)
@@ -63,7 +63,9 @@ const store = new Orders()
  */
 
 source
-  .filter(isClosed)
+  .map(tap(x => debug('Snapshot: %O', x)))
+  .filter(isNotNew)
+  .map(tap(x => debug('Snapshot: %s', x.id)))
   .subscribe(order => {
     debug('Order details: %O', order)
 
@@ -71,7 +73,8 @@ source
       id,
       side,
       price,
-      status
+      status,
+      info
     } = order
 
     const slotProps = {
@@ -82,9 +85,11 @@ source
     if (side === 'buy') {
       slotProps.buy_price = price
       slotProps.buy_status = status
+      slotProps.buy_info = info
     } else {
       slotProps.sell_price = price
       slotProps.sell_status = status
+      slotProps.sell_info = info
     }
 
     store
@@ -106,8 +111,8 @@ store
  *
  */
 
-store
-  .source()
-  .subscribe(order => {
-    debug('Order snapshot received: %s %s', order.side, order.status)
-  })
+// store
+//   .source()
+//   .subscribe(order => {
+//     debug('Order snapshot received: %s %s', order.side, order.status)
+//   })

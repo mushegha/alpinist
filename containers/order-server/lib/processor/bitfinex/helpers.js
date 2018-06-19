@@ -89,6 +89,8 @@ function recover (raw) {
 
   const status = raw.status
 
+  console.log(raw)
+
   const side = raw.amountOrig < 0
     ? 'sell'
     : 'buy'

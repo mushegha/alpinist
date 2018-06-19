@@ -95,7 +95,8 @@ import {
 } from 'ramda'
 
 const props = {
-  dataset: Array
+  dataset: Array,
+  ticker: Object
 }
 
 const filters = {
@@ -153,13 +154,19 @@ const computed = {
   },
   profitOf () {
     return x => {
-      if (x.side === 'buy') return ''
+      const { ticker } = this
+      if (x.side === 'buy' && !ticker) {
+        return ''
+      }
 
       const {
         quantity,
-        buy_price,
-        sell_price
+        buy_price
       } = x
+
+      const sell_price = x.side === 'buy'
+        ? ticker.bid_price
+        : x.sell_price
 
       const profit = quantity * (sell_price - buy_price)
 

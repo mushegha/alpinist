@@ -31,13 +31,15 @@ const isNew = propEq('status', 'new')
 /**
  *
  */
+
 const processor = Processor(creds)
 
 const sink = Channel.Observer()
 
 const source = Channel.Observable('cexio')
   .filter(isNew)
+  .map(tap(x => debug('Order: %O', x)))
   .flatMap(processor)
   .map(tap(x => debug(x.info)))
-  .map(dissoc('info'))
+  // .map(dissoc('info'))
   .subscribe(sink)

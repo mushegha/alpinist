@@ -9,6 +9,7 @@ const props = {
 }
 
 const getters = mapGetters({
+  'tickerOf': 'tickers/fromTarget',
   'byId': 'agents/byId',
   'ofAgent': 'orders/ofAgent'
 })
@@ -19,6 +20,9 @@ const computed = {
   },
   orders () {
     return this.ofAgent(this.id)
+  },
+  tickerData () {
+    return this.tickerOf(this.model.ticker)
   },
   ...getters
 }
