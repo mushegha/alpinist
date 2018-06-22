@@ -1,0 +1,14 @@
+{
+  "name": "alpinist/bitfinex-client-ws",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
+  },
+  "dependencies": {
+    "ws": "^5.2.0"
+  }
+}
