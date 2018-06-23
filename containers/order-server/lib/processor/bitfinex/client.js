@@ -109,6 +109,10 @@ class Client extends EventEmitter {
         return this.emit(`origin:${event}`, payload)
       }
 
+      if (!Array.isArray(payload)) {
+        return void 0
+      }
+
       const [channelId, event, arr] = payload
 
       if (event === 'hb') {
@@ -128,7 +132,8 @@ class Client extends EventEmitter {
         const info = arr[7]
 
         const payload = arr[4]
-        const cid = payload[2]
+
+        const cid = Array.isArray(payload) && payload[2]
 
         if (cid && type === 'ERROR') {
           const res = {
