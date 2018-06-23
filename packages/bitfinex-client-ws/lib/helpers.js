@@ -50,7 +50,8 @@ const toPlainSymbol = compose(
   drop(1),
   join('-'),
   splitAt(-3),
-  toLower)
+  toLower
+)
 
 /**
  * Convert standard order notation to Bitfinex specific

@@ -15,9 +15,7 @@ const {
 
 /**
  * Constants
- */
-
-/**
+ */ /**
  * Ready state constants
  */
 
@@ -33,24 +31,6 @@ const WSS_URL = 'wss://api.bitfinex.com/ws/2'
 const CREDENTIALS = {
   apiKey    : 'rzX7qTepd0xsWAPYZti77k31UKEUaSHo88K6a8kn80L',
   apiSecret : 'i6wMBI8sWZB1FOTtTk8KIVnddbkNNSBqudmMEOAK1ve'
-}
-
-/**
- * Helpers
- */
-
-const authFrom = (creds = CREDENTIALS) => {
-  const authNonce = Date.now() * 1e3
-  const authPayload = `AUTH${authNonce}`
-  const authSig = hmacFrom(apiSecret, authPayload)
-
-  return  JSON.stringify({
-    event:"auth",
-    apiKey,
-    authNonce,
-    authPayload,
-    authSig
-  })
 }
 
 /**
@@ -108,6 +88,10 @@ class Client extends EventEmitter {
     super()
 
     this.orders = {}
+  }
+
+  get isOpen () {
+    return this.ws.readyState === STATE_DICT['OPEN']
   }
 
   open () {
@@ -175,6 +159,10 @@ class Client extends EventEmitter {
     return merge(initial, data)
   }
 
+  async authenticate (creds = CREDENTIALS) {
+    return authenticate(this, creds)
+  }
+
   async placeOrder (data) {
     const orderPayload = convert(data)
 
@@ -196,35 +184,10 @@ class Client extends EventEmitter {
       this.send([ 0, 'on', null, orderPayload ])
     })
   }
+
+  close () {
+    this.ws.close()
+  }
 }
 
 module.exports = Client
-
-
-// ---------
-//
-
-async function go () {
-  const client = new Client()
-
-  await client.open()
-
-  console.log(4)
-
-  await authenticate(client)
-
-  console.log(3)
-
-  const res = await client
-    .placeOrder({
-      id: 'a',
-      symbol: 'eth-usd',
-      side: 'sell',
-      price: 500,
-      quantity: 0.025
-    })
-    .catch(x => x)
-    .then(console.log)
-}
-
-go()
