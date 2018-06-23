@@ -1,0 +1,9 @@
+{
+  "apps" : [
+    {
+      "name"        : "Sync orders",
+      "script"      : "./connect.js",
+      "exec_mode"   : "cluster"
+    }
+  ]
+}

@@ -2,8 +2,6 @@ const debug = require('debug')('alpinist:orders:bitfinex')
 
 const { Observable } = require('rxjs/Rx')
 
-const { Order } = require('bitfinex-api-node/lib/models')
-
 const {
   merge,
   tap
