@@ -92,12 +92,25 @@ services:
       - BITFINEX_API_SECRET=i6wMBI8sWZB1FOTtTk8KIVnddbkNNSBqudmMEOAK1ve
     command: pm2-runtime ecosystem.json
 
+  order-sync:
+    build: ./containers/order-sync
+    links:
+      - mosquitto
+      - couchdb
+      - order-server
+    environment:
+      - DEBUG=alpinist:*
+      - MQTT_URL=mqtt://mosquitto:1883
+      - COUCHDB_URL=http://couchdb:5984
+    command: pm2-runtime ecosystem.json
 
   agent-server:
     build: ./containers/agent-server
     links:
       - mosquitto
       - couchdb
+      - order-sync
+      - ticker-server
     environment:
       - DEBUG=alpinist:*
       - MQTT_URL=mqtt://mosquitto:1883
