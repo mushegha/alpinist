@@ -13,7 +13,6 @@
     "@alpinist/pouchdb-connect": "*",
     "@alpinist/pouchdb-order-methods": "*",
     "axios": "^0.18.0",
-    "bitfinex-api-node": "^2.0.0-beta.1",
     "debug": "^3.1.0",
     "generic-pool": "^3.4.2",
     "getenv": "^0.7.0",
@@ -24,6 +23,7 @@
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.7.0",
     "rxjs": "^6.1.0",
-    "rxjs-compat": "^6.1.0"
+    "rxjs-compat": "^6.1.0",
+    "ws": "^5.2.0"
   }
 }

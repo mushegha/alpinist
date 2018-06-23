@@ -1,112 +1,201 @@
-const debug = require('debug')('alpinist:order:bitfinex')
+const WebSocket = require('ws')
 
-const { WSv2 } = require('bitfinex-api-node')
+const { EventEmitter } = require('events')
 
-const { merge } = require('ramda')
+const getenv = require('getenv')
+
+const {
+  merge
+} = require('ramda')
+
+const { hmacFrom } = require('./crypto')
+
+const {
+  convert,
+  recover
+} = require('./helpers')
 
 /**
- * Client Actions
+ * Constants
+ */ /**
+ * Ready state constants
+ */
+
+const STATE_DICT = {
+  'CONNECTING' : 0,
+  'OPEN'       : 1,
+  'CLOSING'    : 2,
+  'CLOSED'     : 3
+}
+
+const WSS_URL = 'wss://api.bitfinex.com/ws/2'
+
+const CREDENTIALS = getenv.multi({
+  apiKey    : ['BITFINEX_API_KEY'],
+  apiSecret : ['BITFINEX_API_SECRET']
+})
+
+/**
+ *  WS methods
  */
 
 /**
- * Open
+ * Bitfinex specific `auth` object
+ *
+ * @param {WebSocket} ws
+ * @param {Object} [creds]
+ * @param {string} [creds.apiKey]
+ * @param {string} [creds.apiSecret]
+ *
+ * @returns {Object}
  */
 
-function open (ws) {
-  debug('Connecting to Bitfinex servers')
+async function authenticate (client, creds = CREDENTIALS) {
+  const { ws } = client
 
-  if (ws.isOpen()) {
-    debug('Client is already connected')
-    return Promise.resolve(ws)
+  const { apiKey, apiSecret } = creds
+
+  const authNonce = Date.now() * 1e3
+  const authPayload = `AUTH${authNonce}`
+  const authSig = hmacFrom(apiSecret, authPayload)
+
+  const payload =  {
+    event: 'auth',
+    apiKey,
+    authNonce,
+    authPayload,
+    authSig
   }
 
-  const open = (resolve, reject) => {
-    ws.on('error', err => {
-      debug('Could not open WebSocket connection, reason: %s', err.message)
-      reject(err)
+  const cb = (resolve, reject) => {
+    client.once('origin:auth', (res) => {
+      if (!res.error) return resolve(ws)
+
+      client.close()
+      reject(new Error(error))
     })
 
-    ws.on('open', () => {
-      debug('Connected')
-      resolve(ws)
-    })
-
-    ws.open()
+    client.send(payload)
   }
 
-  return new Promise(open)
+  return new Promise(cb)
 }
 
 /**
- * Auth
+ *
  */
 
-function authenticate (ws) {
-  debug('Authenticate client')
+class Client extends EventEmitter {
+  constructor () {
+    super()
 
-  if (ws.isAuthenticated()) {
-    debug('Already authenticated')
-    return Promise.resolve(ws)
+    this.orders = {}
   }
 
-  const auth = (resolve, reject) => {
-    ws.on('error', err => {
-      debug('Could not authenticate, reason: %s', err.message)
-      reject(err)
-    })
-
-    ws.once('auth', () => {
-      debug('Client is authenticated')
-      resolve(ws)
-    })
-
-    ws.auth()
+  get isOpen () {
+    return this.ws.readyState === STATE_DICT['OPEN']
   }
 
-  return new Promise(auth)
-}
+  open () {
+    const ws = new WebSocket(WSS_URL)
 
-/**
- * Destroy
- */
+    this.ws = ws
 
-function destroy (ws) {
-  debug('Closing WebSocket connection')
+    ws.on('message', msg => {
+      const payload = JSON.parse(msg)
 
-  return ws.close(1012, 'Destroyed by pool')
-}
+      if (payload.event) {
+        const { event } = payload
+        return this.emit(`origin:${event}`, payload)
+      }
 
-/**
- * Validate
- */
+      const [channelId, event, arr] = payload
 
-function validate (ws) {
-  debug('Validating client state')
+      if (event === 'hb') {
+        this.hb = Date.now()
+      }
 
-  const isOpen = ws.isOpen()
-  const isAuthenticated = ws.isAuthenticated()
+      if (event === 'oc') {
+        const order = recover(arr)
 
-  return isOpen && isAuthenticated
-}
+        this.emit(`origin:oc`, order)
+        this.emit(`origin:oc:${order.cid}`, order)
+      }
 
-/**
- * Client constructor
- */
+      if (event === 'n') {
+        const ts = arr[0]
+        const type = arr[6]
+        const info = arr[7]
 
-function Client (creds = {}) {
-  debug('Initializing a client')
+        const payload = arr[4]
+        const cid = payload[2]
 
-  const options = merge(creds, { transform: true })
+        if (cid && type === 'ERROR') {
+          const res = {
+            cid,
+            ts,
+            info,
+            status: 'rejected'
+          }
 
-  return {
-    create () {
-      const ws = new WSv2(options)
+          this.emit(`origin:err:${cid}`, res)
+        }
+      }
 
-      return open(ws)
-        .then(authenticate)
-    },
-    destroy,
-    validate
+    })
+
+    return new Promise((resolve, reject) => {
+      ws.once('open', _ => {
+        this.hb = Date.now()
+        resolve(ws)
+      })
+    })
+  }
+
+  send (payload) {
+    const msg = JSON.stringify(payload)
+    this.ws.send(msg)
+  }
+
+  re (data) {
+    const { cid } = data
+    const initial = this.orders[cid]
+
+    if (!initial) return void 0
+
+    delete this.orders[cid]
+
+    return merge(initial, data)
+  }
+
+  async authenticate (creds = CREDENTIALS) {
+    return authenticate(this, creds)
+  }
+
+  async placeOrder (data) {
+    const orderPayload = convert(data)
+
+    const { cid } = orderPayload
+
+    this.orders[cid] = data
+
+    return new Promise((resolve, reject) => {
+      this.once(`origin:oc:${cid}`, payload => {
+        const res = this.re(payload)
+        resolve(res)
+      })
+
+      this.once(`origin:err:${cid}`, payload => {
+        const res = this.re(payload)
+        reject(res)
+      })
+
+      this.send([ 0, 'on', null, orderPayload ])
+    })
+  }
+
+  close () {
+    this.ws.close()
   }
 }
 

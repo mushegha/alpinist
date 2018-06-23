@@ -16,6 +16,31 @@ const POOL_CONFIG = {
   testOnBorrow              : true
 }
 
+/**
+ * Factory methods
+ */
+
+async function create () {
+  debug('Initializing a client')
+
+  const client = new Client()
+
+  await client.open()
+  await client.authenticate()
+
+  return client
+}
+
+async function destroy (client) {
+  return client.close()
+}
+
+async function validate (client) {
+  const { hb, isOpen } = client
+  const passed = Date.now() - hb
+
+  return isOpen && passed < 60 * 1e3
+}
 
 /**
  * Pool constructor
@@ -27,10 +52,12 @@ const POOL_CONFIG = {
  * @returns {Object} - Pool instance
  */
 
-function Pool (creds = {}) {
+function Pool () {
   debug('Creating WS client pool')
 
-  const pool = createPool(Client(creds), POOL_CONFIG)
+  const factory = { create, destroy, validate }
+
+  const pool = createPool(factory, POOL_CONFIG)
 
   pool.on('factoryCreateError', err => {
     debug('Pool failed to create: %s', err.message)
