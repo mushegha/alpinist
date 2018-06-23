@@ -4,16 +4,6 @@ services:
 
   # Services
 
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
-
-  couchdb:
-    image: "apache/couchdb"
-    ports:
-      - "5984:5984"
-
   # lenses:
   #   image: landoop/kafka-lenses-dev
   #   links:
@@ -55,6 +45,16 @@ services:
   #     - "5601:5601"
   #   depends_on:
   #     - elasticsearch
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  couchdb:
+    image: "apache/couchdb"
+    ports:
+      - "5984:5984"
 
   mosquitto:
     image: toke/mosquitto
@@ -102,7 +102,7 @@ services:
       - DEBUG=alpinist:*
       - MQTT_URL=mqtt://mosquitto:1883
       - COUCHDB_URL=http://couchdb:5984
-    command: pm2-runtime ecosystem.json
+    command: npm run dev
 
   agent-server:
     build: ./containers/agent-server
