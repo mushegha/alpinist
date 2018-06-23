@@ -6,8 +6,15 @@ const {
   splitAt,
   join,
   toLower,
-  toUpper
+  toUpper,
+  zipObj
 } = require('ramda')
+
+/**
+ *
+ */
+
+let incr = Date.now() * 1000
 
 /**
  * To Bitfinex symbol notation
@@ -43,7 +50,8 @@ const toPlainSymbol = compose(
   drop(1),
   join('-'),
   splitAt(-3),
-  toLower)
+  toLower
+)
 
 /**
  * Convert standard order notation to Bitfinex specific
@@ -54,9 +62,11 @@ const toPlainSymbol = compose(
  */
 
 function convert (data) {
+  const cid = ++incr
+
   const symbol = fromPlainSymbol(data.symbol)
 
-  const price = data.price
+  const price = String(data.price)
 
   const amount = data.side === 'sell'
     ? data.quantity * -1
@@ -65,8 +75,9 @@ function convert (data) {
   const type = 'EXCHANGE MARKET'
 
   return {
+    cid,
     symbol,
-    amount,
+    amount: String(amount),
     type,
     price
   }
@@ -75,35 +86,60 @@ function convert (data) {
 /**
  * Recover to standard order notation
  *
- * @param {Object} raw
+ * @param {Array} raw
  *
  * @returns {Object}
  */
 
 function recover (raw) {
-  const ts = raw.mtsUpdate || Date.now()
+  const FIELDS = [
+    'id',
+    'gid',
+    'cid',
+    'symbol',
+    'tsX',
+    'ts',
+    'quantityX',
+    'quantity',
+    'type',
+    'typePrev',
+    '_1',
+    '_2',
+    'flags',
+    'info',
+    '_3',
+    '_4',
+    'price',
+    'priceAvg'
+  ]
 
-  const price = raw.price
+  const rawObj = zipObj(FIELDS, raw)
 
-  const symbol = toPlainSymbol(raw.symbol)
+  const symbol = toPlainSymbol(rawObj.symbol)
 
-  const status = raw.status
+  const status = 'closed'
 
-  console.log(raw)
-
-  const side = raw.amountOrig < 0
+  const side = rawObj.quantity < 0
     ? 'sell'
     : 'buy'
 
-  const quantity = Math.abs(raw.amountOrig)
+  const quantity = Math.abs(rawObj.quantity)
+
+  const price = rawObj.priceAvg
+
+  const { cid, ts, info } = rawObj
+
+  //
 
   return {
-    ts,
+    cid,
     symbol,
-    quantity,
-    price,
+    status,
     side,
-    status
+    price,
+    quantity,
+    ts,
+    info
   }
 }
 
@@ -114,3 +150,4 @@ module.exports = {
   convert,
   recover
 }
+

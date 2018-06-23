@@ -9,9 +9,7 @@ const {
   tap
 } = require('ramda')
 
-const Client = require('./client')
-
-const { fromOrder } = require('./observable')
+const createPool = require('./pool')
 
 const {
   convert,
@@ -22,18 +20,18 @@ const {
  *
  */
 
+const pool = createPool()
+
 /**
  *
  */
 
 function Connect (creds = {}) {
-  const { create, destroy } = new Client(creds)
-
-  let clientP = create()
+  let clientP = pool.acquire()
 
   const toOrder = params => {
     const submitP = clientP
-      .then(ws => new Order(params, ws))
+      .then(client => client.placeOrder(params))
 
     return Observable
       .fromPromise(submitP)
@@ -42,13 +40,9 @@ function Connect (creds = {}) {
   return order =>
     Observable
       .of(order)
-      .map(convert)
       .map(tap(o => debug('Received order: %O', o)))
       .flatMap(toOrder)
-      .flatMap(fromOrder)
-      .map(recover)
       .map(tap(o => debug('Processed order: %O', o)))
-      .map(merge(order))
 }
 
 module.exports = Connect
