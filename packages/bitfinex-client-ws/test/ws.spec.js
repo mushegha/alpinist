@@ -1,8 +1,7 @@
 import test from 'ava'
 
-import WebSocket from '../lib/ws'
-
+import Client from '../lib/ws'
 
 test('type', t => {
-  t.is(typeof WebSocket, 'function')
+  t.is(typeof Client, 'function')
 })
