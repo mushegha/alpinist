@@ -109,6 +109,10 @@ class Client extends EventEmitter {
 
       const [channelId, event, arr] = payload
 
+      if (event === 'hb') {
+        this.hb = Date.now()
+      }
+
       if (event === 'oc') {
         const order = recover(arr)
 
@@ -139,7 +143,10 @@ class Client extends EventEmitter {
     })
 
     return new Promise((resolve, reject) => {
-      ws.once('open', _ => resolve(ws))
+      ws.once('open', _ => {
+        this.hb = Date.now()
+        resolve(ws)
+      })
     })
   }
 

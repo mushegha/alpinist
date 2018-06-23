@@ -36,7 +36,10 @@ async function destroy (client) {
 }
 
 async function validate (client) {
-  return client.isOpen
+  const { hb, isOpen } = client
+  const passed = Date.now() - hb
+
+  return isOpen && passed < 60 * 1e3
 }
 
 /**
@@ -73,28 +76,3 @@ function Pool () {
  */
 
 module.exports = Pool
-
-
-
-// ---------
-//
-
-async function go () {
-  const pool = new Pool()
-
-  const client = await pool.acquire()
-
-  const res = await client
-    .placeOrder({
-      id: 'a',
-      symbol: 'eth-usd',
-      side: 'sell',
-      price: 500,
-      quantity: 0.025
-    })
-    .catch(x => x)
-    .then(console.log)
-}
-
-go()
-
