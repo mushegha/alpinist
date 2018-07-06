@@ -59,7 +59,7 @@
         | {{ profitOf(scope.row) }}
 
     el-table-column(
-      label="Operations"
+      label="Actions"
       align="right")
       template(slot-scope="scope")
         el-button(
@@ -70,7 +70,7 @@
           | Sell
 
     el-table-column(
-      label="Updated"
+      label="Ref time"
       align="right"
       prop="time"
       :sortable="true")
@@ -101,7 +101,7 @@ const props = {
 
 const filters = {
   asStandardTime (time) {
-    return formatDate(time, 'HH:mm:ss')
+    return formatDate(time, 'DD/MM HH:mm:ss')
   },
   asPrice (x) {
     return Number(x).toFixed(2)
