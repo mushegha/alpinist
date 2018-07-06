@@ -5,7 +5,7 @@
       label="Price threshold")
 
       el-input-number(
-        :min="1"
+        :min="0.00001"
         controls-position="right"
         v-model="form.priceThreshold")
 
