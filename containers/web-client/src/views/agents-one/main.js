@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex'
 
 import OrderTable from '@/components/order-table'
+import OrderExport from '@/components/order-export'
 import TickerMonitor from '@/components/ticker-monitor'
 import AgentSwitch from '@/components/agent-switch'
 
@@ -42,6 +43,7 @@ export default {
   methods,
   components: {
     OrderTable,
+    OrderExport,
     TickerMonitor,
     AgentSwitch
   }

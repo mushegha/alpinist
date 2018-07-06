@@ -12,6 +12,12 @@
           | Edit
 
     order-table(:dataset="orders" :ticker="tickerData")
+
+    .bottom-bar
+      order-export.right(
+        :id="id"
+        :ticker="tickerData"
+        :dataset="orders")
 </template>
 
 <script src="./main.js"></script>
@@ -31,4 +37,13 @@
   padding: 10px 20px;
 }
 .navbar .actions { }
+
+.bottom-bar {
+  padding: 20px 0;
+  clear: both;
+}
+
+.bottom-bar .right {
+  float: right;
+}
 </style>

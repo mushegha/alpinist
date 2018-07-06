@@ -2,8 +2,7 @@
   el-table(
     v-if="dataset"
     :data="dataset"
-    :row-style="rowStyle"
-    stripe)
+    :row-style="rowStyle")
 
     el-table-column(type="expand")
       template(slot-scope="props")
