@@ -90,6 +90,8 @@ services:
       - CEXIO_API_SECRET=UsYdCQ8GVZpVarFAbcnPe3ytPo
       - BITFINEX_API_KEY=rzX7qTepd0xsWAPYZti77k31UKEUaSHo88K6a8kn80L
       - BITFINEX_API_SECRET=i6wMBI8sWZB1FOTtTk8KIVnddbkNNSBqudmMEOAK1ve
+      - BITFINEX2_API_KEY=IEpfTShc7mmnHfHKbXqk5bLg8zSKtERs1NVivClkeRG
+      - BITFINEX2_API_SECRET=V8RQjKmnoXdgjiODXrhBVWgeErEN1awQRRVNZTgKBJA
     command: pm2-runtime ecosystem.json
 
   order-sync:

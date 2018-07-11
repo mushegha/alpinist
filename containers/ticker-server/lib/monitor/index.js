@@ -1,4 +1,7 @@
-const { Subject } = require('rxjs/Rx')
+const {
+  Subject,
+  Observable
+} = require('rxjs/Rx')
 
 const {
   pick,
@@ -22,6 +25,15 @@ const toRelevant = pick([
 const timestamped = x =>
   assoc('ts', Date.now(), x)
 
+const dupBitfinex = x => {
+  if (x.broker !== 'bitfinex') {
+    return Observable.of(x)
+  }
+
+  const dup = assoc('broker', 'bitfinex2', x)
+  return Observable.from([x, dup])
+}
+
 /**
  * Monitor
  */
@@ -34,6 +46,7 @@ function Monitor (opts = {}) {
 
   return ticker$
     .map(toRelevant)
+    .flatMap(dupBitfinex)
     .map(timestamped)
 }
 
