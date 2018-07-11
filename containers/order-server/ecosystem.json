@@ -5,6 +5,10 @@
       "script"      : "./processor-bitfinex.js",
       "exec_mode"   : "cluster"
     }, {
+      "name"        : "Bitfinex2 processor",
+      "script"      : "./processor-bitfinex2.js",
+      "exec_mode"   : "cluster"
+    }, {
       "name"        : "Cexio processor",
       "script"      : "./processor-cexio.js",
       "exec_mode"   : "cluster"
